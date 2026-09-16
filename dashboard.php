@@ -3988,15 +3988,17 @@ script{ display:none !important; }
     .ava-coin-ranges{ max-width:none; }
 }
 
-/* ===== کارت نرخ‌ها: هم‌ارتفاع با سبد دارایی ===== */
+/* ===== کارت‌های «نرخ لحظه‌ای ارز»: هر سه کارت دقیقاً هم‌ارتفاع ===== */
 .ava-rates-card{ display:flex; flex-direction:column; }
 .ava-rates-list{ flex:1; overflow-y:auto; }
-/* یکسان‌سازی ارتفاع «سبد دارایی من» و «نرخ‌های مورد علاقه» در همه‌ی اندازه‌ها */
+/* یکسان‌سازی ارتفاع «نرخ‌های مورد علاقه» + «نرخ‌های سی روز گذشته» + «تبدیل نرخ لحظه‌ای» در همه‌ی اندازه‌ها */
 .ava-mid-grid{ align-items:stretch; }
 .ava-mid-grid > #avaPortCard,
-.ava-mid-grid > #avaRatesCard{ height:auto; align-self:stretch; display:flex; flex-direction:column; }
+.ava-mid-grid > #avaRatesCard,
+.ava-mid-grid > #avaConvCard{ height:auto; align-self:stretch; display:flex; flex-direction:column; }
 #avaPortCard{ height:100%; }
 #avaRatesCard{ height:100%; }
+#avaConvCard{ height:100%; }
 /* لیست نرخ‌ها فضای باقی‌مانده را پر می‌کند تا کارت‌ها هم‌قد شوند */
 #avaRatesCard .ava-rates-list{ flex:1 1 auto; min-height:0; }
 /* بخش انتهایی سبد دارایی فضای اضافی را می‌گیرد تا با کارت نرخ‌ها هم‌ارتفاع شود */
@@ -4211,53 +4213,8 @@ script{ display:none !important; }
     font-size:15px; font-weight:700; color:#fff;
 }
 #avaPortCard .tx-chart-title i{ color:#A855F7; }
-#avaPortCard .tx-range{ position:relative; z-index:2; display:flex; gap:6px; background:rgba(255,255,255,.05); border-radius:12px; padding:4px; }
-#avaPortCard .tx-range button{
-    border:0; background:transparent; color:rgba(255,255,255,.55); cursor:pointer;
-    font-family:inherit; font-size:11px; font-weight:700; padding:6px 11px; border-radius:9px; transition:.2s;
-}
-#avaPortCard .tx-range button.on{ background:linear-gradient(135deg,#7C3AED,#A855F7); color:#fff; }
-
-#avaPortCard .tx-cur-tabs{
-    position:relative; z-index:2;
-    display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:14px;
-}
-#avaPortCard .tx-cur-tab{
-    display:flex; flex-direction:column; align-items:center; gap:5px;
-    padding:11px 6px; border-radius:16px; cursor:pointer; font-family:inherit;
-    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1);
-    color:rgba(255,255,255,.55); transition:transform .18s, border-color .2s, background .2s, box-shadow .2s;
-}
-#avaPortCard .tx-cur-tab:active{ transform:scale(.96); }
-#avaPortCard .tx-cur-tab i{ font-size:14px; }
-#avaPortCard .tx-cur-tab .t{ font-size:11px; font-weight:800; letter-spacing:.03em; }
-#avaPortCard .tx-cur-tab .s{ font-size:9px; opacity:.8; }
-#avaPortCard .tx-cur-tab.on{
-    color:#fff; border-color:transparent;
-    box-shadow:0 8px 22px rgba(124,58,237,.32);
-}
-#avaPortCard .tx-chart-wrap{ position:relative; z-index:2; height:210px; }
+#avaPortCard .tx-chart-wrap{ position:relative; z-index:2; height:210px; margin-top:12px; }
 #avaPortCard .tx-chart-wrap canvas{ display:block; width:100% !important; }
-#avaPortCard .tx-chart-legend{
-    position:relative; z-index:2;
-    display:flex; align-items:center; justify-content:center; gap:16px; margin-top:12px; flex-wrap:wrap;
-    font-size:11px; color:rgba(255,255,255,.55); font-weight:700;
-}
-#avaPortCard .tx-chart-legend span{ display:inline-flex; align-items:center; gap:6px; }
-#avaPortCard .tx-chart-legend i{ width:10px; height:10px; border-radius:3px; display:inline-block; }
-#avaPortCard .tx-mini-stats{
-    position:relative; z-index:2;
-    display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:14px;
-}
-#avaPortCard .tx-mini{
-    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); border-radius:14px;
-    padding:10px 8px; text-align:center;
-}
-#avaPortCard .tx-mini .l{ font-size:9.5px; color:rgba(255,255,255,.55); font-weight:700; letter-spacing:.04em; }
-#avaPortCard .tx-mini .v{ font-size:14px; font-weight:800; margin-top:4px; direction:ltr; }
-#avaPortCard .tx-mini.in  .v{ color:#4CD964; }
-#avaPortCard .tx-mini.out .v{ color:#FF5E5E; }
-#avaPortCard .tx-mini.net .v{ color:#A855F7; }
 #avaPortCard .tx-chart-empty{
     position:relative; z-index:2;
     display:flex; flex-direction:column; align-items:center; justify-content:center;
@@ -4265,15 +4222,67 @@ script{ display:none !important; }
 }
 #avaPortCard .tx-chart-empty i{ font-size:26px; opacity:.5; }
 @media (max-width: 480px){
-    #avaPortCard .tx-cur-tabs{ gap:6px; }
-    #avaPortCard .tx-cur-tab{ padding:9px 4px; border-radius:13px; }
-    #avaPortCard .tx-cur-tab .t{ font-size:10px; }
-    #avaPortCard .tx-cur-tab .s{ display:none; }
     #avaPortCard .tx-chart-wrap{ height:190px; }
-    #avaPortCard .tx-mini .v{ font-size:12px; }
 }
 
 #avaPortCard .ava-port-foot{ position:relative; z-index:2; }
+
+/* دراپ‌داون انتخاب ارز روی کارت «نرخ‌های سی روز گذشته» */
+.ava-rate30d-select{
+    position:relative; z-index:2;
+    background:rgba(255,255,255,.08); border:1px solid rgba(168,85,247,.35); border-radius:12px;
+    color:#fff; font-family:inherit; font-size:.72rem; font-weight:700; padding:8px 10px;
+    cursor:pointer; outline:none;
+}
+.ava-rate30d-select:focus{ border-color:#A855F7; }
+.ava-rate30d-head{
+    position:relative; z-index:2; display:flex; align-items:baseline; justify-content:space-between;
+    gap:8px; margin-top:4px; flex-wrap:wrap;
+}
+.ava-rate30d-price{ font-size:1.28rem; font-weight:900; color:#fff; direction:ltr; }
+.ava-rate30d-chg{ font-size:.74rem; font-weight:800; display:inline-flex; align-items:center; gap:4px; }
+.ava-rate30d-chg.up{ color:#22C55E; }
+.ava-rate30d-chg.dn{ color:#FF5A6E; }
+
+/* ===== کارت «تبدیل نرخ لحظه‌ای» ===== */
+#avaConvCard{
+    position:relative; overflow:hidden;
+    background:
+        radial-gradient(120% 100% at 100% 0%, rgba(56,189,248,.20), transparent 55%),
+        radial-gradient(120% 100% at 0% 100%, rgba(168,85,247,.16), transparent 55%),
+        linear-gradient(165deg,#0F1E3D 0%,#12103A 55%,#120A28 100%);
+    border:1px solid rgba(56,189,248,.32);
+    border-radius:24px;
+    box-shadow:0 18px 44px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.08);
+}
+#avaConvCard .ava-sec-title{
+    background:linear-gradient(120deg,#fff 30%,#93C5FD 70%);
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+}
+#avaConvCard .ava-sec-title i{ -webkit-text-fill-color:#38BDF8; color:#38BDF8; }
+.ava-conv-body{ display:flex; flex-direction:column; gap:10px; flex:1; justify-content:center; }
+.ava-conv-row{ display:flex; flex-direction:column; gap:6px; }
+.ava-conv-lbl{ font-size:.66rem; color:rgba(255,255,255,.5); font-weight:700; }
+.ava-conv-field{
+    display:flex; align-items:center; gap:8px;
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12);
+    border-radius:14px; padding:8px 10px;
+}
+.ava-conv-amt{
+    flex:1; min-width:0; background:transparent; border:none; outline:none;
+    color:#fff; font-family:inherit; font-size:1rem; font-weight:800; direction:ltr; text-align:left;
+}
+.ava-conv-sel{
+    flex:none; max-width:44%; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+    border-radius:10px; color:#fff; font-family:inherit; font-size:.68rem; font-weight:700; padding:6px 8px; cursor:pointer;
+}
+.ava-conv-swap{
+    align-self:center; width:38px; height:38px; border-radius:50%;
+    background:linear-gradient(135deg,#38BDF8,#6C40C5); border:none; color:#fff; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; font-size:.9rem;
+    box-shadow:0 6px 16px -6px rgba(56,189,248,.55); transition:transform .2s;
+}
+.ava-conv-swap:active{ transform:scale(.9) rotate(180deg); }
 
 /* ===== (آپدیت) گجت هوشمند بازار: پیش‌بینی قیمت + تمایل بازار ===== */
 
@@ -4803,7 +4812,9 @@ html:not([data-theme="light"]) #mainDashboard.ava-dash::before{
 /* ---------- ۶) بنر تبلیغاتی: باریک‌تر و شیک‌تر ---------- */
 .ava-promo{ box-shadow:0 12px 28px -16px rgba(6,3,20,.55); }
 
-/* ---------- ۷) سبد دارایی + نرخ‌های مورد علاقه: بدون کروسل، کاشی‌های بزرگ پشت‌هم ---------- */
+/* ---------- ۷) «نرخ لحظه‌ای ارز»: نرخ‌های مورد علاقه + نرخ‌های سی روز گذشته + تبدیل نرخ لحظه‌ای ----------
+   سه کارت این دسته باید همیشه دقیقاً هم‌اندازه باشند: زیر ۷۶۰px زیرِهم (تمام‌عرض)،
+   بین ۷۶۰ تا ۱۰۹۹px دو ستونی (کارت سوم تمام‌عرض می‌شود)، از ۱۱۰۰px به بالا سه‌ستونی مساوی. */
 .ava-mid-grid{
     display:flex; flex-direction:column; overflow:visible;
     scroll-snap-type:none; padding-bottom:0;
@@ -4811,6 +4822,11 @@ html:not([data-theme="light"]) #mainDashboard.ava-dash::before{
 .ava-mid-grid > *{ flex:1 1 auto; scroll-snap-align:none; }
 @media (min-width:760px){
     .ava-mid-grid{ display:grid; grid-template-columns:1fr 1fr; align-items:stretch; }
+    .ava-mid-grid > #avaConvCard{ grid-column:1 / -1; }
+}
+@media (min-width:1100px){
+    .ava-mid-grid{ grid-template-columns:1fr 1fr 1fr; }
+    .ava-mid-grid > #avaConvCard{ grid-column:auto; }
 }
 
 /* ---------- ۸) فعالیت و دسترسی سریع: دو کاشی کوچک + یک کاشی بزرگ ----------
@@ -5370,7 +5386,8 @@ html:not([data-theme="light"]) #mainDashboard.ava-dash::before{
     </div>
     <div class="ava-slot" data-slot="ads"></div>
 
-    <!-- ===== سبد دارایی + نرخ‌های مورد علاقه ===== -->
+    <!-- ===== دسته‌بندی «نرخ لحظه‌ای ارز»: نرخ‌های مورد علاقه + نرخ‌های سی روز گذشته + تبدیل نرخ لحظه‌ای ===== -->
+    <div class="ava-quad-label"><i class="fas fa-bolt"></i> نرخ لحظه‌ای ارز</div>
     <div class="ava-mid-grid">
         <div class="ava-card ava-rates-card" id="avaRatesCard" data-avasec="rates" data-avasec-title="نرخ‌های مورد علاقه" data-avasec-icon="fas fa-star">
             <div class="ava-sec-head">
@@ -5463,121 +5480,49 @@ html:not([data-theme="light"]) #mainDashboard.ava-dash::before{
                 <button class="ava-more" onclick="showCurrencyRate()">مشاهده همه نرخ‌ها <i class="fas fa-chevron-left"></i></button>
             </div>
         </div>
-        <div class="ava-card" id="avaPortCard" data-avasec="portfolio" data-avasec-title="سبد دارایی من" data-avasec-icon="fas fa-chart-pie">
+        <div class="ava-card" id="avaPortCard" data-avasec="rate30d" data-avasec-title="نرخ‌های سی روز گذشته" data-avasec-icon="fas fa-chart-line">
             <div class="ava-sec-head">
-                <div class="ava-sec-title"><i class="fas fa-chart-pie"></i> سبد دارایی من</div>
-                <span style="width:26px;height:26px;border-radius:50%;background:rgba(168,85,247,.16);border:1px solid rgba(168,85,247,.3);display:flex;align-items:center;justify-content:center;">
-                    <i class="fas fa-circle-info" style="color:#C4B5FD;font-size:.66rem"></i>
-                </span>
+                <div class="ava-sec-title"><i class="fas fa-chart-line"></i> نرخ‌های سی روز گذشته</div>
+                <select id="avaRate30dSelect" class="ava-rate30d-select" onchange="avaRate30dSelect(this.value)">
+                    <option value="USD" data-kind="fiat">دلار آمریکا</option>
+                    <option value="EUR" data-kind="fiat">یورو</option>
+                    <option value="USDT" data-kind="fiat">تتر</option>
+                    <option value="bitcoin" data-kind="crypto">بیت‌کوین</option>
+                </select>
             </div>
 
             <?php
             // ===============================================================
-            // (آپدیت) داده‌ی نمودار «سبد دارایی من» — دقیقاً همان نمودار کارت
-            // نمودار transactions.php («جریان نقدی» بر اساس رکوردهای واقعی
-            // جدول transactions، نه بازسازی بالانس روزانه). عیناً همان منطق
-            // محاسبه‌ی transactions.php (خط ~303 آن فایل) اینجا هم اجرا می‌شود
-            // تا خروجی/رفتار دو کارت کاملاً یکی باشد.
+            // (جدید) نمودار «نرخ‌های سی روز گذشته»: کاربر یک ارز را از دراپ‌داون
+            // (دلار/یورو/تتر/بیت‌کوین) انتخاب می‌کند و نمودار ۳۰ روز اخیرِ همان
+            // ارز کشیده می‌شود. برای دلار/یورو/تتر از همان تابع سرویِ گجت هوشمند
+            // بازار (ava_ai_compute_range با بازه‌ی '1m') استفاده می‌شود تا نیازی
+            // به منبع‌داده‌ی جدید نباشد؛ بیت‌کوین سمت کلاینت از همان API تاریخچه‌ی
+            // ارز دیجیتال (api/crypto_market_api.php) گرفته می‌شود.
             // ===============================================================
-            $__avaChartCurs   = ['USD', 'EUR', 'USDT', 'IRR'];
-            $__avaChartMonths = [];
-            $__avaChartLabels = [];
-            for ($__i = 11; $__i >= 0; $__i--) {
-                $__ts = strtotime(date('Y-m-01') . " -$__i month");
-                $__avaChartMonths[] = date('Y-m', $__ts);
-                $__avaChartLabels[] = date('M y', $__ts);
-            }
-            $__avaMonthIdx = array_flip($__avaChartMonths);
-
-            $__avaChartData = [];
-            foreach ($__avaChartCurs as $__c) {
-                $__avaChartData[$__c] = [
-                    'in' => array_fill(0, 12, 0.0), 'out' => array_fill(0, 12, 0.0), 'net' => array_fill(0, 12, 0.0),
-                    'tin' => 0.0, 'tout' => 0.0, 'count' => 0,
-                ];
-            }
-            $__avaChartSql = "SELECT currency, DATE_FORMAT(created_at, '%Y-%m') AS ym, sender_id, receiver_id, amount, type
-                         FROM transactions
-                         WHERE (sender_id = ? OR receiver_id = ?) AND status = 'completed'
-                           AND created_at >= DATE_SUB(DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL 11 MONTH)";
-            $__avaChartStmt = $conn->prepare($__avaChartSql);
-            if ($__avaChartStmt) {
-                $__avaChartStmt->bind_param("ii", $userId, $userId);
-                $__avaChartStmt->execute();
-                $__avaChartRes = $__avaChartStmt->get_result();
-                while ($__row = $__avaChartRes->fetch_assoc()) {
-                    $__cur = strtoupper($__row['currency'] ?? '');
-                    if (!isset($__avaChartData[$__cur])) continue;
-                    if (!isset($__avaMonthIdx[$__row['ym']])) continue;
-                    $__k   = $__avaMonthIdx[$__row['ym']];
-                    $__amt = (float)$__row['amount'];
-                    $__isIn = ((int)$__row['receiver_id'] === (int)$userId) || $__row['type'] === 'deposit';
-                    if ($__row['type'] === 'withdrawal') $__isIn = false;
-                    if ($__isIn) { $__avaChartData[$__cur]['in'][$__k]  += $__amt; $__avaChartData[$__cur]['tin']  += $__amt; }
-                    else         { $__avaChartData[$__cur]['out'][$__k] += $__amt; $__avaChartData[$__cur]['tout'] += $__amt; }
-                    $__avaChartData[$__cur]['count']++;
-                }
-            }
-            foreach ($__avaChartCurs as $__c) {
-                for ($__k = 0; $__k < 12; $__k++) {
-                    $__avaChartData[$__c]['net'][$__k] = round($__avaChartData[$__c]['in'][$__k] - $__avaChartData[$__c]['out'][$__k], 4);
-                    $__avaChartData[$__c]['in'][$__k]  = round($__avaChartData[$__c]['in'][$__k], 4);
-                    $__avaChartData[$__c]['out'][$__k] = round($__avaChartData[$__c]['out'][$__k], 4);
-                }
-            }
-            $__avaChartMeta = [
-                'USD'  => ['label' => 'US Dollar', 'fa' => 'دلار',  'sym' => '$', 'color' => '#22C55E', 'icon' => 'fas fa-dollar-sign',     'dec' => 2],
-                'EUR'  => ['label' => 'Euro',      'fa' => 'یورو',  'sym' => '€', 'color' => '#38BDF8', 'icon' => 'fas fa-euro-sign',       'dec' => 2],
-                'USDT' => ['label' => 'Tether',    'fa' => 'تتر',   'sym' => '₮', 'color' => '#26A17B', 'icon' => 'fas fa-coins',           'dec' => 2],
-                'IRR'  => ['label' => 'Toman',     'fa' => 'تومان', 'sym' => 'T', 'color' => '#A855F7', 'icon' => 'fas fa-money-bill-wave', 'dec' => 0],
-            ];
+            $__rate30dSeed = ava_ai_compute_range($conn, 'USD', '1m');
             ?>
 
-            <div class="tx-cur-tabs" id="avaTxCurTabs">
-                <?php foreach ($__avaChartCurs as $__ci => $__cc): $__cm = $__avaChartMeta[$__cc]; ?>
-                <button type="button" class="tx-cur-tab<?php echo $__ci === 0 ? ' on' : ''; ?>"
-                        data-cur="<?php echo $__cc; ?>" data-color="<?php echo $__cm['color']; ?>"
-                        onclick="avaTxSelectCur('<?php echo $__cc; ?>', this)">
-                    <i class="<?php echo $__cm['icon']; ?>"></i>
-                    <span class="t"><?php echo $__cc === 'IRR' ? 'TOMAN' : $__cc; ?></span>
-                    <span class="s"><?php echo $__cm['fa']; ?></span>
-                </button>
-                <?php endforeach; ?>
-            </div>
-
-            <div class="tx-chart-head" style="margin-bottom:10px;">
-                <div class="tx-chart-title"><i class="fas fa-chart-area"></i> <span id="avaTxChartTitle">Cash Flow</span></div>
-                <div class="tx-range">
-                    <button type="button" class="on" data-mode="net" onclick="avaTxSetMode('net', this)">Net</button>
-                    <button type="button" data-mode="both" onclick="avaTxSetMode('both', this)">In / Out</button>
-                    <button type="button" data-mode="bar" onclick="avaTxSetMode('bar', this)">Bars</button>
-                </div>
+            <div class="ava-rate30d-head">
+                <div class="ava-rate30d-price" id="avaRate30dPrice">—</div>
+                <div class="ava-rate30d-chg" id="avaRate30dChg">—</div>
             </div>
 
             <div class="tx-chart-wrap">
-                <canvas id="avaTxChart"></canvas>
-                <div class="tx-chart-empty" id="avaTxChartEmpty" style="display:none;">
+                <canvas id="avaRate30dChart"></canvas>
+                <div class="tx-chart-empty" id="avaRate30dEmpty" style="display:none;">
                     <i class="fas fa-chart-line"></i>
-                    <span>هنوز تراکنشی برای این ارز ثبت نشده</span>
+                    <span>داده‌ی کافی برای رسم نمودار موجود نیست</span>
                 </div>
-            </div>
-
-            <div class="tx-chart-legend" id="avaTxLegend"></div>
-
-            <div class="tx-mini-stats">
-                <div class="tx-mini in"><div class="l">دریافتی</div><div class="v" id="avaTxMiniIn">0</div></div>
-                <div class="tx-mini out"><div class="l">ارسالی</div><div class="v" id="avaTxMiniOut">0</div></div>
-                <div class="tx-mini net"><div class="l">خالص</div><div class="v" id="avaTxMiniNet">0</div></div>
+                <div class="ava-smart-chart-loading" id="avaRate30dLoading" style="display:none;"><i class="fas fa-spinner fa-spin"></i></div>
             </div>
 
             <script>
-                window.AVA_TX_DATA   = <?php echo json_encode($__avaChartData, JSON_UNESCAPED_UNICODE); ?>;
-                window.AVA_TX_META   = <?php echo json_encode($__avaChartMeta, JSON_UNESCAPED_UNICODE); ?>;
-                window.AVA_TX_LABELS = <?php echo json_encode($__avaChartLabels); ?>;
+                window.AVA_RATE30D_SEED = { USD: <?php echo json_encode($__rate30dSeed, JSON_UNESCAPED_UNICODE); ?> };
             </script>
 
             <div class="ava-port-foot" style="padding-top:10px;">
-                <a href="transactions.php" class="ava-more">مشاهده جزئیات سبد دارایی <i class="fas fa-chevron-left"></i></a>
+                <span class="ava-rate-live"><i class="fas fa-circle"></i> نمودار ۳۰ روز اخیر</span>
             </div>
         </div>
 
@@ -5600,6 +5545,39 @@ html:not([data-theme="light"]) #mainDashboard.ava-dash::before{
             $__seedRates[$code] = ['price' => round((float)$r['price'], 2), 'change' => round((float)$r['change_24h'], 2), 'usd' => !empty($m['usd'])];
         }
         ?>
+
+        <!-- ===== تبدیل نرخ لحظه‌ای ===== -->
+        <div class="ava-card" id="avaConvCard" data-avasec="convert" data-avasec-title="تبدیل نرخ لحظه‌ای" data-avasec-icon="fas fa-right-left">
+            <div class="ava-sec-head">
+                <div class="ava-sec-title"><i class="fas fa-right-left"></i> تبدیل نرخ لحظه‌ای</div>
+            </div>
+
+            <div class="ava-conv-body">
+                <div class="ava-conv-row">
+                    <label class="ava-conv-lbl">از</label>
+                    <div class="ava-conv-field">
+                        <input type="text" inputmode="decimal" id="avaConvFromAmt" class="ava-conv-amt" value="1" oninput="avaConvCalc('from')">
+                        <select id="avaConvFromCur" class="ava-conv-sel" onchange="avaConvCalc('from')"></select>
+                    </div>
+                </div>
+
+                <button type="button" class="ava-conv-swap" onclick="avaConvSwap()" title="جابه‌جایی">
+                    <i class="fas fa-arrow-down-arrow-up"></i>
+                </button>
+
+                <div class="ava-conv-row">
+                    <label class="ava-conv-lbl">به</label>
+                    <div class="ava-conv-field">
+                        <input type="text" inputmode="decimal" id="avaConvToAmt" class="ava-conv-amt" value="" oninput="avaConvCalc('to')">
+                        <select id="avaConvToCur" class="ava-conv-sel" onchange="avaConvCalc('from')"></select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ava-port-foot" style="padding-top:10px;">
+                <span class="ava-rate-live"><i class="fas fa-circle"></i> بر اساس نرخ لحظه‌ای</span>
+            </div>
+        </div>
     </div>
     <script>
         window.__avaAllCurs = <?php echo json_encode($__allCurs, JSON_UNESCAPED_UNICODE); ?>;
@@ -8965,111 +8943,127 @@ async function avaLogout(){
     window.location.replace('login.php?logout=success&t=' + Date.now());
 }
 
-/* --- نمودار «سبد دارایی من» — عیناً همان کارت نمودار transactions.php
-   («جریان نقدی» بر اساس رکوردهای واقعی جدول transactions به تفکیک ارز)،
-   با همان نام‌گذاری تابع‌ها (پیشوند avaTx) تا با نسخه‌ی transactions.php
-   یکی باشد و در آینده هم‌زمان نگه داشتن رفتار دو کارت ساده بماند. --- */
-let avaTxCur  = 'USD';
-let avaTxMode = 'net';
-let avaTxChart = null;
-
-function avaTxIsLight(){
+/* --- کمک‌توابع مشترک نمودارها (تشخیص تم روشن/تیره + رنگ با شفافیت) --- */
+function avaRateIsLight(){
     try { return (document.documentElement.getAttribute('data-theme') || localStorage.getItem('ava_theme')) === 'light'; }
     catch(e){ return false; }
 }
-function avaTxFmt(v, dec){
-    const a = Math.abs(Number(v) || 0);
-    let out;
-    if (a >= 1e9)      out = (a / 1e9).toFixed(2) + 'B';
-    else if (a >= 1e6) out = (a / 1e6).toFixed(2) + 'M';
-    else if (a >= 1e3) out = (a / 1e3).toFixed(1) + 'K';
-    else               out = a.toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec });
-    return (Number(v) < 0 ? '-' : '') + out;
-}
-function avaTxHexA(hex, a){
+function avaRateHexA(hex, a){
     const h = hex.replace('#', '');
     const r = parseInt(h.substring(0,2), 16), g = parseInt(h.substring(2,4), 16), b = parseInt(h.substring(4,6), 16);
     return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
 }
 
-function avaTxSelectCur(cur, el){
-    avaTxCur = cur;
-    document.querySelectorAll('#avaTxCurTabs .tx-cur-tab').forEach(function(b){
-        b.classList.remove('on');
-        b.style.background = '';
-    });
-    if (el){
-        el.classList.add('on');
-        const c = el.dataset.color || '#A855F7';
-        el.style.background = 'linear-gradient(135deg,' + avaTxHexA(c, .95) + ',' + avaTxHexA(c, .55) + ')';
-    }
-    avaTxRender();
-}
-function avaTxSetMode(mode, el){
-    avaTxMode = mode;
-    if (el) {
-        const wrap = el.closest('.tx-range');
-        if (wrap) wrap.querySelectorAll('button').forEach(b => b.classList.remove('on'));
-        el.classList.add('on');
-    }
-    avaTxRender();
+/* ====================================================================
+   نمودار «نرخ‌های سی روز گذشته» — دراپ‌داون دلار/یورو/تتر/بیت‌کوین،
+   با انتخاب هر ارز نمودار ۳۰ روز اخیر همان ارز کشیده می‌شود.
+   دلار/یورو/تتر: dashboard.php?ava=ai_history&range=1m (همان منبع گجت هوشمند)
+   بیت‌کوین: api/crypto_market_api.php?action=history&days=30
+   ==================================================================== */
+let avaRate30dChart = null;
+let avaRate30dCur = 'USD';
+const avaRate30dCache = {};
+
+function avaRate30dMeta(cur){
+    const map = {
+        USD: { label:'دلار آمریکا', unit:'تومان', color:'#22C55E', dec:0 },
+        EUR: { label:'یورو',        unit:'تومان', color:'#38BDF8', dec:0 },
+        USDT:{ label:'تتر',         unit:'تومان', color:'#26A17B', dec:0 },
+        bitcoin:{ label:'بیت‌کوین', unit:'$',     color:'#F7931A', dec:2 },
+    };
+    return map[cur] || { label:cur, unit:'', color:'#A855F7', dec:0 };
 }
 
-function avaTxRender(){
-    const DATA = window.AVA_TX_DATA || {}, META = window.AVA_TX_META || {}, LABELS = window.AVA_TX_LABELS || [];
-    const meta  = META[avaTxCur]  || { color:'#A855F7', dec:2, label:avaTxCur, fa:avaTxCur, sym:'' };
-    const d     = DATA[avaTxCur]  || { in:[], out:[], net:[], tin:0, tout:0, count:0 };
-    const light = avaTxIsLight();
+async function avaRate30dSelect(cur){
+    avaRate30dCur = cur;
+    const loading = document.getElementById('avaRate30dLoading');
+    const empty   = document.getElementById('avaRate30dEmpty');
+    const cv      = document.getElementById('avaRate30dChart');
+    if (empty) empty.style.display = 'none';
+    if (cv) cv.style.display = 'block';
+
+    if (avaRate30dCache[cur]){ avaRate30dRender(cur, avaRate30dCache[cur]); return; }
+
+    if (cur === 'USD' && window.AVA_RATE30D_SEED && window.AVA_RATE30D_SEED.USD){
+        avaRate30dCache.USD = { history: window.AVA_RATE30D_SEED.USD.history, last: window.AVA_RATE30D_SEED.USD.last, change: window.AVA_RATE30D_SEED.USD.change };
+        avaRate30dRender(cur, avaRate30dCache.USD);
+        return;
+    }
+
+    if (loading) loading.style.display = 'flex';
+    try {
+        let data;
+        if (cur === 'bitcoin'){
+            const res = await fetch('api/crypto_market_api.php?action=history&id=bitcoin&days=30');
+            const j = await res.json();
+            const pts = (j && j.points) || [];
+            if (!j || !j.success || pts.length < 2) throw new Error('no-data');
+            const values = pts.map(p => Number(p.p));
+            data = { history: values, last: values[values.length - 1], change: values[0] > 0 ? ((values[values.length-1]-values[0])/values[0]*100) : 0 };
+        } else {
+            const res = await fetch('dashboard.php?ava=ai_history&currency=' + encodeURIComponent(cur) + '&range=1m');
+            const j = await res.json();
+            if (!j || !j.success) throw new Error('no-data');
+            const hist = j.history || [];
+            const change = (hist.length >= 2 && hist[0] > 0) ? ((hist[hist.length-1]-hist[0])/hist[0]*100) : (j.change || 0);
+            data = { history: hist, last: j.last, change: change };
+        }
+        avaRate30dCache[cur] = data;
+        if (avaRate30dCur === cur) avaRate30dRender(cur, data);
+    } catch(e){
+        if (avaRate30dCur === cur){
+            if (loading) loading.style.display = 'none';
+            if (empty) empty.style.display = 'flex';
+            if (cv) cv.style.display = 'none';
+        }
+    }
+}
+
+function avaRate30dRender(cur, data){
+    const loading = document.getElementById('avaRate30dLoading');
+    const empty   = document.getElementById('avaRate30dEmpty');
+    const cv      = document.getElementById('avaRate30dChart');
+    if (loading) loading.style.display = 'none';
+
+    const meta = avaRate30dMeta(cur);
+    const hist = (data.history || []).map(Number).filter(v => !isNaN(v));
+
+    const priceEl = document.getElementById('avaRate30dPrice');
+    const chgEl   = document.getElementById('avaRate30dChg');
+    if (priceEl) priceEl.textContent = (Number(data.last) || 0).toLocaleString('en-US', { maximumFractionDigits: meta.dec }) + ' ' + meta.unit;
+    if (chgEl){
+        const up = (Number(data.change) || 0) >= 0;
+        chgEl.className = 'ava-rate30d-chg ' + (up ? 'up' : 'dn');
+        chgEl.innerHTML = '<i class="fas fa-caret-' + (up ? 'up' : 'down') + '"></i> ' + (up ? '+' : '') + (Number(data.change) || 0).toFixed(2) + '٪ (۳۰ روز)';
+    }
+
+    if (hist.length < 2){
+        if (empty) empty.style.display = 'flex';
+        if (cv) cv.style.display = 'none';
+        if (avaRate30dChart){ avaRate30dChart.destroy(); avaRate30dChart = null; }
+        return;
+    }
+    if (empty) empty.style.display = 'none';
+    if (cv) cv.style.display = 'block';
+
+    const light = avaRateIsLight();
     const grid  = light ? 'rgba(16,8,40,.08)'  : 'rgba(255,255,255,.07)';
     const tick  = light ? '#6B6390'            : 'rgba(255,255,255,.5)';
-
-    const title = document.getElementById('avaTxChartTitle');
-    if (title) title.textContent = (avaTxCur === 'IRR' ? 'Toman' : meta.label) + ' — Cash Flow (12M)';
-
-    const mi = document.getElementById('avaTxMiniIn'), mo = document.getElementById('avaTxMiniOut'), mn = document.getElementById('avaTxMiniNet');
-    const net = (Number(d.tin) || 0) - (Number(d.tout) || 0);
-    if (mi) mi.textContent = '+' + avaTxFmt(d.tin,  meta.dec);
-    if (mo) mo.textContent = '-' + avaTxFmt(d.tout, meta.dec);
-    if (mn) mn.textContent = (net >= 0 ? '+' : '') + avaTxFmt(net, meta.dec);
-
-    const lg = document.getElementById('avaTxLegend');
-    if (lg){
-        lg.innerHTML = (avaTxMode === 'net')
-            ? '<span><i style="background:' + meta.color + '"></i> Net flow (' + (avaTxCur === 'IRR' ? 'Toman' : avaTxCur) + ')</span>'
-            : '<span><i style="background:#4CD964"></i> Received</span><span><i style="background:#FF5E5E"></i> Sent</span>';
-    }
-
-    const empty = document.getElementById('avaTxChartEmpty');
-    const cv    = document.getElementById('avaTxChart');
-    const hasData = (Number(d.count) || 0) > 0;
-    if (empty) empty.style.display = hasData ? 'none' : 'flex';
-    if (cv)    cv.style.display    = hasData ? 'block' : 'none';
-    if (!hasData){ if (avaTxChart){ avaTxChart.destroy(); avaTxChart = null; } return; }
-
-    let datasets;
-    if (avaTxMode === 'net'){
-        datasets = [{
-            label: 'Net', data: d.net, borderColor: meta.color, backgroundColor: avaTxHexA(meta.color, .18),
-            borderWidth: 2.4, tension: .38, fill: true, pointRadius: 0, pointHoverRadius: 5, pointHoverBackgroundColor: meta.color
-        }];
-    } else if (avaTxMode === 'both'){
-        datasets = [
-            { label:'Received', data:d.in,  borderColor:'#4CD964', backgroundColor:'rgba(76,217,100,.15)', borderWidth:2.2, tension:.38, fill:true, pointRadius:0, pointHoverRadius:5 },
-            { label:'Sent',     data:d.out, borderColor:'#FF5E5E', backgroundColor:'rgba(255,94,94,.13)',  borderWidth:2.2, tension:.38, fill:true, pointRadius:0, pointHoverRadius:5 }
-        ];
-    } else {
-        datasets = [
-            { label:'Received', data:d.in,  backgroundColor:'rgba(76,217,100,.75)', borderRadius:6, borderSkipped:false, maxBarThickness:16 },
-            { label:'Sent',     data:d.out, backgroundColor:'rgba(255,94,94,.75)',  borderRadius:6, borderSkipped:false, maxBarThickness:16 }
-        ];
-    }
+    const up = hist[hist.length - 1] >= hist[0];
+    const col = up ? '#22C55E' : '#FF5A6E';
 
     const cfg = {
-        type: (avaTxMode === 'bar') ? 'bar' : 'line',
-        data: { labels: LABELS, datasets: datasets },
+        type: 'line',
+        data: {
+            labels: hist.map((_, i) => i),
+            datasets: [{
+                data: hist, borderColor: col, backgroundColor: avaRateHexA(col, .18),
+                borderWidth: 2.4, tension: .38, fill: true, pointRadius: 0, pointHoverRadius: 5, pointHoverBackgroundColor: col
+            }]
+        },
         options: {
             responsive: true, maintainAspectRatio: false,
-            animation: { duration: 850, easing: 'easeOutQuart' },
+            animation: { duration: 700, easing: 'easeOutQuart' },
             interaction: { mode: 'index', intersect: false },
             plugins: {
                 legend: { display: false },
@@ -9077,24 +9071,90 @@ function avaTxRender(){
                     backgroundColor: light ? 'rgba(255,255,255,.96)' : 'rgba(12,6,30,.94)',
                     titleColor: light ? '#180F35' : '#fff',
                     bodyColor:  light ? '#3B3468' : 'rgba(255,255,255,.85)',
-                    borderColor: avaTxHexA(meta.color, .5), borderWidth: 1, padding: 11, displayColors: true,
+                    borderColor: avaRateHexA(col, .5), borderWidth: 1, padding: 11, displayColors: false,
                     callbacks: {
-                        label: function(ctx){
-                            return ' ' + ctx.dataset.label + ': ' + avaTxFmt(ctx.parsed.y, meta.dec) + ' ' + (avaTxCur === 'IRR' ? 'Toman' : avaTxCur);
-                        }
+                        title: () => '',
+                        label: (ctx) => ' ' + Number(ctx.parsed.y).toLocaleString('en-US', { maximumFractionDigits: meta.dec }) + ' ' + meta.unit
                     }
                 }
             },
             scales: {
-                x: { grid: { display:false }, ticks: { color: tick, font: { size: 9.5 }, maxRotation: 0, autoSkipPadding: 8 } },
-                y: { grid: { color: grid, drawBorder: false }, ticks: { color: tick, font: { size: 9.5 }, callback: function(v){ return avaTxFmt(v, 0); } } }
+                x: { display:false },
+                y: { grid: { color: grid, drawBorder: false }, ticks: { color: tick, font: { size: 9.5 }, maxTicksLimit: 5 } }
             }
         }
     };
 
-    if (avaTxChart){ avaTxChart.destroy(); avaTxChart = null; }
-    try { avaTxChart = new Chart(document.getElementById('avaTxChart'), cfg); } catch(e){ console.error('avaTx chart', e); }
+    if (avaRate30dChart){ avaRate30dChart.destroy(); avaRate30dChart = null; }
+    try { avaRate30dChart = new Chart(document.getElementById('avaRate30dChart'), cfg); } catch(e){ console.error('avaRate30d chart', e); }
 }
+
+/* ====================================================================
+   کارت «تبدیل نرخ لحظه‌ای» — تبدیل بین تومان و ارزهای زنده‌ی موجود در
+   window.__avaAllCurs (همان فهرست ارزهایی که در «نرخ‌های مورد علاقه»
+   قابل انتخابند)، بر اساس آخرین نرخ لحظه‌ای (window.__avaSeedRates).
+   ==================================================================== */
+function avaConvRatesMap(){
+    const map = { IRR: 1 };
+    const seed = window.__avaSeedRates || {};
+    Object.keys(seed).forEach(code => { map[code] = Number(seed[code].price) || 0; });
+    return map;
+}
+function avaConvOptionsHtml(){
+    const curs = window.__avaAllCurs || [];
+    let html = '<option value="IRR">تومان (IRR)</option>';
+    curs.forEach(c => { html += '<option value="' + c.code + '">' + c.name + ' (' + c.code + ')</option>'; });
+    return html;
+}
+function avaConvInit(){
+    const fromSel = document.getElementById('avaConvFromCur');
+    const toSel   = document.getElementById('avaConvToCur');
+    if (!fromSel || !toSel) return;
+    const html = avaConvOptionsHtml();
+    fromSel.innerHTML = html;
+    toSel.innerHTML   = html;
+    fromSel.value = 'USD';
+    toSel.value   = 'IRR';
+    avaConvCalc('from');
+}
+function avaConvSwap(){
+    const fromSel = document.getElementById('avaConvFromCur');
+    const toSel   = document.getElementById('avaConvToCur');
+    if (!fromSel || !toSel) return;
+    const tmp = fromSel.value;
+    fromSel.value = toSel.value;
+    toSel.value = tmp;
+    avaConvCalc('from');
+}
+function avaConvFmt(v){
+    const n = Number(v) || 0;
+    const dec = Math.abs(n) >= 100 ? 0 : (Math.abs(n) >= 1 ? 2 : 6);
+    return n.toLocaleString('en-US', { maximumFractionDigits: dec });
+}
+function avaConvCalc(dir){
+    const fromAmtEl = document.getElementById('avaConvFromAmt');
+    const toAmtEl   = document.getElementById('avaConvToAmt');
+    const fromSel   = document.getElementById('avaConvFromCur');
+    const toSel     = document.getElementById('avaConvToCur');
+    if (!fromAmtEl || !toAmtEl || !fromSel || !toSel) return;
+    const rates = avaConvRatesMap();
+    const fromRate = rates[fromSel.value] || 0;
+    const toRate   = rates[toSel.value] || 0;
+    if (!fromRate || !toRate) return;
+
+    if (dir === 'to'){
+        const toAmt = parseFloat((toAmtEl.value || '').toString().replace(/,/g, '')) || 0;
+        const fromAmt = toAmt * toRate / fromRate;
+        fromAmtEl.value = toAmt ? avaConvFmt(fromAmt) : '';
+    } else {
+        const fromAmt = parseFloat((fromAmtEl.value || '').toString().replace(/,/g, '')) || 0;
+        const toAmt = fromAmt * fromRate / toRate;
+        toAmtEl.value = fromAmt ? avaConvFmt(toAmt) : '';
+    }
+}
+document.addEventListener('DOMContentLoaded', function(){
+    if (typeof avaConvInit === 'function') avaConvInit();
+});
 
 /* ====================================================================
    گجت هوشمند بازار — پیش‌بینی قیمت + تمایل بازار (دلار/یورو/تتر) +
@@ -10342,19 +10402,14 @@ document.addEventListener('DOMContentLoaded', function(){
 </style>
 <script>
 document.addEventListener('DOMContentLoaded', function(){
-    const first = document.querySelector('#avaTxCurTabs .tx-cur-tab.on');
-    if (first){
-        avaTxCur = first.dataset.cur || avaTxCur;
-        const c = first.dataset.color || '#A855F7';
-        first.style.background = 'linear-gradient(135deg,' + avaTxHexA(c, .95) + ',' + avaTxHexA(c, .55) + ')';
-    }
-    if (typeof Chart !== 'undefined') avaTxRender();
-    else setTimeout(avaTxRender, 700);
+    if (typeof Chart !== 'undefined') avaRate30dSelect('USD');
+    else setTimeout(function(){ avaRate30dSelect('USD'); }, 700);
 });
 // هنگام تغییر تم، نمودار را با رنگ‌های جدید بازسازی کن
 try {
-    new MutationObserver(function(){ if (avaTxChart || document.getElementById('avaTxChart')) avaTxRender(); })
-        .observe(document.documentElement, { attributes:true, attributeFilter:['data-theme'] });
+    new MutationObserver(function(){
+        if (avaRate30dChart || document.getElementById('avaRate30dChart')) avaRate30dRender(avaRate30dCur, avaRate30dCache[avaRate30dCur] || {});
+    }).observe(document.documentElement, { attributes:true, attributeFilter:['data-theme'] });
 } catch(e){}
 
 /* --- هشدارهای قیمت --- */
