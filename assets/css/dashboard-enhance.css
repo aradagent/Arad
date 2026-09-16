@@ -1,0 +1,889 @@
+/* =========================================================================
+   dashboard-enhance.css
+   افزونه‌ی داشبورد AvaPay:
+     ۱) پیمایش راحت «گوی‌ها» + نمودار انتقال‌های هر حساب
+     ۲) بنرهای تبلیغاتی مدیریتی (جای‌گذاری آزاد + باز شدن عملیات سریع)
+     ۳) مخفی/بازگرداندن بخش‌ها با حفظ جای اصلی
+     ۴) هشدار چشم‌گیر صورت‌حساب پرداخت‌نشده
+   ========================================================================= */
+
+/* ======================================================================
+   ۱) گوی‌ها (معرفی حساب): پیمایش راحت‌تر
+   ====================================================================== */
+
+.ava-ben-scroll {
+    position: relative;
+    margin: 0 -4px;
+}
+
+/* محو شدن لبه‌ها تا کاربر بفهمد ادامه دارد */
+.ava-ben-scroll::before,
+.ava-ben-scroll::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 10px;
+    width: 34px;
+    pointer-events: none;
+    z-index: 3;
+    opacity: 0;
+    transition: opacity .25s;
+    /* روی لایه‌ی compositor بماند تا حین اسکرول دوباره رنگ‌آمیزی نشود */
+    will-change: opacity;
+}
+.ava-ben-scroll::before {
+    right: 0;
+    background: linear-gradient(to left, var(--ava-card, #150C2E), transparent);
+}
+.ava-ben-scroll::after {
+    left: 0;
+    background: linear-gradient(to right, var(--ava-card, #150C2E), transparent);
+}
+.ava-ben-scroll.has-prev::before { opacity: 1; }
+.ava-ben-scroll.has-next::after  { opacity: 1; }
+
+/* دکمه‌های پیمایش و نوار اسکرول حذف شدند — پیمایش فقط با کشیدن انگشت */
+.ava-ben-nav,
+.ava-ben-bar { display: none !important; }
+
+/* ===== پیمایش کاملاً روان =====
+   snap حذف شد چون باعث گیر کردن و پرش هنگام کشیدن می‌شد.
+   حالا حرکت آزاد و با اینرسی است. */
+.ava-ben-grid.many {
+    cursor: grab;
+    /* snap حذف شد — باعث پرش و قفل شدن وسط کشیدن می‌شد */
+    scroll-snap-type: none !important;
+    /* auto لازم است تا اینرسی بومی لمس کار کند؛ smooth آن را می‌کشد */
+    scroll-behavior: auto;
+    /* جلوگیری از فعال شدن ژست «برگشت» مرورگر هنگام رسیدن به لبه */
+    overscroll-behavior-x: contain;
+    /* اینرسی بومی روی iOS/PWA */
+    -webkit-overflow-scrolling: touch;
+    /* touch-action دست‌کاری نمی‌شود تا مرورگر خودش تصمیم بگیرد
+       (تعیین دستی، اسکرول عمودی صفحه را از داخل این کادر خراب می‌کرد) */
+    padding-bottom: 2px;
+    /* پنهان کردن کامل میله‌ی اسکرول در همه‌ی مرورگرها */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.ava-ben-grid.many::-webkit-scrollbar { width: 0 !important; height: 0 !important; display: none !important; }
+.ava-ben-grid.many.dragging { cursor: grabbing; }
+/* حذف شد: pointer-events:none روی آیتم‌ها حین دراگ باعث می‌شد یک کلیک ساده
+   (بدون هیچ جابه‌جایی) روی دسکتاپ هم گرفته نشود — چون pointer-events درست
+   در لحظه‌ی pointerup/click غیرفعال بود و هیچ رویدادی به avaBenOpen() نمی‌رسید.
+   تشخیص «کلیک بعد از کشیدن واقعی» همان‌طور که باید در دشبورد-enhance.js با
+   بررسی moved>6 روی رویداد click انجام می‌شود، پس این قانون لازم نبود. */
+
+/* آیتم‌ها نباید هنگام کشیدن انتخاب یا درگ شوند */
+.ava-ben-grid.many .ava-ben-item {
+    flex: 0 0 calc(25% - 6px);
+    min-width: 78px;
+    padding: 10px 4px;
+    scroll-snap-align: none;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: transparent;
+}
+/* افکت hover روی موبایل باعث رنگ‌آمیزی مجدد حین کشیدن می‌شد */
+@media (hover: none) {
+    .ava-ben-grid.many .ava-ben-item:hover { background: none; }
+}
+.ava-ben-grid.many .ava-ben-item:active { transform: none; }
+.ava-ben-grid.many .ava-ben-item img { -webkit-user-drag: none; pointer-events: none; }
+
+/* انیمیشن ورودی فقط یک‌بار — هنگام پیمایش باعث لرزش می‌شد */
+.ava-ben-grid.many .ava-ben-item { animation: none; }
+
+/* راهنمای کشیدن: فقط تا وقتی کاربر پیمایش نکرده */
+.ava-ben-swipe-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    transition: opacity .3s;
+}
+.ava-ben-swipe-hint.faded { opacity: 0; }
+
+/* ======================================================================
+   ۱ب) نمودار انتقال‌های هر حساب (داخل شیت جزئیات)
+   ====================================================================== */
+
+.ava-benchart {
+    margin: 14px 0 4px;
+    border-radius: 18px;
+    padding: 12px 12px 8px;
+    background: linear-gradient(160deg, rgba(255, 255, 255, .07), rgba(255, 255, 255, .02));
+    border: 1px solid rgba(255, 255, 255, .11);
+}
+.ava-benchart-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+.ava-benchart-title {
+    font-size: .72rem;
+    font-weight: 800;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.ava-benchart-title i { color: var(--ava-pur2, #A855F7); font-size: .78rem; }
+.ava-benchart-sub {
+    font-size: .58rem;
+    color: rgba(255, 255, 255, .45);
+    font-weight: 700;
+}
+
+/* تب‌های کوچک ارز */
+.ava-benchart-tabs {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    margin-bottom: 8px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+.ava-benchart-tabs::-webkit-scrollbar { display: none; }
+.ava-benchart-tab {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 11px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, .14);
+    background: rgba(255, 255, 255, .05);
+    color: rgba(255, 255, 255, .62);
+    font-family: inherit;
+    font-size: .62rem;
+    font-weight: 800;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: .18s;
+}
+.ava-benchart-tab .cnt {
+    font-size: .52rem;
+    font-weight: 800;
+    padding: 1px 6px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .12);
+    color: rgba(255, 255, 255, .7);
+}
+.ava-benchart-tab.active {
+    background: linear-gradient(135deg, var(--ava-pur, #7C3AED), var(--ava-pur2, #A855F7));
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 6px 16px rgba(124, 58, 237, .38);
+}
+.ava-benchart-tab.active .cnt { background: rgba(255, 255, 255, .25); color: #fff; }
+.ava-benchart-tab.all.active {
+    background: linear-gradient(135deg, #0EA5E9, #22C55E);
+    box-shadow: 0 6px 16px rgba(14, 165, 233, .35);
+}
+
+/* خلاصه‌ی مجموع */
+.ava-benchart-sum {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+.ava-benchart-sum b {
+    font-size: 1.05rem;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: -.01em;
+}
+.ava-benchart-sum span {
+    font-size: .62rem;
+    font-weight: 800;
+    color: rgba(255, 255, 255, .5);
+}
+.ava-benchart-canvas-wrap { position: relative; height: 170px; }
+.ava-benchart-canvas-wrap canvas { width: 100% !important; height: 170px !important; }
+
+.ava-benchart-tip {
+    position: absolute;
+    z-index: 5;
+    min-width: 120px;
+    max-width: 220px;
+    max-height: 150px;
+    overflow-y: auto;
+    background: rgba(15, 8, 30, .96);
+    border: 1px solid rgba(255, 255, 255, .14);
+    border-radius: 12px;
+    padding: 9px 11px;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, .5);
+    opacity: 0;
+    transition: opacity .12s ease;
+    font-size: .68rem;
+    direction: rtl;
+}
+.ava-benchart-tip-title {
+    font-weight: 800;
+    color: #fff;
+    font-size: .68rem;
+    margin-bottom: 6px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid rgba(255, 255, 255, .1);
+}
+.ava-benchart-tip-cur {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 6px 0 3px;
+    font-size: .68rem;
+}
+.ava-benchart-tip-cur span:last-child { color: rgba(255, 255, 255, .55); font-size: .62rem; }
+.ava-benchart-tip-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 3px 0 3px 4px;
+    font-size: .62rem;
+    color: rgba(255, 255, 255, .8);
+    border-right: 2px solid rgba(255, 255, 255, .08);
+    margin-right: 3px;
+}
+.ava-benchart-tip-row b { color: #fff; font-weight: 700; }
+.ava-benchart-tip-more {
+    font-size: .58rem;
+    color: rgba(255, 255, 255, .4);
+    padding: 2px 0 2px 4px;
+}
+
+.ava-benchart-hint {
+    text-align: center;
+    font-size: .62rem;
+    color: rgba(255, 255, 255, .38);
+    margin-top: 8px;
+}
+.ava-benchart-hint i { margin-inline-end: 4px; color: rgba(255, 255, 255, .3); }
+
+.ava-benchart-list {
+    margin-top: 12px;
+    max-height: 260px;
+    overflow-y: auto;
+    border-top: 1px solid rgba(255, 255, 255, .1);
+    padding-top: 10px;
+}
+.ava-benchart-list-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 9px 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, .06);
+    font-size: .7rem;
+}
+.ava-benchart-list-row:last-child { border-bottom: 0; }
+.ava-benchart-list-to {
+    color: #fff;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 55%;
+}
+.ava-benchart-list-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    font-size: .66rem;
+}
+.ava-benchart-list-meta span { color: rgba(255, 255, 255, .45); }
+.ava-benchart-list-meta b { font-weight: 800; }
+.ava-benchart-list-empty {
+    text-align: center;
+    padding: 18px 10px;
+    font-size: .66rem;
+    color: rgba(255, 255, 255, .4);
+}
+
+.ava-benchart-empty {
+    text-align: center;
+    padding: 22px 10px;
+    font-size: .68rem;
+    color: rgba(255, 255, 255, .42);
+}
+.ava-benchart-empty i {
+    display: block;
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+    opacity: .5;
+}
+.ava-benchart-load {
+    text-align: center;
+    padding: 26px 10px;
+    font-size: .66rem;
+    color: rgba(255, 255, 255, .4);
+}
+.ava-benchart-load i { animation: avaSpin 1s linear infinite; }
+@keyframes avaSpin { to { transform: rotate(360deg); } }
+
+/* ======================================================================
+   ۲) بنرهای مدیریتی (جای‌گذاری آزاد در هر بخش)
+   ====================================================================== */
+
+.ava-slot { display: block; }
+.ava-slot:empty { display: none; }
+
+/* بنر نواری — هم‌خانواده‌ی .ava-promo داخلی */
+.ava-promo.ava-promo-admin { position: relative; }
+.ava-promo.pcustom { background: linear-gradient(120deg, #3B0F6E 0%, #7C3AED 55%, #2563EB 120%); }
+
+.ava-promo-bgimg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: .34;
+    pointer-events: none;
+}
+.ava-promo-ico img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 13px;
+}
+
+/* نشان کوچک «باز شدن در مدال» */
+.ava-promo-badge {
+    position: absolute;
+    top: 8px;
+    inset-inline-start: 10px;
+    font-size: .5rem;
+    font-weight: 800;
+    color: rgba(255, 255, 255, .85);
+    background: rgba(0, 0, 0, .28);
+    border: 1px solid rgba(255, 255, 255, .2);
+    padding: 2px 7px;
+    border-radius: 20px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* بنر بزرگ (layout = slide) */
+.ava-promo-big {
+    position: relative;
+    overflow: hidden;
+    border-radius: 22px;
+    min-height: 148px;
+    margin: 4px 0 14px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, .16);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, .42);
+    transition: transform .2s;
+}
+.ava-promo-big:active { transform: scale(.985); }
+.ava-promo-big > * { position: relative; z-index: 2; }
+.ava-promo-big .ava-promo-bgimg { z-index: 1; opacity: .5; }
+.ava-promo-big-ico {
+    width: 46px;
+    height: 46px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, .18);
+    border: 1px solid rgba(255, 255, 255, .3);
+    color: #fff;
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+}
+.ava-promo-big-ico img { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; }
+.ava-promo-big-t { font-size: 1rem; font-weight: 900; color: #fff; line-height: 1.6; }
+.ava-promo-big-s { font-size: .68rem; color: rgba(255, 255, 255, .82); line-height: 1.7; margin-top: 4px; }
+.ava-promo-big-cta {
+    align-self: flex-start;
+    margin-top: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, .95);
+    color: #1a0b2e;
+    font-size: .64rem;
+    font-weight: 900;
+}
+
+/* ======================================================================
+   ۳) مخفی‌سازی بخش‌ها با حفظ جای اصلی
+   ====================================================================== */
+
+/* بخش مخفی: فقط پنهان می‌شود و از DOM حذف نمی‌شود،
+   بنابراین با بازگرداندن دقیقاً سر جای قبلی برمی‌گردد. */
+[data-avasec].ava-sec-hidden {
+    display: none !important;
+}
+
+/* دکمه‌ی مخفی‌کردن روی هر بخش (فقط در حالت ویرایش) */
+.ava-sec-hide-btn {
+    display: none;
+    position: absolute;
+    top: 8px;
+    inset-inline-start: 8px;
+    z-index: 20;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 90, 110, .55);
+    background: rgba(30, 8, 20, .92);
+    color: #FF7A8A;
+    font-size: .62rem;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, .5);
+}
+.ava-sec-hide-btn:active { transform: scale(.88); }
+
+body.ava-editing [data-avasec] {
+    position: relative;
+    outline: 1px dashed rgba(168, 85, 247, .5);
+    outline-offset: 3px;
+    border-radius: 18px;
+}
+body.ava-editing .ava-sec-hide-btn { display: flex; }
+
+/* نوار اعلام حالت ویرایش */
+.ava-edit-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: calc(96px + env(safe-area-inset-bottom));
+    z-index: 9998;
+    display: none;
+    justify-content: center;
+    padding: 0 12px;
+    pointer-events: none;
+}
+body.ava-editing .ava-edit-bar { display: flex; }
+.ava-edit-bar > div {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 420px;
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #1B1440, #2A1A5E);
+    border: 1px solid rgba(168, 85, 247, .5);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, .5);
+    font-size: .68rem;
+    font-weight: 700;
+    color: #EDEAFB;
+}
+.ava-edit-bar button {
+    margin-inline-start: auto;
+    border: 0;
+    border-radius: 12px;
+    padding: 7px 14px;
+    font-family: inherit;
+    font-size: .66rem;
+    font-weight: 800;
+    color: #fff;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--ava-pur, #7C3AED), var(--ava-pur2, #A855F7));
+}
+
+/* فهرست بخش‌ها در شیت شخصی‌سازی */
+.ava-secmgr-list { display: flex; flex-direction: column; gap: 7px; margin: 10px 0 4px; }
+.ava-secmgr-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, .05);
+    border: 1px solid rgba(255, 255, 255, .1);
+}
+.ava-secmgr-row.off { opacity: .55; }
+.ava-secmgr-ico {
+    width: 30px;
+    height: 30px;
+    flex: none;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(124, 58, 237, .16);
+    color: var(--ava-pur2, #A855F7);
+    font-size: .72rem;
+}
+.ava-secmgr-name { flex: 1; min-width: 0; font-size: .74rem; font-weight: 800; color: #fff; }
+.ava-secmgr-pos { font-size: .55rem; color: rgba(255, 255, 255, .4); font-weight: 700; }
+
+/* سوییچ */
+.ava-switch { position: relative; width: 42px; height: 24px; flex: none; }
+.ava-switch input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; z-index: 2; }
+.ava-switch i {
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, .14);
+    transition: .22s;
+}
+.ava-switch i::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #fff;
+    transition: .22s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .35);
+}
+.ava-switch input:checked + i { background: linear-gradient(135deg, var(--ava-pur, #7C3AED), var(--ava-pur2, #A855F7)); }
+.ava-switch input:checked + i::after { transform: translateX(18px); }
+
+/* ======================================================================
+   ۴) هشدار صورت‌حساب پرداخت‌نشده
+   ====================================================================== */
+
+/* کارت صورت‌حساب وقتی فیش پرداخت‌نشده دارد */
+.ava-top-inv.ava-inv-alarm {
+    position: relative;
+    border-color: rgba(255, 90, 110, .55) !important;
+    background:
+        radial-gradient(120% 130% at 100% 0%, rgba(255, 90, 110, .16), transparent 62%),
+        var(--ava-card, #150C2E);
+    animation: avaInvHalo 2s ease-in-out infinite;
+    overflow: hidden;
+}
+@keyframes avaInvHalo {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 90, 110, .0), 0 10px 26px rgba(0, 0, 0, .35); }
+    50%      { box-shadow: 0 0 0 4px rgba(255, 90, 110, .22), 0 10px 26px rgba(0, 0, 0, .35); }
+}
+
+/* نوار براق متحرک روی کارت */
+.ava-inv-alarm::before {
+    content: '';
+    position: absolute;
+    top: -40%;
+    inset-inline-start: -30%;
+    width: 45%;
+    height: 200%;
+    pointer-events: none;
+    z-index: 1;
+    background: linear-gradient(105deg, transparent, rgba(255, 255, 255, .13), transparent);
+    transform: skewX(-18deg);
+    animation: avaInvShine 3.6s ease-in-out infinite;
+}
+@keyframes avaInvShine { 0%, 60% { inset-inline-start: -60%; } 100% { inset-inline-start: 130%; } }
+.ava-inv-alarm > * { position: relative; z-index: 2; }
+
+/* برچسب گوشه — صاف و دقیقاً چسبیده به گوشه‌ی کارت */
+.ava-inv-ribbon {
+    position: absolute;
+    top: 0;
+    inset-inline-end: 0;
+    z-index: 4;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: linear-gradient(135deg, #FF5A6E, #FF8A3D);
+    color: #fff;
+    font-size: .52rem;
+    font-weight: 900;
+    letter-spacing: .02em;
+    line-height: 1;
+    padding: 5px 10px;
+    white-space: nowrap;
+    /* گوشه‌ی بیرونی هم‌اندازه‌ی گردی کارت، گوشه‌ی داخلی نرم */
+    border-start-end-radius: 18px;
+    border-end-start-radius: 12px;
+    box-shadow: 0 4px 12px rgba(255, 90, 110, .38);
+}
+.ava-inv-ribbon i { font-size: .5rem; }
+/* کارت باید گردی خودش را نگه دارد تا برچسب بیرون نزند */
+.ava-top-inv.ava-inv-alarm { border-radius: 18px; }
+
+/* شمارنده در عنوان */
+.ava-inv-alarm .ava-inv-count {
+    background: linear-gradient(135deg, #FF5A6E, #FF8A3D) !important;
+    color: #fff !important;
+    animation: avaInvCount 1.2s ease-in-out infinite;
+}
+@keyframes avaInvCount {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.16); }
+}
+.ava-inv-alarm .ava-sec-title > i:first-child {
+    color: #FF7A8A;
+    animation: avaInvRing 2.2s ease-in-out infinite;
+    transform-origin: 50% 10%;
+}
+@keyframes avaInvRing {
+    0%, 72%, 100% { transform: rotate(0); }
+    76% { transform: rotate(-13deg); }
+    80% { transform: rotate(11deg); }
+    84% { transform: rotate(-8deg); }
+    88% { transform: rotate(6deg); }
+    92% { transform: rotate(-3deg); }
+}
+
+/* مجموع بدهی، بالای فهرست */
+.ava-inv-due {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 9px;
+    padding: 9px 11px;
+    border-radius: 13px;
+    background: linear-gradient(135deg, rgba(255, 90, 110, .18), rgba(255, 138, 61, .12));
+    border: 1px solid rgba(255, 90, 110, .35);
+}
+.ava-inv-due-ico {
+    width: 26px;
+    height: 26px;
+    flex: none;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 90, 110, .22);
+    color: #FF8A9A;
+    font-size: .66rem;
+}
+.ava-inv-due-txt { min-width: 0; flex: 1; }
+.ava-inv-due-t { font-size: .58rem; font-weight: 800; color: rgba(255, 255, 255, .62); }
+.ava-inv-due-v { font-size: .74rem; font-weight: 900; color: #fff; line-height: 1.7; }
+
+/* آیتم پرداخت‌نشده */
+.ava-inv-item.ava-inv-due-item {
+    border-color: rgba(255, 90, 110, .45) !important;
+    background: linear-gradient(150deg, rgba(255, 90, 110, .12), rgba(255, 255, 255, .02)) !important;
+    position: relative;
+    padding-inline-start: 14px;
+}
+.ava-inv-item.ava-inv-due-item::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    bottom: 8px;
+    inset-inline-start: 5px;
+    width: 3px;
+    border-radius: 4px;
+    background: linear-gradient(180deg, #FF5A6E, #FF8A3D);
+}
+.ava-inv-item.ava-inv-due-item .ava-inv-amt { color: #fff; font-size: .76rem; }
+
+/* دکمه پرداخت */
+.ava-inv-pay {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 7px;
+    padding: 5px 12px;
+    border: 0;
+    border-radius: 20px;
+    font-family: inherit;
+    font-size: .6rem;
+    font-weight: 900;
+    color: #fff;
+    cursor: pointer;
+    background: linear-gradient(135deg, #FF5A6E, #FF8A3D);
+    box-shadow: 0 6px 16px rgba(255, 90, 110, .35);
+    animation: avaInvPay 1.8s ease-in-out infinite;
+}
+@keyframes avaInvPay {
+    0%, 100% { box-shadow: 0 6px 16px rgba(255, 90, 110, .3); }
+    50%      { box-shadow: 0 6px 22px rgba(255, 90, 110, .62); }
+}
+.ava-inv-pay:active { transform: scale(.94); }
+
+/* نوار هشدار چسبان بالای داشبورد */
+.ava-inv-topbar {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 12px;
+    padding: 11px 13px;
+    border-radius: 16px;
+    cursor: pointer;
+    color: #fff;
+    background: linear-gradient(120deg, #7A1225 0%, #E11D48 55%, #F59E0B 130%);
+    border: 1px solid rgba(255, 255, 255, .2);
+    box-shadow: 0 12px 28px rgba(225, 29, 72, .32);
+    animation: avaInvBarIn .45s ease both;
+}
+.ava-inv-topbar.on { display: flex; }
+.ava-alert-carousel {
+    position: relative;
+    margin: 0 0 12px;
+    border-radius: 16px;
+}
+.ava-alert-track.ava-banner-track {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    transition: none;
+}
+.ava-alert-track.ava-banner-track::-webkit-scrollbar { display: none; }
+.ava-alert-track > * { flex: 0 0 100%; scroll-snap-align: start; }
+.ava-alert-track .ava-inv-topbar { display: flex; margin: 0; border-radius: 16px; }
+.ava-alert-carousel .ava-alert-dots { display: none !important; }
+/* رنگ و آیکون متفاوت برای هر نوع اسلاید هشدار */
+.ava-alert-track .ava-inv-topbar.ava-alert-invoice {
+    background: linear-gradient(120deg, #7A1225 0%, #E11D48 55%, #F59E0B 130%);
+    box-shadow: 0 12px 28px rgba(225, 29, 72, .32);
+}
+.ava-alert-track .ava-inv-topbar.ava-alert-accounts {
+    background: linear-gradient(120deg, #3B0764 0%, #7C3AED 55%, #A855F7 130%);
+    box-shadow: 0 12px 28px rgba(124, 58, 237, .32);
+}
+.ava-alert-track .ava-inv-topbar.ava-alert-receipts {
+    background: linear-gradient(120deg, #064E3B 0%, #0EA5E9 55%, #10B981 130%);
+    box-shadow: 0 12px 28px rgba(14, 165, 233, .32);
+}
+.ava-alert-track .ava-inv-topbar.ava-alert-offers {
+    background: linear-gradient(120deg, #831843 0%, #EC4899 55%, #A855F7 130%);
+    box-shadow: 0 12px 28px rgba(236, 72, 153, .32);
+}
+@keyframes avaInvBarIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+.ava-inv-topbar-ico {
+    width: 34px;
+    height: 34px;
+    flex: none;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, .2);
+    border: 1px solid rgba(255, 255, 255, .28);
+    font-size: .88rem;
+    animation: avaInvRing 2.2s ease-in-out infinite;
+    transform-origin: 50% 10%;
+}
+.ava-inv-topbar-txt { min-width: 0; flex: 1; }
+.ava-inv-topbar-t { font-size: .76rem; font-weight: 900; line-height: 1.6; }
+.ava-inv-topbar-s { font-size: .6rem; color: rgba(255, 255, 255, .84); line-height: 1.7; }
+.ava-inv-topbar-cta {
+    flex: none;
+    padding: 6px 13px;
+    border-radius: 20px;
+    background: #fff;
+    color: #B91C3C;
+    font-size: .62rem;
+    font-weight: 900;
+}
+.ava-inv-topbar-x {
+    flex: none;
+    border: 0;
+    background: none;
+    color: rgba(255, 255, 255, .7);
+    font-size: .8rem;
+    cursor: pointer;
+    padding: 4px;
+}
+
+/* نشانگر تعداد بخش‌های مخفی، در منوی پروفایل */
+.ava-secmgr-badge {
+    margin-inline-start: auto;
+    margin-inline-end: 6px;
+    font-size: .58rem;
+    font-weight: 800;
+    padding: 3px 9px;
+    border-radius: 20px;
+    color: #A855F7;
+    background: rgba(168, 85, 247, .14);
+    border: 1px solid rgba(168, 85, 247, .35);
+    white-space: nowrap;
+}
+
+/* عنوان شیت‌ها (کلاس موجود ولی بدون استایل بود) */
+.ava-sheet-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: .92rem;
+    font-weight: 900;
+    color: #fff;
+    margin: 2px 0 14px;
+}
+.ava-sheet-title i { color: var(--ava-pur2, #A855F7); font-size: .88rem; }
+html[data-theme="light"] .ava-sheet-title { color: #1F1235; }
+
+/* ======================================================================
+   حالت روشن
+   ====================================================================== */
+html[data-theme="light"] .ava-ben-scroll::before { background: linear-gradient(to left, #fff, transparent); }
+html[data-theme="light"] .ava-ben-scroll::after  { background: linear-gradient(to right, #fff, transparent); }
+html[data-theme="light"] .ava-ben-nav { background: rgba(255, 255, 255, .92); color: #2A0D3F; border-color: rgba(0, 0, 0, .12); }
+html[data-theme="light"] .ava-benchart { background: rgba(124, 58, 237, .05); border-color: rgba(124, 58, 237, .16); }
+html[data-theme="light"] .ava-benchart-title,
+html[data-theme="light"] .ava-benchart-sum b,
+html[data-theme="light"] .ava-secmgr-name,
+html[data-theme="light"] .ava-inv-due-v { color: #1F1235; }
+html[data-theme="light"] .ava-benchart-tab { color: #5B5177; border-color: rgba(0, 0, 0, .1); background: rgba(0, 0, 0, .03); }
+html[data-theme="light"] .ava-secmgr-row { background: rgba(0, 0, 0, .03); border-color: rgba(0, 0, 0, .08); }
+html[data-theme="light"] .ava-top-inv.ava-inv-alarm { background: radial-gradient(120% 130% at 100% 0%, rgba(255, 90, 110, .12), transparent 62%), #fff; }
+html[data-theme="light"] .ava-switch i { background: rgba(0, 0, 0, .16); }
+
+/* ======================================================================
+   صفحه‌های کوچک
+   ====================================================================== */
+@media (max-width: 400px) {
+    .ava-ben-grid.many .ava-ben-item { flex: 0 0 calc(30% - 6px); }
+    .ava-inv-topbar-cta { display: none; }
+    .ava-benchart-canvas-wrap,
+    .ava-benchart-canvas-wrap canvas { height: 132px !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ava-inv-alarm,
+    .ava-inv-alarm::before,
+    .ava-inv-alarm .ava-inv-count,
+    .ava-inv-alarm .ava-sec-title > i:first-child,
+    .ava-inv-pay,
+    .ava-inv-topbar,
+    .ava-inv-topbar-ico { animation: none !important; }
+}
+
+/* ===== هشدار «حساب در انتظار پرداخت»: قرمز پررنگ و ضربان‌دار =====
+   این بنر یعنی کاربر باید پول واریز کند، پس باید از بقیه‌ی بنرها
+   (که صرفاً اطلاعی‌اند) واضح‌تر و قرمزتر دیده شود. */
+.ava-inv-topbar.ava-alert-danger {
+    background: linear-gradient(120deg, #6B0F1A 0%, #DC2626 50%, #EF4444 100%);
+    border-color: rgba(255, 120, 120, .55);
+    box-shadow: 0 12px 30px rgba(220, 38, 38, .48);
+    animation: avaInvBarIn .45s ease both, avaDangerPulse 1.9s ease-in-out infinite;
+}
+.ava-inv-topbar.ava-alert-danger .ava-inv-topbar-ico {
+    background: rgba(255, 255, 255, .22);
+    color: #fff;
+}
+.ava-inv-topbar.ava-alert-danger .ava-inv-topbar-cta {
+    background: #fff;
+    color: #B91C1C;
+    font-weight: 900;
+}
+@keyframes avaDangerPulse {
+    0%, 100% { box-shadow: 0 12px 30px rgba(220, 38, 38, .40); }
+    50%      { box-shadow: 0 12px 38px rgba(239, 68, 68, .72); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .ava-inv-topbar.ava-alert-danger { animation: avaInvBarIn .45s ease both; }
+}

@@ -1,0 +1,893 @@
+/* ============================================================
+   AvaPay – Dashboard (طرح جدید مطابق ماکت)
+   RTL / Responsive : Mobile → Tablet → Desktop
+   ============================================================ */
+
+#mainDashboard.ava-dash{
+    --ava-bg:#0A0520;
+    --ava-bg2:#0E0828;
+    --ava-card:#151034;
+    --ava-card2:#1B1440;
+    --ava-line:rgba(255,255,255,.07);
+    --ava-line2:rgba(255,255,255,.12);
+    --ava-txt:#EDEAFB;
+    --ava-mut:#9C93C8;
+    --ava-pur:#7C3AED;
+    --ava-pur2:#A855F7;
+    --ava-grn:#22C55E;
+    --ava-red:#FF5A6E;
+    --ava-r:18px;
+
+    direction:rtl;
+    text-align:right;
+    font-family:"Vazirmatn","IRANSans","Segoe UI",Tahoma,sans-serif;
+    background:var(--ava-bg);
+    color:var(--ava-txt);
+    padding:14px 12px calc(96px + env(safe-area-inset-bottom));
+    /* فضای بالا برای هدر ثابت */
+    padding-top:calc(96px + env(safe-area-inset-top));
+    max-width:1280px;
+    margin:0 auto;
+    min-height:100vh;
+}
+[data-theme="light"] #mainDashboard.ava-dash{
+    --ava-bg:#F4F2FB; --ava-bg2:#FFFFFF; --ava-card:#FFFFFF; --ava-card2:#FAF9FF;
+    --ava-line:rgba(16,8,40,.08); --ava-line2:rgba(16,8,40,.14);
+    --ava-txt:#180F35; --ava-mut:#6B6390;
+}
+#mainDashboard.ava-dash *{box-sizing:border-box;}
+.ava-dash .ava-card{
+    background:var(--ava-card);
+    border:1px solid var(--ava-line);
+    border-radius:var(--ava-r);
+    padding:14px;
+}
+.ava-dash .ava-sec{margin-bottom:12px;}
+
+/* عنوان بخش‌ها */
+.ava-sec-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;}
+.ava-sec-title{display:flex;align-items:center;gap:8px;font-size:.9rem;font-weight:800;color:var(--ava-txt);}
+.ava-sec-title i{color:var(--ava-pur2);font-size:.95rem;}
+.ava-more{display:inline-flex;align-items:center;gap:5px;font-size:.68rem;font-weight:700;color:var(--ava-pur2);text-decoration:none;background:none;border:0;cursor:pointer;padding:0;}
+.ava-more i{font-size:.6rem;}
+
+/* ========== HEADER (ثابت / Fixed) ========== */
+.ava-head{
+    position:fixed;
+    top:0; left:0; right:0;
+    z-index:1200;
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    /* کمی پایین‌تر از حد بالای صفحه */
+    padding:calc(env(safe-area-inset-top) + 18px) 14px 14px;
+    background:rgba(10,5,32,.82);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--ava-line);
+    margin:0;
+}
+[data-theme="light"] .ava-head{background:rgba(244,242,251,.9);}
+/* محدود کردن عرض محتوای هدر هم‌راستا با بدنه */
+.ava-head > *{max-width:1280px;}
+@media (min-width:1280px){
+    .ava-head{padding-left:max(14px,calc((100% - 1280px)/2 + 14px));padding-right:max(14px,calc((100% - 1280px)/2 + 14px));}
+}
+.ava-user{display:flex;align-items:center;gap:10px;min-width:0;}
+.ava-user img{width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid rgba(124,58,237,.55);flex:none;}
+.ava-user-name{font-size:1rem;font-weight:800;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ava-user-lvl{display:flex;align-items:center;gap:5px;font-size:.68rem;color:var(--ava-mut);margin-top:2px;}
+.ava-user-lvl .lvl-badge{width:14px;height:14px;border-radius:50%;background:linear-gradient(135deg,var(--ava-pur),var(--ava-pur2));display:inline-flex;align-items:center;justify-content:center;font-size:.45rem;color:#fff;}
+.ava-head-acts{display:flex;align-items:center;gap:8px;flex:none;}
+.ava-ico-btn{
+    width:44px;height:44px;border-radius:14px;flex:none;
+    background:var(--ava-card);border:1px solid var(--ava-line);
+    color:var(--ava-txt);font-size:1rem;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;position:relative;text-decoration:none;
+    transition:transform .15s,border-color .2s;
+}
+.ava-ico-btn:active{transform:scale(.93);}
+.ava-ico-btn .ava-dot{position:absolute;top:9px;right:11px;width:8px;height:8px;border-radius:50%;background:var(--ava-red);border:2px solid var(--ava-card);}
+
+/* ========== ردیف بالا: کیف پول + بنر ========== */
+.ava-top-grid,.ava-grid3{display:grid;}
+.ava-top-grid > *,.ava-grid3 > *{min-width:0;}
+.ava-top-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+
+.ava-wallet-card{
+    position:relative;overflow:hidden;
+    background:
+        radial-gradient(120% 90% at 100% 0%, rgba(255,77,141,.22), transparent 55%),
+        radial-gradient(120% 90% at 0% 100%, rgba(56,189,248,.20), transparent 55%),
+        linear-gradient(150deg,#241556 0%,#160E38 55%,#120A2C 100%);
+    border:1px solid rgba(168,85,247,.35);
+    border-radius:24px;padding:18px;
+    min-height:190px;display:flex;flex-direction:column;justify-content:space-between;
+    box-shadow:0 18px 44px rgba(0,0,0,.42), inset 0 1px 0 rgba(255,255,255,.14);
+}
+/* هاله‌ی نرم گوشه */
+.ava-wallet-card::after{
+    content:"";position:absolute;left:-40px;bottom:-50px;width:200px;height:200px;
+    background:radial-gradient(circle,rgba(124,58,237,.5),transparent 65%);
+    pointer-events:none;animation:avaWalGlow 6s ease-in-out infinite;
+}
+@keyframes avaWalGlow{0%,100%{opacity:.65;transform:scale(1)}50%{opacity:1;transform:scale(1.12)}}
+/* براقی متحرک روی کارت */
+.ava-wallet-card::before{
+    content:"";position:absolute;top:0;left:-60%;width:45%;height:100%;
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,.13),transparent);
+    transform:skewX(-18deg);pointer-events:none;animation:avaWalShine 5.5s ease-in-out infinite;
+}
+@keyframes avaWalShine{0%{left:-60%}55%,100%{left:130%}}
+.ava-wal-top{
+    display:flex;align-items:center;justify-content:space-between;gap:7px;
+    font-size:.72rem;color:rgba(255,255,255,.72);font-weight:700;position:relative;z-index:2;
+}
+.ava-wal-top>span{display:inline-flex;align-items:center;gap:7px;}
+.ava-wal-top>span::before{
+    content:"";width:7px;height:7px;border-radius:50%;background:#22C55E;
+    box-shadow:0 0 0 0 rgba(34,197,94,.6);animation:avaWalDot 1.8s infinite;
+}
+@keyframes avaWalDot{0%{box-shadow:0 0 0 0 rgba(34,197,94,.5)}70%{box-shadow:0 0 0 7px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+.ava-wal-eye{
+    background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16);
+    color:rgba(255,255,255,.8);cursor:pointer;font-size:.72rem;
+    width:30px;height:30px;border-radius:10px;transition:.2s;
+}
+.ava-wal-eye:hover{background:rgba(255,255,255,.16);}
+.ava-wal-amount{
+    font-size:1.95rem;font-weight:900;letter-spacing:-1px;margin:10px 0 2px;line-height:1.15;
+    position:relative;z-index:2;
+    background:linear-gradient(120deg,#fff 20%,#D8B4FE 55%,#fff 90%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    text-shadow:0 2px 20px rgba(168,85,247,.35);
+}
+.ava-wal-unit{
+    font-size:.68rem;color:rgba(255,255,255,.55);position:relative;z-index:2;
+    letter-spacing:.08em;font-weight:700;
+}
+.ava-wal-btn{
+    align-self:stretch;margin-top:14px;position:relative;z-index:2;
+    display:inline-flex;align-items:center;justify-content:space-between;gap:8px;
+    background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.07));
+    border:1px solid rgba(255,255,255,.22);
+    color:#fff;border-radius:15px;padding:12px 15px;
+    font-size:.78rem;font-weight:800;cursor:pointer;font-family:inherit;
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    box-shadow:0 8px 22px rgba(0,0,0,.28);transition:.22s;
+}
+.ava-wal-btn:hover{background:linear-gradient(135deg,rgba(255,255,255,.24),rgba(255,255,255,.12));transform:translateY(-1px);}
+.ava-wal-btn i{font-size:.95rem;color:#C4B5FD;}
+.ava-wal-btn:active{transform:scale(.97);}
+.ava-wal-art{
+    position:absolute;left:16px;top:20px;font-size:3.6rem;
+    color:rgba(196,181,253,.16);
+    filter:drop-shadow(0 0 22px rgba(168,85,247,.45));
+    animation:avaWalFloat 5s ease-in-out infinite;pointer-events:none;
+}
+@keyframes avaWalFloat{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-9px) rotate(-2deg)}}
+.ava-wal-spark{position:absolute;left:14px;bottom:14px;width:120px;height:34px;z-index:1;opacity:.9;pointer-events:none;}
+
+.ava-promo-card{
+    position:relative;overflow:hidden;
+    background:linear-gradient(140deg,#4C1D95 0%,#2E1065 55%,#1B1044 100%);
+    border:1px solid rgba(168,85,247,.3);
+    border-radius:20px;padding:16px;min-height:180px;
+    display:flex;flex-direction:column;justify-content:space-between;
+}
+.ava-promo-card h3{font-size:1.02rem;font-weight:800;line-height:1.6;margin:0;max-width:62%;}
+.ava-promo-card p{font-size:.72rem;color:#C9BEF3;margin:6px 0 0;}
+.ava-promo-btn{
+    align-self:flex-start;margin-top:12px;
+    background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);
+    color:#fff;border-radius:12px;padding:8px 16px;font-size:.72rem;font-weight:700;
+    cursor:pointer;text-decoration:none;font-family:inherit;backdrop-filter:blur(6px);
+}
+.ava-coins{position:absolute;left:10px;top:14px;width:110px;height:110px;}
+.ava-coin{position:absolute;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:#fff;box-shadow:0 8px 20px rgba(0,0,0,.4);}
+.ava-coin.c1{background:linear-gradient(135deg,#F7931A,#FFB65C);top:0;right:16px;}
+.ava-coin.c2{background:linear-gradient(135deg,#627EEA,#8FA5F5);top:34px;right:-6px;}
+.ava-coin.c3{background:linear-gradient(135deg,#26A17B,#4FD1A5);top:62px;right:30px;}
+
+/* ========== ولت‌های من ========== */
+.ava-wallets{display:flex;gap:10px;overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;padding-bottom:4px;scrollbar-width:none;}
+.ava-wallets::-webkit-scrollbar{display:none;}
+.ava-wal-item{
+    flex:0 0 auto;min-width:118px;scroll-snap-align:start;
+    background:var(--ava-card2);border:1px solid var(--ava-line);
+    border-radius:14px;padding:12px;cursor:pointer;transition:border-color .2s,transform .15s;
+}
+.ava-wal-item:active{transform:scale(.97);}
+.ava-wal-item:hover{border-color:rgba(124,58,237,.5);}
+.ava-wal-item-top{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.ava-flag{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;background:rgba(255,255,255,.06);flex:none;overflow:hidden;}
+.ava-wal-item-name{font-size:.72rem;font-weight:700;line-height:1.4;}
+.ava-wal-item-code{font-size:.6rem;color:var(--ava-mut);}
+.ava-wal-item-val{font-size:1rem;font-weight:800;}
+.ava-wal-item-unit{font-size:.6rem;color:var(--ava-mut);margin-top:2px;}
+.ava-wal-mini-spark{display:block;width:100%;height:26px;margin-top:8px;opacity:.95;}
+
+/* ========== عملیات سریع ========== */
+.ava-qa{display:flex;gap:10px;padding-bottom:4px;overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;scrollbar-width:none;}
+.ava-qa::-webkit-scrollbar{display:none;}
+.ava-qa-item{
+    flex:0 0 calc((100% - 20px) / 3);width:calc((100% - 20px) / 3);
+    background:var(--ava-card2);border:1px solid var(--ava-line);
+    border-radius:14px;padding:14px 6px;text-align:center;cursor:pointer;
+    text-decoration:none;color:var(--ava-txt);transition:transform .15s,border-color .2s;
+    scroll-snap-align:start;
+}
+.ava-qa-item:active{transform:scale(.95);}
+.ava-qa-item:hover{border-color:rgba(124,58,237,.5);}
+.ava-qa-badge{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.15rem;margin:0 auto 8px;}
+.ava-qa-item span:last-child{font-size:.66rem;font-weight:700;display:block;white-space:normal;overflow:visible;text-overflow:clip;line-height:1.35;word-break:break-word;}
+
+/* آیکون‌های عملیات سریع: گرادیانی، برجسته و با هاله‌ی رنگی */
+.ava-qa-badge{position:relative;color:#fff;box-shadow:0 6px 14px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.28);}
+.ava-qa-badge::after{content:"";position:absolute;inset:0;border-radius:50%;background:linear-gradient(180deg,rgba(255,255,255,.30),rgba(255,255,255,0) 55%);pointer-events:none;}
+.ava-qa-badge i{position:relative;z-index:1;filter:drop-shadow(0 1px 2px rgba(0,0,0,.35));}
+.ava-qa-item:hover .ava-qa-badge{transform:translateY(-2px);}
+.ava-qa-badge{transition:transform .18s ease;}
+.qa-g-violet{background:linear-gradient(145deg,#8B5CF6,#6D28D9);}
+.qa-g-indigo{background:linear-gradient(145deg,#A855F7,#7C3AED);}
+.qa-g-gold  {background:linear-gradient(145deg,#FBBF24,#D97706);}
+.qa-g-sky   {background:linear-gradient(145deg,#38BDF8,#0284C7);}
+.qa-g-pink  {background:linear-gradient(145deg,#F472B6,#DB2777);}
+.qa-g-green {background:linear-gradient(145deg,#34D399,#059669);}
+
+/* آیکون‌های سه‌بعدی اختصاصی تیم طراحی (تصویری، نه FontAwesome) */
+.ava-qa-badge.ava-qa-img{
+    background:none;box-shadow:none;border-radius:16px;
+    width:52px;height:52px;padding:0;overflow:hidden;
+}
+.ava-qa-badge.ava-qa-img::after{display:none;}
+.ava-qa-badge.ava-qa-img img{
+    width:100%;height:100%;object-fit:cover;display:block;
+    border-radius:16px;filter:drop-shadow(0 3px 8px rgba(0,0,0,.35));
+}
+
+/* ========== سبد دارایی + نرخ‌های مورد علاقه ========== */
+.ava-mid-grid{
+    display:flex;gap:12px;margin-bottom:12px;align-items:stretch;
+    overflow-x:auto;-webkit-overflow-scrolling:touch;
+    scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:4px;
+}
+.ava-mid-grid::-webkit-scrollbar{display:none;}
+.ava-mid-grid > *{flex:0 0 88%;min-width:0;scroll-snap-align:center;display:flex;flex-direction:column;height:auto;}
+#avaPortCard, #avaRatesCard{display:flex;flex-direction:column;}
+#avaPortCard{justify-content:flex-start;}
+/* هر دو کارت کشیده شوند تا هم‌ارتفاع بمانند */
+.ava-mid-grid{align-items:stretch;}
+
+.ava-port-total{font-size:.66rem;color:var(--ava-mut);}
+.ava-port-val{font-size:1.5rem;font-weight:800;margin:4px 0 2px;}
+.ava-port-unit{font-size:.66rem;color:var(--ava-mut);margin-bottom:6px;}
+.ava-port-pl{font-size:.72rem;font-weight:800;}
+.ava-port-pl.up{color:var(--ava-grn);} .ava-port-pl.dn{color:var(--ava-red);}
+.ava-port-pl-lbl{font-size:.62rem;color:var(--ava-mut);display:block;}
+.ava-port-chart{height:96px;margin:8px 0 10px;position:relative;}
+.ava-port-tabs{display:flex;gap:6px;background:rgba(255,255,255,.04);border-radius:12px;padding:4px;}
+.ava-port-tab{
+    flex:1;border:0;background:none;color:var(--ava-mut);
+    font-size:.66rem;font-weight:700;padding:7px 4px;border-radius:9px;cursor:pointer;font-family:inherit;
+}
+.ava-port-tab.active{background:linear-gradient(135deg,var(--ava-pur),var(--ava-pur2));color:#fff;}
+
+.ava-rate-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--ava-line);}
+.ava-rate-row:last-child{border-bottom:0;}
+.ava-star{background:none;border:0;color:#FBBF24;font-size:.75rem;cursor:pointer;padding:2px;flex:none;}
+.ava-star.off{color:var(--ava-mut);}
+.ava-rate-id{display:flex;align-items:center;gap:8px;min-width:0;flex:1;}
+.ava-rate-name{font-size:.72rem;font-weight:700;white-space:nowrap;}
+.ava-rate-code{font-size:.58rem;color:var(--ava-mut);}
+.ava-rate-price{font-size:.8rem;font-weight:800;flex:none;white-space:nowrap;}
+.ava-rate-chg{font-size:.66rem;font-weight:800;flex:none;min-width:52px;text-align:center;}
+.ava-rate-chg.up{color:var(--ava-grn);} .ava-rate-chg.dn{color:var(--ava-red);}
+.ava-spark{width:56px;height:26px;flex:none;}
+
+/* ========== سه‌ستونه‌ها ========== */
+.ava-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px;}
+.ava-grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:12px;align-items:stretch;}
+.ava-grid2 > *{min-width:0;}
+
+/* ========== نوار کشویی: تراکنش‌های اخیر + هشدارهای قیمت + خدمات محبوب + سفارشات/حواله‌ها ==========
+   یک ردیفِ افقیِ قابل‌کشیدن با انگشت، همه‌ی کارت‌ها هم‌عرض و هم‌ارتفاع (مثل ava-mid-grid بالا)،
+   با یک عنوان کوتاه بالای آن تا مشخص باشد این چهار کارت زیرمجموعه‌ی «فعالیت و دسترسی سریع» هستند. */
+.ava-quad-label{display:flex;align-items:center;gap:7px;font-size:.78rem;font-weight:800;color:var(--ava-txt);margin:4px 2px 10px;}
+.ava-quad-label i{color:var(--ava-pur2);font-size:.8rem;}
+.ava-quad-scroll{
+    display:flex;gap:12px;margin-bottom:12px;align-items:stretch;
+    overflow-x:auto;-webkit-overflow-scrolling:touch;
+    scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:4px;
+}
+.ava-quad-scroll::-webkit-scrollbar{display:none;}
+.ava-quad-scroll > *{flex:0 0 82%;min-width:0;scroll-snap-align:center;}
+@media (min-width:600px){
+    .ava-quad-scroll > *{flex:0 0 46%;}
+}
+@media (min-width:1024px){
+    .ava-quad-scroll{overflow:visible;}
+    .ava-quad-scroll > *{flex:1 1 0;}
+}
+
+.ava-list-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--ava-line);}
+.ava-list-row:last-child{border-bottom:0;}
+.ava-list-ic{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;flex:none;}
+.ava-list-body{flex:1;min-width:0;}
+.ava-list-t{font-size:.7rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ava-list-s{font-size:.6rem;color:var(--ava-mut);margin-top:2px;}
+.ava-list-v{font-size:.72rem;font-weight:800;flex:none;}
+.ava-list-v.up{color:var(--ava-grn);} .ava-list-v.dn{color:var(--ava-red);}
+.ava-empty{text-align:center;color:var(--ava-mut);font-size:.68rem;padding:18px 0;}
+
+/* سفارشات فعال */
+.ava-order{background:rgba(255,255,255,.03);border:1px solid var(--ava-line);border-radius:12px;padding:10px;margin-bottom:8px;}
+.ava-order:last-child{margin-bottom:0;}
+.ava-order-h{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;}
+.ava-order-t{font-size:.72rem;font-weight:800;}
+.ava-order-meta{font-size:.6rem;color:var(--ava-mut);line-height:1.9;}
+.ava-badge{font-size:.55rem;font-weight:800;padding:3px 8px;border-radius:20px;white-space:nowrap;}
+.ava-badge.wait{background:rgba(251,191,36,.15);color:#FBBF24;}
+.ava-badge.ok{background:rgba(34,197,94,.15);color:var(--ava-grn);}
+.ava-badge.no{background:rgba(255,90,110,.15);color:var(--ava-red);}
+
+/* هشدار قیمت */
+.ava-alert-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--ava-line);}
+.ava-alert-row:last-of-type{border-bottom:0;}
+.ava-switch{position:relative;width:42px;height:23px;flex:none;cursor:pointer;}
+.ava-switch input{opacity:0;width:0;height:0;}
+.ava-switch span{position:absolute;inset:0;border-radius:20px;background:rgba(255,255,255,.12);transition:.25s;}
+.ava-switch span::before{content:"";position:absolute;width:17px;height:17px;border-radius:50%;background:#fff;top:3px;right:3px;transition:.25s;}
+.ava-switch input:checked + span{background:linear-gradient(135deg,var(--ava-pur),var(--ava-pur2));}
+.ava-switch input:checked + span::before{transform:translateX(-19px);}
+.ava-add-alert{
+    width:100%;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px;
+    background:rgba(124,58,237,.12);border:1px dashed rgba(124,58,237,.45);
+    color:var(--ava-pur2);border-radius:12px;padding:10px;font-size:.7rem;font-weight:700;
+    cursor:pointer;font-family:inherit;
+}
+
+/* خدمات محبوب */
+.ava-serv-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.ava-serv{
+    background:rgba(255,255,255,.03);border:1px solid var(--ava-line);border-radius:12px;
+    padding:10px 5px;text-align:center;cursor:pointer;color:var(--ava-txt);text-decoration:none;
+    display:flex;flex-direction:column;align-items:center;gap:7px;transition:transform .15s;
+}
+.ava-serv:active{transform:scale(.94);}
+.ava-serv i{font-size:1.1rem;}
+.ava-serv img{width:26px;height:26px;object-fit:contain;}
+.ava-serv span{font-size:.56rem;font-weight:700;line-height:1.5;}
+
+/* بنر تبلیغاتی پایین */
+.ava-banner{min-height:120px;
+    position:relative;overflow:hidden;border-radius:20px;padding:20px 16px;text-align:center;
+    background:linear-gradient(120deg,#5B21B6,#2E1065 60%,#3B1E7E);
+    border:1px solid rgba(168,85,247,.3);margin-bottom:10px;
+}
+.ava-banner h3{font-size:.95rem;font-weight:800;margin:0 0 6px;}
+.ava-banner p{font-size:.7rem;color:#C9BEF3;margin:0 0 12px;}
+.ava-banner a,.ava-banner button{
+    display:inline-block;background:linear-gradient(135deg,var(--ava-pur),var(--ava-pur2));
+    color:#fff;border:0;border-radius:12px;padding:9px 22px;font-size:.72rem;font-weight:800;
+    text-decoration:none;cursor:pointer;font-family:inherit;box-shadow:0 6px 18px rgba(124,58,247,.4);
+}
+.ava-banner-track{display:flex;transition:transform .45s cubic-bezier(.4,0,.2,1);}
+.ava-banner-track > *{flex:0 0 100%;}
+.ava-dots{display:flex;justify-content:center;gap:6px;margin-bottom:6px;}
+.ava-dots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.2);cursor:pointer;transition:.2s;}
+.ava-dots i.active{width:18px;border-radius:6px;background:var(--ava-pur2);}
+
+/* شیت شارژ/فیش (محتوای قدیمی) */
+.ava-sheet{position:fixed;inset:0;z-index:100010;display:none;}
+.ava-sheet.open{display:block;}
+.ava-sheet-bd{position:absolute;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);}
+.ava-sheet-in{
+    position:absolute;left:0;right:0;bottom:0;max-height:88vh;overflow-y:auto;
+    background:var(--ava-bg2);border-radius:22px 22px 0 0;border-top:1px solid var(--ava-line2);
+    padding:14px 12px calc(20px + env(safe-area-inset-bottom));
+    animation:avaUp .3s cubic-bezier(.4,0,.2,1);
+}
+@keyframes avaUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.ava-sheet-close{position:sticky;top:0;margin-right:auto;display:block;background:rgba(255,255,255,.08);border:0;color:#fff;width:34px;height:34px;border-radius:50%;cursor:pointer;}
+#avaLegacyHidden{display:none;}
+
+/* ========== RESPONSIVE (چیدمان مثل عکس در همه‌ی عرض‌ها) ========== */
+/* گوشی‌های باریک: چینش کنار هم می‌ماند و فقط فونت/فاصله کوچک می‌شود */
+@media (max-width:560px){
+    #mainDashboard.ava-dash{padding-left:8px;padding-right:8px;}
+    .ava-dash .ava-card{padding:10px;}
+    .ava-top-grid,.ava-mid-grid,.ava-grid3,.ava-grid2,.ava-quad-scroll{gap:8px;}
+    .ava-sec-title{font-size:.72rem;}
+    .ava-sec-title i{font-size:.72rem;}
+    .ava-more{font-size:.56rem;}
+    .ava-wallets{gap:6px;}
+    .ava-wal-item{padding:8px 6px;min-width:96px;}
+    .ava-wal-item-name{font-size:.58rem;}
+    .ava-wal-item-code{font-size:.5rem;}
+    .ava-wal-item-val{font-size:.72rem;}
+    .ava-wal-item-unit{font-size:.5rem;}
+    .ava-flag{width:22px;height:22px;font-size:.7rem;}
+    .ava-qa-item{padding:10px 4px;}
+    .ava-qa-badge{width:36px;height:36px;font-size:.95rem;margin-bottom:6px;}
+    .ava-qa-badge.ava-qa-img{width:46px;height:46px;border-radius:14px;}
+    .ava-qa-badge.ava-qa-img img{border-radius:14px;}
+    .ava-qa-item span:last-child{font-size:.58rem;}
+    .ava-wal-amount{font-size:1.15rem;}
+    .ava-promo-card h3{font-size:.8rem;}
+    .ava-port-val{font-size:1.1rem;}
+    .ava-rate-name{font-size:.6rem;}
+    .ava-rate-code{font-size:.48rem;}
+    .ava-rate-price{font-size:.62rem;}
+    .ava-rate-chg{font-size:.52rem;min-width:38px;}
+    .ava-spark{width:38px;height:20px;}
+    .ava-list-t{font-size:.6rem;}
+    .ava-list-s{font-size:.5rem;}
+    .ava-list-v{font-size:.6rem;}
+    .ava-list-ic{width:26px;height:26px;font-size:.62rem;}
+    .ava-order-t{font-size:.6rem;}
+    .ava-order-meta{font-size:.5rem;}
+    .ava-badge{font-size:.46rem;padding:2px 6px;}
+    .ava-alert-row{gap:6px;}
+    .ava-switch{width:34px;height:19px;}
+    .ava-switch span::before{width:13px;height:13px;}
+    .ava-switch input:checked + span::before{transform:translateX(-15px);}
+    .ava-add-alert{font-size:.56rem;padding:8px;}
+    .ava-serv-grid{grid-template-columns:repeat(2,1fr);gap:6px;}
+    .ava-cur-charts{grid-template-columns:1fr 1fr;gap:6px;}
+    .ava-receipts{grid-template-columns:1fr;}
+    .ava-inv-cols{gap:6px;}
+    .ava-serv span{font-size:.5rem;}
+    .ava-serv i{font-size:.9rem;}
+    .ava-coins{width:80px;height:80px;left:4px;}
+    .ava-coin{width:32px;height:32px;font-size:.85rem;}
+    .ava-port-tab{font-size:.54rem;padding:6px 2px;}
+    .ava-banner h3{font-size:.78rem;}
+    .ava-banner p{font-size:.58rem;}
+}
+@media (min-width:600px){
+    .ava-wal-amount{font-size:1.9rem;}
+    .ava-serv-grid{grid-template-columns:repeat(4,1fr);}
+    .ava-serv span{font-size:.62rem;}
+}
+@media (min-width:768px){
+    #mainDashboard.ava-dash{padding:20px 18px 40px;padding-top:calc(104px + env(safe-area-inset-top));}
+    .ava-port-chart{height:120px;}
+    .ava-mid-grid{overflow:visible;}
+    .ava-mid-grid > *{flex:1 1 0;}
+}
+@media (min-width:1024px){
+    .ava-serv-grid{grid-template-columns:repeat(4,1fr);}
+}
+@media (min-width:1280px){
+    #mainDashboard.ava-dash{padding-bottom:60px;}
+}
+
+/* اخبار بازار: تب‌های فا/EN */
+.ava-news-tabs{display:flex;gap:6px;background:rgba(255,255,255,.04);border-radius:12px;padding:4px;margin-bottom:10px;}
+.ava-news-tab{flex:1;border:0;background:none;color:var(--ava-mut);font-size:.68rem;font-weight:700;padding:7px 4px;border-radius:9px;cursor:pointer;font-family:inherit;}
+.ava-news-tab.active{background:linear-gradient(135deg,var(--ava-pur),var(--ava-pur2));color:#fff;}
+.ava-news-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--ava-line);cursor:pointer;}
+.ava-news-item:last-child{border-bottom:0;}
+.ava-news-thumb{width:40px;height:40px;border-radius:10px;flex:none;overflow:hidden;background:rgba(124,58,237,.14);color:#A855F7;display:flex;align-items:center;justify-content:center;font-size:.85rem;}
+.ava-news-thumb img{width:100%;height:100%;object-fit:cover;}
+.ava-news-title{font-size:.7rem;font-weight:700;line-height:1.7;}
+.ava-news-date{font-size:.58rem;color:var(--ava-mut);margin-top:2px;}
+
+/* هم‌ارتفاع کردن کادرها در هر ردیف */
+.ava-grid2 > .ava-card,.ava-grid3 > .ava-card,.ava-top-grid > .ava-card,.ava-mid-grid > .ava-card,.ava-quad-scroll > .ava-card{
+    height:100%;display:flex;flex-direction:column;
+}
+.ava-grid2 > .ava-card > .ava-sec-head,.ava-grid3 > .ava-card > .ava-sec-head,.ava-quad-scroll > .ava-card > .ava-sec-head{flex:none;}
+
+/* نمودار جداگانه‌ی هر ارز */
+.ava-cur-charts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0 6px;}
+.ava-cur-chart{background:var(--ava-card2);border:1px solid var(--ava-line);border-radius:12px;padding:9px;}
+.ava-cur-chart-h{display:flex;align-items:center;gap:7px;margin-bottom:6px;}
+.ava-cur-name{font-size:.6rem;color:var(--ava-mut);font-weight:700;}
+.ava-cur-val{font-size:.78rem;font-weight:800;}
+.ava-cur-canvas{width:100%!important;height:40px!important;}
+
+/* فیش‌های دریافتی */
+.ava-receipts{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.ava-receipt-item{display:flex;align-items:center;gap:9px;background:var(--ava-card2);border:1px solid var(--ava-line);border-radius:12px;padding:9px;text-decoration:none;color:var(--ava-txt);transition:border-color .2s;}
+.ava-receipt-item:hover{border-color:rgba(124,58,237,.5);}
+.ava-new-badge{display:none;background:linear-gradient(135deg,#FF5A6E,#FF8A3D);color:#fff;font-size:.52rem;font-weight:800;padding:2px 7px;border-radius:20px;margin-right:4px;}
+.ava-new-badge.on{display:inline-block;animation:avaBlink 1s steps(2,start) infinite;}
+@keyframes avaBlink{50%{opacity:.25;}}
+
+/* صورت‌حساب‌ها: دو ستون */
+.ava-inv-cols{display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;}
+.ava-inv-col-h{font-size:.62rem;font-weight:800;color:var(--ava-mut);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--ava-line);}
+.ava-inv-item{background:var(--ava-card2);border:1px solid var(--ava-line);border-radius:10px;padding:8px;margin-bottom:7px;}
+.ava-inv-amt{font-size:.7rem;font-weight:800;}
+.ava-inv-meta{font-size:.55rem;color:var(--ava-mut);margin:3px 0 6px;}
+
+/* حالت‌های فقط-تاپ‌آپ / فقط-چت در شیت */
+.ava-sheet.ava-only-topup .hub-tabs,
+.ava-sheet.ava-only-topup #hub-news,
+.ava-sheet.ava-only-topup #hub-tx,
+.ava-sheet.ava-only-topup #hub-chat,
+.ava-sheet.ava-only-topup .invoice-section,
+.ava-sheet.ava-only-topup #invoiceList{display:none!important;}
+.ava-sheet.ava-only-topup #hub-topup{display:block!important;}
+.ava-sheet.ava-only-chat .hub-tabs,
+.ava-sheet.ava-only-chat #hub-news,
+.ava-sheet.ava-only-chat #hub-tx,
+.ava-sheet.ava-only-chat #hub-topup,
+.ava-sheet.ava-only-chat .invoice-section,
+.ava-sheet.ava-only-chat #invoiceList{display:none!important;}
+.ava-sheet.ava-only-chat #hub-chat{display:block!important;}
+
+/* دکمه حذف هشدار */
+.ava-alert-del{background:none;border:0;color:var(--ava-red);font-size:.72rem;cursor:pointer;padding:4px;flex:none;opacity:.75;}
+.ava-alert-del:hover{opacity:1;}
+
+/* Toast */
+.ava-toast-host{position:fixed;left:0;right:0;bottom:calc(96px + env(safe-area-inset-bottom));z-index:99999;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;padding:0 12px;}
+.ava-toast{pointer-events:auto;max-width:420px;width:100%;display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,#1B1440,#241a54);border:1px solid rgba(124,58,237,.5);color:#EDEAFB;border-radius:14px;padding:12px 14px;font-size:.72rem;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.5);opacity:0;transform:translateY(20px);transition:.3s;}
+.ava-toast.show{opacity:1;transform:translateY(0);}
+.ava-toast i{color:#A855F7;font-size:.9rem;}
+.ava-toast.ava-toast-err{background:linear-gradient(135deg,#3b1020,#4a1526);border-color:rgba(255,90,110,.55);}
+.ava-toast.ava-toast-err i{color:#FF7A8A;}
+
+/* پیل‌های انتخاب ارز در سبد دارایی */
+.ava-port-pills{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;}
+.ava-port-pill{border:1px solid var(--ava-line2);background:var(--ava-card2);color:var(--ava-mut);font-size:.64rem;font-weight:700;padding:6px 12px;border-radius:20px;cursor:pointer;font-family:inherit;transition:.2s;}
+.ava-port-pill.active{background:linear-gradient(135deg,var(--ava-pur),var(--ava-pur2));color:#fff;border-color:transparent;}
+
+/* دکمه + کوچک */
+.ava-add-mini{width:26px;height:26px;border-radius:8px;border:1px solid rgba(124,58,237,.5);background:rgba(124,58,237,.15);color:var(--ava-pur2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.7rem;}
+.ava-add-mini:active{transform:scale(.9);}
+
+/* چشمک زدن آیتم آماده‌ی پرداخت */
+.ava-inv-blink{animation:avaInvBlink 1.1s ease-in-out infinite;border-color:rgba(34,197,94,.6)!important;}
+@keyframes avaInvBlink{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.0);}50%{box-shadow:0 0 0 3px rgba(34,197,94,.35);}}
+
+/* کارت صورت‌حساب بالای صفحه (هم‌ارتفاع کارت کیف پول) */
+.ava-top-inv{min-height:180px;display:flex;flex-direction:column;}
+.ava-top-inv .ava-inv-cols{flex:1;}
+
+/* مدال تمام‌صفحه */
+.ava-fs-modal{position:fixed;inset:0;z-index:100000;background:rgba(6,3,18,.96);display:none;flex-direction:column;}
+.ava-fs-modal.open{display:flex;}
+.ava-fs-top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:calc(env(safe-area-inset-top) + 14px) 16px 14px;color:var(--ava-txt);font-weight:800;font-size:.85rem;border-bottom:1px solid var(--ava-line);}
+.ava-fs-close{background:rgba(255,90,110,.15);border:1px solid rgba(255,90,110,.4);color:#FF5A6E;border-radius:10px;padding:8px 14px;font-size:.72rem;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;}
+.ava-fs-body{flex:1;display:flex;align-items:center;justify-content:center;padding:16px;overflow:auto;}
+.ava-fs-foot{padding:14px 16px calc(env(safe-area-inset-bottom) + 16px);}
+
+/* جزئیات صورت‌حساب */
+.ava-inv-detail{font-size:.75rem;}
+.ava-inv-row{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--ava-line);}
+.ava-inv-bankbox{margin:14px 0;background:var(--ava-card2);border:1px solid var(--ava-line);border-radius:14px;padding:12px;}
+.ava-inv-bank-h{font-size:.66rem;color:var(--ava-mut);font-weight:700;margin-bottom:10px;}
+.ava-inv-copy{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--ava-card);border:1px solid var(--ava-line2);border-radius:10px;padding:10px;margin-bottom:8px;cursor:pointer;transition:border-color .2s;}
+.ava-inv-copy:hover{border-color:rgba(124,58,237,.5);}
+.ava-inv-copy-l{font-size:.58rem;color:var(--ava-mut);}
+.ava-inv-copy-v{font-size:.8rem;font-weight:800;direction:ltr;text-align:right;word-break:break-all;}
+.ava-inv-copy i{color:var(--ava-pur2);font-size:.85rem;flex:none;}
+.ava-inv-note{margin-top:12px;padding:12px;border-radius:12px;background:rgba(251,191,36,.12);color:#FBBF24;font-size:.7rem;font-weight:700;line-height:1.9;}
+.ava-inv-note.ok{background:rgba(34,197,94,.12);color:#22C55E;}
+.ava-inv-note.no{background:rgba(255,90,110,.12);color:#FF5A6E;}
+.ava-inv-up{margin-top:14px;}
+
+
+/* ================= معرفی حساب (ذی‌نفعان تسویه) ================= */
+.ava-ben-search{
+    position:relative;margin-bottom:14px;
+}
+.ava-ben-search i{
+    position:absolute;right:13px;top:50%;transform:translateY(-50%);
+    color:rgba(255,255,255,.35);font-size:.8rem;pointer-events:none;
+}
+.ava-ben-search input{
+    width:100%;padding:11px 38px 11px 13px;border-radius:14px;
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+    color:#fff;font-family:inherit;font-size:.8rem;outline:none;transition:.2s;
+}
+.ava-ben-search input:focus{border-color:var(--ava-pur2);box-shadow:0 0 0 3px rgba(168,85,247,.18);}
+.ava-ben-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:12px 8px;
+}
+.ava-ben-item{
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+    cursor:pointer;padding:8px 4px;border-radius:16px;transition:.2s;
+    animation:benIn .35s ease both;
+}
+@keyframes benIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
+.ava-ben-item:hover{background:rgba(255,255,255,.05);}
+.ava-ben-item:active{transform:scale(.93);}
+.ava-ben-avatar{
+    width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-size:1.5rem;border:2px solid rgba(255,255,255,.22);
+    box-shadow:0 8px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.3);
+}
+.ava-ben-avatar.lg{width:76px;height:76px;font-size:2rem;margin:0 auto 10px;
+    background:linear-gradient(135deg,var(--ava-pur),var(--ava-pur2));}
+.ava-ben-name{
+    font-size:.68rem;font-weight:800;color:#fff;text-align:center;line-height:1.4;
+    max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.ava-ben-bank{font-size:.6rem;color:rgba(255,255,255,.45);text-align:center;}
+/* فرم افزودن */
+.ava-ben-form{display:flex;flex-direction:column;gap:7px;margin-top:8px;}
+.ava-ben-form label{font-size:.72rem;color:rgba(255,255,255,.6);font-weight:700;margin-top:5px;}
+.ava-ben-form label .req{color:#FF5A6E;}
+.ava-ben-form input{
+    padding:11px 13px;border-radius:13px;background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.13);color:#fff;font-family:inherit;font-size:.8rem;outline:none;transition:.2s;
+}
+.ava-ben-form input:focus{border-color:var(--ava-pur2);box-shadow:0 0 0 3px rgba(168,85,247,.18);}
+.ava-ben-err{
+    background:rgba(255,90,110,.12);border:1px solid rgba(255,90,110,.3);
+    color:#FF8A9A;border-radius:12px;padding:9px 12px;font-size:.72rem;
+}
+.ava-btn-main{
+    width:100%;margin-top:12px;padding:13px;border:0;border-radius:15px;cursor:pointer;
+    font-family:inherit;font-size:.85rem;font-weight:800;color:#fff;
+    background:linear-gradient(135deg,var(--ava-pur),var(--ava-pur2));
+    box-shadow:0 10px 26px rgba(124,58,237,.4);transition:.2s;
+}
+.ava-btn-main:active{transform:scale(.97);}
+.ava-btn-main:disabled{opacity:.6;}
+.ava-btn-ghost{
+    width:100%;margin-top:8px;padding:11px;border-radius:15px;cursor:pointer;
+    font-family:inherit;font-size:.78rem;font-weight:700;
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);color:#fff;transition:.2s;
+}
+.ava-btn-ghost.danger{color:#FF8A9A;border-color:rgba(255,90,110,.3);}
+.ava-ben-add-big{
+    width:100%;padding:16px;border:0;border-radius:16px;cursor:pointer;
+    font-family:inherit;font-size:.88rem;font-weight:800;color:#fff;
+    background:linear-gradient(135deg,var(--ava-pur),#FF4D8D);
+    box-shadow:0 12px 28px rgba(124,58,237,.4);transition:.2s;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.ava-ben-add-big:active{transform:scale(.97);}
+.ava-bm-pane{padding-bottom:6px;}
+
+/* ========== مودال جامع «معرفی حساب» — پس‌زمینه‌ی طراحی‌شده ==========
+   نکته‌ی مهم: aura قبلاً انیمیشن infinite داشت درست زیر دو لایه‌ی
+   backdrop-filter (هدر + کارت‌ها) — یعنی مرورگر مجبور بود در هر فریم
+   دوباره بلور را روی یک پس‌زمینه‌ی درحال‌تغییر محاسبه کند. این ترکیب
+   خصوصاً روی موبایل/وب‌ویوهای داخل تلگرام می‌تواند کاملاً هنگ‌کننده
+   باشد. حالا aura ثابت است (بدون انیمیشن) و backdrop-filter از روی
+   کارت‌ها برداشته شده — همان حس بصری، بدون هزینه‌ی رندر مداوم.
+   نکته‌ی مهم‌تر: اینجا هرگز نباید «position» دوباره نوشته شود — این
+   کلاس همیشه همراه با «ava-fs-modal» است که خودش position:fixed دارد؛
+   نوشتن position:relative اینجا (با specificity برابر و بعد از آن در
+   فایل) آن fixed را بی‌اثر می‌کرد و کل مودال به‌جای اورلی روی صفحه،
+   داخل روند عادی صفحه (پایین صفحه) رندر می‌شد — همان چیزی که باعث
+   «هنگ کردن کل صفحه» هم می‌شد (چون یک بلوک تمام‌صفحه ناگهان وسط
+   flow عادی صفحه اضافه می‌شد و کل صفحه را reflow می‌کرد). */
+.ava-bm-modal{
+    overflow:hidden;
+    background:radial-gradient(140% 90% at 50% 0%, #2b1660 0%, #1a0e42 40%, #0b0620 100%) !important;
+}
+.ava-bm-aura{
+    position:absolute;inset:0;pointer-events:none;z-index:0;
+    background:
+        radial-gradient(380px 380px at 12% 6%, rgba(168,85,247,.26), transparent 60%),
+        radial-gradient(320px 320px at 92% 14%, rgba(251,191,36,.15), transparent 62%),
+        radial-gradient(360px 360px at 50% 100%, rgba(255,77,141,.13), transparent 60%);
+}
+.ava-bm-top{
+    position:relative;z-index:1;
+    background:linear-gradient(135deg, rgba(124,58,237,.32), rgba(255,77,141,.16));
+}
+.ava-bm-body{position:relative;z-index:1;padding:14px;overflow-y:auto;flex:1;}
+.ava-bm-card{
+    position:relative;margin-top:18px;padding:16px;border-radius:20px;
+    background:linear-gradient(160deg,rgba(40,22,74,.65),rgba(20,11,42,.55));
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow:0 16px 40px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08);
+}
+.ava-bm-card-title{
+    font-size:.85rem;font-weight:800;color:#fff;margin-bottom:12px;
+    display:flex;align-items:center;gap:8px;
+}
+.ava-bm-card-title i{color:#FF4D8D;}
+/* جزئیات */
+.ava-ben-view-head{text-align:center;margin:6px 0 14px;}
+.ava-ben-view-name{font-size:1rem;font-weight:900;color:#fff;}
+.ava-ben-rows{display:flex;flex-direction:column;gap:7px;margin-bottom:14px;}
+.ava-ben-row{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+    border-radius:13px;padding:10px 13px;
+}
+.ava-ben-row span{font-size:.7rem;color:rgba(255,255,255,.5);}
+.ava-ben-row b{font-size:.78rem;color:#fff;font-weight:800;letter-spacing:.03em;}
+
+/* آیکون اختصاصی کاربری AvaPay در حساب‌های معرفی‌شده */
+/* آیکون حساب معرفی‌شده: لوگوی سکه‌ای AVA PAY، پرکننده‌ی کامل دایره */
+.ava-ben-glyph{
+    display:block;width:100%;height:100%;object-fit:cover;border-radius:50%;
+    filter:drop-shadow(0 2px 4px rgba(0,0,0,.35));
+}
+/* پس‌زمینه‌ی رنگی زیر لوگو دیگر لازم نیست */
+.ava-ben-avatar{overflow:hidden;background:#12061f !important;}
+
+/* لینک تاریخچه در گوشه‌ی کارت صورت‌حساب‌ها */
+.ava-inv-hist-link{
+    background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.75);
+    font-size:.68rem;font-weight:800;padding:6px 12px;border-radius:20px;cursor:pointer;
+    font-family:inherit;transition:.2s;display:inline-flex;align-items:center;gap:6px;
+}
+.ava-inv-hist-link:hover{background:rgba(168,85,247,.18);border-color:rgba(168,85,247,.45);color:#fff;}
+
+/* ===== بنرهای تبلیغاتی داخلی AvaPay ===== */
+.ava-promo{
+    position:relative;display:flex;align-items:center;gap:13px;overflow:hidden;
+    margin:4px 0 14px;padding:15px 16px;border-radius:20px;cursor:pointer;
+    border:1px solid rgba(255,255,255,.16);
+    box-shadow:0 12px 30px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.2);
+    transition:transform .2s;
+}
+.ava-promo:active{transform:scale(.98);}
+.ava-promo.p1{background:linear-gradient(120deg,#3B0F6E 0%,#7C3AED 55%,#2563EB 120%);}
+.ava-promo.p2{background:linear-gradient(120deg,#7A1650 0%,#DB2777 55%,#F59E0B 130%);}
+.ava-promo.p3{background:linear-gradient(120deg,#0B3B5E 0%,#0EA5E9 60%,#22C55E 140%);}
+.ava-promo-glow{
+    position:absolute;top:-40%;left:-15%;width:55%;height:200%;pointer-events:none;
+    background:linear-gradient(105deg,transparent,rgba(255,255,255,.28),transparent);
+    transform:skewX(-18deg);animation:avaPromoShine 3.4s ease-in-out infinite;
+}
+@keyframes avaPromoShine{0%,55%{left:-60%}100%{left:130%}}
+.ava-promo-ico{
+    width:46px;height:46px;flex:none;border-radius:15px;display:flex;align-items:center;justify-content:center;
+    background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);
+    color:#fff;font-size:1.15rem;backdrop-filter:blur(6px);
+    animation:avaPromoBob 2.6s ease-in-out infinite;
+}
+@keyframes avaPromoBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.ava-promo-txt{min-width:0;flex:1;}
+.ava-promo-t{font-size:.84rem;font-weight:900;color:#fff;line-height:1.6;}
+.ava-promo-s{font-size:.66rem;color:rgba(255,255,255,.8);line-height:1.7;}
+.ava-promo-arrow{color:rgba(255,255,255,.7);font-size:.8rem;animation:avaPromoArr 1.6s ease-in-out infinite;}
+@keyframes avaPromoArr{0%,100%{transform:translateX(0)}50%{transform:translateX(-4px)}}
+
+/* ===== اخبار کریپتو ===== */
+.ava-cn-item{
+    display:flex;align-items:center;gap:11px;padding:11px 12px;margin-bottom:9px;
+    border-radius:16px;cursor:pointer;border:1px solid rgba(255,255,255,.12);
+    background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.02));
+    transition:.2s;
+}
+.ava-cn-item:active{transform:scale(.98);}
+.ava-cn-item:hover{border-color:rgba(56,189,248,.45);}
+.ava-cn-img{width:52px;height:52px;flex:none;border-radius:12px;overflow:hidden;background:rgba(255,255,255,.06);}
+.ava-cn-img img{width:100%;height:100%;object-fit:cover;}
+.ava-cn-body{min-width:0;flex:1;}
+.ava-cn-title{
+    font-size:.74rem;font-weight:800;color:#fff;line-height:1.7;direction:ltr;text-align:left;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.ava-cn-meta{font-size:.6rem;color:rgba(255,255,255,.45);direction:ltr;text-align:left;margin-top:3px;}
+.ava-cn-src{color:#38BDF8;font-weight:800;}
+.ava-cn-like{
+    flex:none;display:inline-flex;align-items:center;gap:5px;
+    background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);
+    color:rgba(255,255,255,.7);font-size:.66rem;font-weight:800;
+    padding:7px 11px;border-radius:20px;cursor:pointer;font-family:inherit;transition:.2s;
+}
+.ava-cn-like.on{background:rgba(255,77,141,.18);border-color:rgba(255,77,141,.5);color:#FF7DA9;}
+.ava-cn-like.on i{animation:avaHeartPop .35s cubic-bezier(.22,1.6,.36,1);}
+.ava-cn-like.lg{font-size:.8rem;padding:11px 16px;}
+@keyframes avaHeartPop{0%{transform:scale(.4)}60%{transform:scale(1.35)}100%{transform:scale(1)}}
+.ava-cn-more{
+    width:100%;display:flex;align-items:center;justify-content:center;gap:8px;
+    padding:12px;border-radius:14px;border:1px dashed rgba(56,189,248,.45);
+    background:rgba(56,189,248,.07);color:#38BDF8;font-weight:900;font-size:.76rem;
+    cursor:pointer;font-family:inherit;transition:.2s;
+}
+.ava-cn-more:active{transform:scale(.98);}
+
+
+/* ===== اخبار اقتصادی ایران: کادر تمام‌عرض، هر صفحه ۳ خبر، سوایپ افقی ===== */
+.ava-irn-pager{
+    display:flex;overflow-x:auto;scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none;
+    margin:0 -2px;padding:2px;
+}
+.ava-irn-pager::-webkit-scrollbar{display:none;}
+
+/* هر صفحه = تمام عرض کادر، شامل ۳ ردیف خبر */
+.ava-irn-page{
+    flex:0 0 100%;width:100%;scroll-snap-align:start;
+    display:flex;flex-direction:column;gap:9px;
+}
+
+/* ردیف خبر (هم‌خانواده با .ava-adrow آگهی‌های فعال) */
+.ava-irn-row{
+    display:flex;align-items:center;gap:11px;cursor:pointer;
+    background:var(--ava-card2, rgba(255,255,255,0.04));
+    border:1px solid var(--ava-line, rgba(255,255,255,0.07));
+    border-radius:14px;padding:10px 12px;transition:border-color .2s;
+}
+.ava-irn-row:hover{border-color:#22C55E;}
+.ava-irn-row:active{transform:scale(.995);}
+
+.ava-irn-thumb{
+    flex:none;width:74px;height:60px;border-radius:11px;overflow:hidden;
+    background:linear-gradient(145deg,#173124,#0c1f16);
+}
+.ava-irn-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.ava-irn-thumb.ph{position:relative;}
+.ava-irn-thumb.ph::after{
+    content:"\f1ea";font-family:"Font Awesome 6 Free";font-weight:900;
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    color:rgba(34,197,94,.5);font-size:1.1rem;
+}
+
+.ava-irn-body{flex:1;min-width:0;}
+.ava-irn-title{
+    font-size:.76rem;font-weight:800;color:var(--ava-txt,#fff);line-height:1.75;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.ava-irn-meta{
+    display:flex;align-items:center;gap:8px;margin-top:5px;
+    font-size:.58rem;color:var(--ava-mut,rgba(255,255,255,.45));
+}
+.ava-irn-src{background:rgba(34,197,94,.18);color:#22C55E;font-weight:800;padding:2px 9px;border-radius:10px;}
+
+.ava-irn-like{
+    flex:none;display:inline-flex;align-items:center;gap:5px;
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+    border-radius:14px;color:var(--ava-mut,rgba(255,255,255,.6));
+    font-size:.62rem;font-weight:800;padding:6px 10px;cursor:pointer;
+    font-family:inherit;transition:.2s;
+}
+.ava-irn-like i{font-size:.66rem;}
+.ava-irn-like.on{background:rgba(239,68,68,.18);border-color:rgba(239,68,68,.4);color:#F87171;}
+.ava-irn-like.lg{font-size:.78rem;padding:11px 18px;border-radius:14px;}
+.ava-irn-like.lg.on{background:rgba(239,68,68,.22);border-color:rgba(239,68,68,.45);color:#F87171;}
+
+/* نقطه‌های راهنمای صفحه */
+.ava-irn-dots{display:flex;justify-content:center;gap:6px;margin-top:11px;}
+.ava-irn-dot{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--ava-line,rgba(255,255,255,.18));transition:.25s;
+}
+.ava-irn-dot.on{width:20px;border-radius:4px;background:#22C55E;}
+
+@media (max-width:480px){
+    .ava-irn-thumb{width:64px;height:54px;}
+    .ava-irn-title{font-size:.72rem;}
+}
+
+/* کارت کریپتو داخل مدال: بدون حاشیه‌ی اضافی و تمام‌عرض */
+#avaCryptoModal .ava-crypto-card{margin-bottom:0;}
+
+/* ===== معرفی حساب: بیش از ۴ حساب → نوار کششی افقی ===== */
+.ava-ben-grid.many{
+    display:flex;
+    grid-template-columns:none;
+    overflow-x:auto;
+    gap:8px;
+    padding-bottom:6px;
+    /* scroll-snap حذف شد — وسط کشیدن با انگشت قفل می‌کرد */
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior-x:contain;
+    scrollbar-width:none;
+}
+.ava-ben-grid.many::-webkit-scrollbar{display:none;}
+/* چهار حساب در یک نما؛ بقیه با کشیدن انگشت */
+.ava-ben-grid.many .ava-ben-item{
+    flex:0 0 calc(25% - 6px);
+    min-width:74px;
+}
+.ava-ben-swipe-hint{
+    font-size:.58rem;color:var(--ava-mut,rgba(255,255,255,.38));
+    text-align:center;margin-bottom:6px;
+}
+.ava-ben-swipe-hint i{margin-left:4px;opacity:.7;}
+@media (max-width:400px){
+    .ava-ben-grid.many .ava-ben-item{flex:0 0 calc(28% - 6px);}
+}
+
+/* ===== (آپدیت جدید) مهار ژست افقیِ خودِ مرورگر برای بازگشت با کشیدن انگشت =====
+   بدون این، کشیدن از لبه‌ی چپ باعث فعال‌شدن ناوبریِ داخلی مرورگر می‌شد و
+   به‌جای بسته‌شدن مدال، پس‌زمینه‌ی صفحه با یک انیمیشن رنگی بیرون می‌آمد. */
+html, body{ overscroll-behavior-x:none; }
+.ava-fs-modal, .ava-sheet, .news-modal-overlay, .modal-overlay{ overscroll-behavior:contain; }
+/* ردیف عملیات سریع: اسکرول افقیِ خودش کار کند ولی به صفحه سرریز نشود */
+.ava-qa{ overscroll-behavior-x:contain; }

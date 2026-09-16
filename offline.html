@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AvaPay - Offline</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        .offline-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .offline-content {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        .offline-icon {
+            font-size: 4rem;
+            color: var(--accent-purple);
+            margin-bottom: 20px;
+        }
+        
+        .retry-btn {
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: linear-gradient(45deg, var(--accent-purple), var(--accent-pink));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .retry-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(108, 64, 197, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <div class="offline-content">
+            <div class="offline-icon">
+                <i class="fas fa-wifi-slash"></i>
+            </div>
+            <h1>You're Offline</h1>
+            <p>Please check your internet connection and try again.</p>
+            <p>Some features may not be available while offline.</p>
+            
+            <button class="retry-btn" onclick="window.location.reload()">
+                <i class="fas fa-sync-alt"></i> Retry Connection
+            </button>
+            
+            <div style="margin-top: 30px; font-size: 0.9rem; color: var(--text-gray);">
+                <p>While offline, you can still:</p>
+                <ul style="text-align: left; margin-top: 10px;">
+                    <li>View your cached balance</li>
+                    <li>See recent transactions</li>
+                    <li>Access saved friend list</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // چک کردن وضعیت اتصال
+        function checkConnection() {
+            if (navigator.onLine) {
+                window.location.href = 'dashboard.php';
+            }
+        }
+        
+        // گوش دادن به تغییرات وضعیت شبکه
+        window.addEventListener('online', checkConnection);
+        window.addEventListener('offline', () => {
+        });
+        
+        // چک اولیه
+        if (navigator.onLine) {
+            setTimeout(() => {
+                window.location.href = 'dashboard.php';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

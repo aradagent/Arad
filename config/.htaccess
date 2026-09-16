@@ -1,0 +1,5 @@
+# جلوگیری از دسترسی مستقیم به فایل‌های این پوشه از طریق مرورگر
+# (شامل رمز دیتابیس و توکن تلگرام در database.php)
+Require all denied
+Order deny,allow
+Deny from all

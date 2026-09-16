@@ -1,0 +1,266 @@
+:root {
+    --card-border-radius: 28px;
+    --card-padding: 28px;
+    --transition-speed: 0.6s;
+    --purple-primary: #2c1a4d;
+    --purple-secondary: #1f1038;
+    --purple-light: #3a2563;
+    --purple-gradient: linear-gradient(135deg, #2c1a4d 0%, #1f1038 100%);
+}
+
+.card-number {
+    font-family: 'Courier New', 'Monaco', monospace;
+    font-size: 1.5rem;
+    letter-spacing: 3px;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+    flex: 1;
+    position: relative;
+    z-index: 2;
+}
+
+.card-number.blurred {
+    filter: blur(8px);
+    user-select: none;
+}
+
+.date-value.blurred {
+    filter: blur(8px);
+    user-select: none;
+}
+
+.cardholder-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: white;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.cardholder-name.blurred {
+    filter: blur(8px);
+    user-select: none;
+}
+
+/* Eye Toggle Button */
+.eye-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10;
+    backdrop-filter: blur(10px);
+}
+
+.eye-toggle:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(1.1);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.section-header h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0;
+    color: white;
+}
+
+.change-indicator.positive {
+    color: #4cd964;
+    background: rgba(76, 217, 100, 0.15);
+}
+
+.change-indicator.negative {
+    color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.15);
+}
+
+/* ========== RESPONSIVE - Mobile Optimized ========== */
+@media (max-width: 768px) {
+    .flip-card {
+        max-width: 100%;
+        width: 100%;
+        height: 340px;
+    }
+    
+    .bank-card-wrapper {
+        padding: 0 12px;
+    }
+    
+    .love2shop-card {
+        padding: 25px 22px;
+    }
+    
+    .card-logo {
+        font-size: 1.6rem;
+    }
+    
+    .card-number {
+        font-size: 1.3rem;
+        letter-spacing: 2px;
+    }
+    
+    .balances-section {
+        padding: 22px;
+    }
+    
+    .balance-item-compact {
+        padding: 15px 17px;
+    }
+    
+    .currency-code-large {
+        font-size: 1.25rem;
+    }
+    
+    .balance-value-large {
+        font-size: 1.05rem;
+    }
+    
+    .action-circle {
+        width: 58px;
+        height: 58px;
+        font-size: 1.25rem;
+    }
+    
+    .quick-actions-wrapper {
+        max-width: 100%;
+        padding: 0 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .flip-card {
+        height: 320px; /* 2px larger than before */
+        max-width: 100%;
+        width: 100%;
+    }
+    
+    .bank-card-wrapper {
+        padding: 0 10px;
+        width: 100%;
+    }
+    
+    .love2shop-card {
+        padding: 22px 20px;
+    }
+    
+    .card-logo {
+        font-size: 1.5rem;
+    }
+    
+    .card-number {
+        font-size: 1.2rem;
+        letter-spacing: 2px;
+    }
+    
+    .balances-section {
+        padding: 20px;
+    }
+    
+    .balances-grid-compact {
+        gap: 10px;
+    }
+    
+    .balance-item-compact {
+        padding: 14px 16px; /* 2px larger padding */
+    }
+    
+    .currency-code-large {
+        font-size: 1.2rem; /* slightly larger */
+    }
+    
+    .balance-value-large {
+        font-size: 1rem; /* slightly larger */
+    }
+    
+    .change-indicator {
+        font-size: 0.75rem;
+        padding: 4px 10px; /* larger padding */
+    }
+    
+    .action-chip {
+        font-size: 0.85rem;
+        padding: 11px 0; /* larger padding */
+    }
+    
+    .action-circle {
+        width: 55px; /* larger */
+        height: 55px; /* larger */
+        font-size: 1.2rem;
+    }
+    
+    .action-btn-circle span {
+        font-size: 0.75rem;
+    }
+    
+    .scroll-indicator {
+        width: 40px; /* larger */
+        height: 40px; /* larger */
+    }
+    
+    .section-header h2 {
+        font-size: 1.25rem; /* larger */
+    }
+    
+    .header-icon {
+        width: 48px; /* larger */
+        height: 48px; /* larger */
+        font-size: 22px;
+    }
+    
+    .total-balance-badge {
+        padding: 9px 18px; /* larger padding */
+    }
+    
+    .total-value {
+        font-size: 1.15rem; /* larger */
+    }
+}
+
+/* Very small devices */
+@media (max-width: 360px) {
+    .flip-card {
+        height: 330px; /* even larger for very small screens */
+    }
+    
+    .balance-item-compact {
+        padding: 15px 16px;
+    }
+    
+    .currency-code-large {
+        font-size: 1.25rem;
+    }
+    
+    .balance-value-large {
+        font-size: 1.05rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    .flip-card {
+        max-width: 780px;
+        height: 370px;
+    }
+}

@@ -1,0 +1,400 @@
+/* ============================================================
+   LIGHT THEME — تم روشن کامل و تهاجمی
+   با افزودن data-theme="light" روی <html> فعال می‌شود.
+   هدف: تمام سطوح تیره روشن شوند و تمام متن‌های روشن تیره شوند
+   تا در تم روشن به‌راحتی دیده شوند.
+   ============================================================ */
+html[data-theme="light"] {
+    --primary-dark: #ffffff;
+    --primary-purple: #f4f2fb;
+    --secondary-purple: #ece8f7;
+    --accent-purple: #6C40C5;
+    --accent-pink: #FF4D8D;
+    --text-light: #1a0b2e;
+    --text-gray: #5b5570;
+    --glass-bg: #ffffff;
+    --glass-border: rgba(20, 10, 40, 0.10);
+    --shadow: 0 8px 32px rgba(108, 64, 197, 0.12);
+}
+
+/* پس‌زمینه اصلی صفحه */
+html[data-theme="light"],
+html[data-theme="light"] body {
+    background: linear-gradient(160deg, #eef1f8 0%, #f4f0fa 50%, #f8eef4 100%) !important;
+    background-size: 100% 100% !important;
+    background-attachment: fixed !important;
+    color: #1a0b2e !important;
+    animation: none !important;
+}
+
+/* --- تبدیل تمام گرادیان‌ها/پس‌زمینه‌های تیره به روشن --- */
+/* سطوح شیشه‌ای که در دارک روشن‌اند (rgba سفید کم‌رنگ) → در لایت سفید مات */
+html[data-theme="light"] .glass,
+html[data-theme="light"] .card,
+html[data-theme="light"] .balance-section,
+html[data-theme="light"] .account-details,
+html[data-theme="light"] .wallet-card,
+html[data-theme="light"] .inv-cell,
+html[data-theme="light"] .invoice-panel,
+html[data-theme="light"] .topup-panel,
+html[data-theme="light"] .glass-balance-card,
+html[data-theme="light"] .currency-card,
+html[data-theme="light"] .stat-compact-card,
+html[data-theme="light"] .ad-card,
+html[data-theme="light"] .offer-card,
+html[data-theme="light"] .deal-card,
+html[data-theme="light"] .withdrawal-glass-card,
+html[data-theme="light"] .transfer-card,
+html[data-theme="light"] .tp-card,
+html[data-theme="light"] .quick-actions-grid,
+html[data-theme="light"] .qa-item,
+html[data-theme="light"] .modal-content,
+html[data-theme="light"] .tp-modal-sheet,
+html[data-theme="light"] .news-item,
+html[data-theme="light"] .news-modal-content,
+html[data-theme="light"] section,
+html[data-theme="light"] .section {
+    background: #ffffff !important;
+    border-color: rgba(20,10,40,0.08) !important;
+    box-shadow: 0 4px 18px rgba(108,64,197,0.08) !important;
+    color: #1a0b2e !important;
+}
+
+/* هر عنصری که background اینلاین تیره دارد (بنفش/مشکی) در لایت روشن شود */
+html[data-theme="light"] [style*="#1A0B2E"],
+html[data-theme="light"] [style*="#1a0b2e"],
+html[data-theme="light"] [style*="#2A0D3F"],
+html[data-theme="light"] [style*="#2a0d3f"],
+html[data-theme="light"] [style*="#12061f"],
+html[data-theme="light"] [style*="#241041"] {
+    background: #ffffff !important;
+    background-image: none !important;
+    color: #1a0b2e !important;
+    border-color: rgba(20,10,40,0.08) !important;
+}
+
+/* متن: هر رنگ روشن → تیره */
+html[data-theme="light"] body,
+html[data-theme="light"] h1, html[data-theme="light"] h2, html[data-theme="light"] h3,
+html[data-theme="light"] h4, html[data-theme="light"] h5, html[data-theme="light"] p,
+html[data-theme="light"] span, html[data-theme="light"] label, html[data-theme="light"] strong,
+html[data-theme="light"] a, html[data-theme="light"] li, html[data-theme="light"] td,
+html[data-theme="light"] th, html[data-theme="light"] small, html[data-theme="light"] div {
+    color: #1a0b2e;
+}
+/* متن‌های سفید صریح (اینلاین) → تیره */
+html[data-theme="light"] [style*="color:#fff"],
+html[data-theme="light"] [style*="color: #fff"],
+html[data-theme="light"] [style*="color:#FFF"],
+html[data-theme="light"] [style*="color:white"],
+html[data-theme="light"] [style*="color: white"],
+html[data-theme="light"] [style*="color:rgba(255,255,255"],
+html[data-theme="light"] [style*="color: rgba(255, 255, 255"] {
+    color: #2a1a45 !important;
+}
+/* متن‌های خاکستری روشن → خاکستری تیره */
+html[data-theme="light"] .text-gray,
+html[data-theme="light"] [style*="color:#aaa"],
+html[data-theme="light"] [style*="color: #aaa"],
+html[data-theme="light"] [style*="color:#B8B8D1"],
+html[data-theme="light"] [style*="color:#888"] {
+    color: #6b6580 !important;
+}
+
+/* هدر */
+html[data-theme="light"] .header,
+html[data-theme="light"] .header-container,
+html[data-theme="light"] .top-header { color: #1a0b2e; }
+
+/* نوار پایین */
+html[data-theme="light"] .bottom-nav {
+    background: rgba(255,255,255,0.97) !important;
+    border-top: 1px solid rgba(20,10,40,0.08) !important;
+    box-shadow: 0 -4px 20px rgba(108,64,197,0.08) !important;
+}
+html[data-theme="light"] .nav-item { color: #7a7490 !important; }
+html[data-theme="light"] .nav-item.active { color: #6C40C5 !important; background: rgba(108,64,197,0.08) !important; }
+html[data-theme="light"] .nav-scan-fab { border-color: #ffffff !important; }
+
+/* دکمه‌های بزرگ ناوبری (arad/money_transfer) */
+html[data-theme="light"] .nav-large-btn {
+    background: #ffffff !important;
+    color: #6b6580 !important;
+    border: 1px solid rgba(20,10,40,0.08) !important;
+}
+html[data-theme="light"] .nav-large-btn.active {
+    background: linear-gradient(135deg, #6C40C5, #FF4D8D) !important;
+    color: #ffffff !important;
+}
+html[data-theme="light"] .nav-large-btn.active span,
+html[data-theme="light"] .nav-large-btn.active i { color: #ffffff !important; }
+
+/* ورودی‌ها */
+html[data-theme="light"] input,
+html[data-theme="light"] select,
+html[data-theme="light"] textarea {
+    background: #f4f2fb !important;
+    color: #1a0b2e !important;
+    border: 1px solid rgba(20,10,40,0.12) !important;
+}
+html[data-theme="light"] ::placeholder { color: #9a94ac !important; }
+
+/* آیکن‌ها/عناصری که باید رنگی بمانند (گرادیان بنفش-صورتی برند) دست‌نخورده */
+html[data-theme="light"] .wallet-hero,
+html[data-theme="light"] .nav-scan-fab,
+html[data-theme="light"] .qa-circle,
+html[data-theme="light"] .btn,
+html[data-theme="light"] .ava-chooser-ic,
+html[data-theme="light"] .inv-pay-hint,
+html[data-theme="light"] .wallet-hero * {
+    color: unset;
+}
+html[data-theme="light"] .wallet-hero,
+html[data-theme="light"] .wallet-hero .wallet-hero-amount,
+html[data-theme="light"] .wallet-hero .wallet-hero-label,
+html[data-theme="light"] .wallet-hero span { color: #ffffff !important; }
+html[data-theme="light"] .wallet-hero { box-shadow: 0 12px 34px rgba(108,64,197,0.22) !important; }
+
+/* دکمه‌های برند سفید بمانند */
+html[data-theme="light"] .btn,
+html[data-theme="light"] .create-withdrawal-btn,
+html[data-theme="light"] .fab-add,
+html[data-theme="light"] .ava-qr-submit,
+html[data-theme="light"] .ava-receive-share {
+    color: #ffffff !important;
+}
+html[data-theme="light"] .btn *,
+html[data-theme="light"] .create-withdrawal-btn * { color: #ffffff !important; }
+
+/* اسکلت لودینگ و overlayها */
+html[data-theme="light"] .modal-overlay,
+html[data-theme="light"] .tp-modal-overlay {
+    background: rgba(30,15,50,0.35) !important;
+}
+
+/* ============================================================
+   LIGHT THEME — تقویت جامع (v2)
+   هدف: هیچ متن روشنی روی پس‌زمینه روشن نامرئی نماند.
+   ============================================================ */
+
+/* --- تمام حالت‌های متن سفید/کم‌رنگ اینلاین → تیره خوانا --- */
+html[data-theme="light"] [style*="color:rgba(255,255,255"],
+html[data-theme="light"] [style*="color: rgba(255,255,255"],
+html[data-theme="light"] [style*="color: rgba(255, 255, 255"],
+html[data-theme="light"] [style*="color:rgba(255, 255, 255"],
+html[data-theme="light"] [style*="color:#fff"],
+html[data-theme="light"] [style*="color: #fff"],
+html[data-theme="light"] [style*="color:#FFF"],
+html[data-theme="light"] [style*="color: #FFF"],
+html[data-theme="light"] [style*="color:#ffffff"],
+html[data-theme="light"] [style*="color: #ffffff"],
+html[data-theme="light"] [style*="color:white"],
+html[data-theme="light"] [style*="color: white"] {
+    color: #241a3a !important;
+}
+
+/* --- خاکستری‌های روشن رایج → خاکستری تیره خوانا --- */
+html[data-theme="light"] [style*="color:#aaa"],
+html[data-theme="light"] [style*="color: #aaa"],
+html[data-theme="light"] [style*="color:#bbb"],
+html[data-theme="light"] [style*="color: #bbb"],
+html[data-theme="light"] [style*="color:#ccc"],
+html[data-theme="light"] [style*="color: #ccc"],
+html[data-theme="light"] [style*="color:#ddd"],
+html[data-theme="light"] [style*="color: #ddd"],
+html[data-theme="light"] [style*="color:#888"],
+html[data-theme="light"] [style*="color: #888"],
+html[data-theme="light"] [style*="color:#999"],
+html[data-theme="light"] [style*="color: #999"],
+html[data-theme="light"] [style*="color:#9b94b8"],
+html[data-theme="light"] [style*="color:#B8B8D1"],
+html[data-theme="light"] [style*="color:#b8b8d1"],
+html[data-theme="light"] [style*="color:#9a94ac"] {
+    color: #635c7a !important;
+}
+
+/* --- عناوین و متن‌های عمومی که رنگ اینلاین ندارند --- */
+html[data-theme="light"] .header h1,
+html[data-theme="light"] .header p,
+html[data-theme="light"] .top-header h1,
+html[data-theme="light"] .top-header p,
+html[data-theme="light"] .page-title,
+html[data-theme="light"] .section-title,
+html[data-theme="light"] .card-title,
+html[data-theme="light"] .admin-card-title,
+html[data-theme="light"] .label,
+html[data-theme="light"] .value,
+html[data-theme="light"] .list-title,
+html[data-theme="light"] .item-title,
+html[data-theme="light"] .tx-title,
+html[data-theme="light"] .tx-amount,
+html[data-theme="light"] .transaction-title,
+html[data-theme="light"] .notification-title,
+html[data-theme="light"] .notification-message,
+html[data-theme="light"] .dropdown-title,
+html[data-theme="light"] .empty-state p,
+html[data-theme="light"] .empty-state,
+html[data-theme="light"] .form-label,
+html[data-theme="light"] .setting-label,
+html[data-theme="light"] .menu-item span,
+html[data-theme="light"] .stat-value,
+html[data-theme="light"] .stat-label {
+    color: #241a3a !important;
+}
+
+/* متن‌های ثانویه/توضیحی خاکستری */
+html[data-theme="light"] .subtitle,
+html[data-theme="light"] .muted,
+html[data-theme="light"] .text-muted,
+html[data-theme="light"] .hint,
+html[data-theme="light"] .desc,
+html[data-theme="light"] .description,
+html[data-theme="light"] .notification-time,
+html[data-theme="light"] .tx-date,
+html[data-theme="light"] .transaction-date,
+html[data-theme="light"] .item-sub,
+html[data-theme="light"] .caption {
+    color: #6b6580 !important;
+}
+
+/* --- پس‌زمینه‌های تیره‌ی اینلاین رایج → روشن --- */
+html[data-theme="light"] [style*="background:#1A0B2E"],
+html[data-theme="light"] [style*="background: #1A0B2E"],
+html[data-theme="light"] [style*="background:#1a0b2e"],
+html[data-theme="light"] [style*="background:#150a28"],
+html[data-theme="light"] [style*="background:#1e0f38"],
+html[data-theme="light"] [style*="background:#120824"],
+html[data-theme="light"] [style*="background:#1e122f"],
+html[data-theme="light"] [style*="background:rgba(255,255,255,0.03)"],
+html[data-theme="light"] [style*="background:rgba(255,255,255,0.04)"],
+html[data-theme="light"] [style*="background:rgba(255,255,255,0.05)"],
+html[data-theme="light"] [style*="background:rgba(255,255,255,0.06)"],
+html[data-theme="light"] [style*="background: rgba(255,255,255,0.05)"],
+html[data-theme="light"] [style*="background:rgba(255,255,255,.05)"] {
+    background: #f5f3fb !important;
+    color: #241a3a !important;
+    border-color: rgba(20,10,40,0.08) !important;
+}
+
+/* کارت‌ها/باکس‌های شیشه‌ای عمومی که در دارک نیمه‌شفاف روشن‌اند */
+html[data-theme="light"] .notification-item,
+html[data-theme="light"] .tx-item,
+html[data-theme="light"] .transaction-item,
+html[data-theme="light"] .list-item,
+html[data-theme="light"] .setting-item,
+html[data-theme="light"] .menu-item,
+html[data-theme="light"] .info-row,
+html[data-theme="light"] .detail-row,
+html[data-theme="light"] .stat-card,
+html[data-theme="light"] .admin-card,
+html[data-theme="light"] .filter-tab {
+    background: #ffffff !important;
+    border-color: rgba(20,10,40,0.08) !important;
+    color: #241a3a !important;
+}
+
+/* آیکن زنگوله/اکشن‌ها که خاکستری کم‌رنگ بودند */
+html[data-theme="light"] .notification-delete,
+html[data-theme="light"] .close-dropdown-btn,
+html[data-theme="light"] .refresh-header-icon,
+html[data-theme="light"] .icon-btn {
+    color: #635c7a !important;
+}
+
+/* اطمینان از اینکه دکمه‌های برند (گرادیان) سفید بمانند و override نشوند */
+html[data-theme="light"] .action-btn.accept,
+html[data-theme="light"] .action-btn.accept *,
+html[data-theme="light"] .action-btn.reject,
+html[data-theme="light"] .action-btn.reject *,
+html[data-theme="light"] .btn-accept, html[data-theme="light"] .btn-accept *,
+html[data-theme="light"] .btn-reject, html[data-theme="light"] .btn-reject *,
+html[data-theme="light"] .admin-tab.active,
+html[data-theme="light"] .admin-tab.active *,
+html[data-theme="light"] .mark-all-read-btn,
+html[data-theme="light"] .filter-tab.active,
+html[data-theme="light"] .filter-tab.active * {
+    color: #ffffff !important;
+}
+
+/* دراپ‌داون نوتیفیکیشن در تم روشن: پس‌زمینه سفید + متن تیره */
+html[data-theme="light"] .notification-dropdown {
+    background: #ffffff !important;
+    border-color: rgba(20,10,40,0.10) !important;
+}
+html[data-theme="light"] .notification-dropdown .dropdown-title,
+html[data-theme="light"] .notification-dropdown .notification-title { color: #241a3a !important; }
+html[data-theme="light"] .notification-dropdown .notification-message,
+html[data-theme="light"] .notification-dropdown .notification-time { color: #6b6580 !important; }
+html[data-theme="light"] .notification-dropdown .dropdown-header { background: #ffffff !important; border-bottom-color: rgba(20,10,40,0.08) !important; }
+html[data-theme="light"] .notification-dropdown::after { background: rgba(20,10,40,0.18) !important; }
+
+/* ============================================================
+   LIGHT THEME — تقویت جامع (v3)
+   مشکل نسخه‌های قبلی: انتخابگرهای [style*="..."] به‌صورت پیش‌فرض
+   Case-Sensitive بودند، در حالی که جاوااسکریپت گاهی رنگ‌ها را با
+   حروف بزرگ/کوچک یا فاصله‌ی متفاوت می‌نویسد (مثلاً "color: #B8B8D1"
+   با فاصله، وقتی فقط حالت بدون فاصله پوشش داده شده بود) و در نتیجه
+   بعضی متن‌ها هنوز در تم روشن سفید/کم‌رنگ و ناخوانا می‌ماندند.
+   با فلگ "i" (case-insensitive) این مشکل برطرف می‌شود.
+   ============================================================ */
+html[data-theme="light"] [style*="color:#fff" i],
+html[data-theme="light"] [style*="color: #fff" i],
+html[data-theme="light"] [style*="color:white" i],
+html[data-theme="light"] [style*="color: white" i],
+html[data-theme="light"] [style*="color:rgba(255,255,255" i],
+html[data-theme="light"] [style*="color: rgba(255,255,255" i],
+html[data-theme="light"] [style*="color: rgba(255, 255, 255" i],
+html[data-theme="light"] [style*="color:rgba(255, 255, 255" i] {
+    color: #241a3a !important;
+}
+
+html[data-theme="light"] [style*="color:#aaa" i],
+html[data-theme="light"] [style*="color: #aaa" i],
+html[data-theme="light"] [style*="color:#bbb" i],
+html[data-theme="light"] [style*="color: #bbb" i],
+html[data-theme="light"] [style*="color:#ccc" i],
+html[data-theme="light"] [style*="color: #ccc" i],
+html[data-theme="light"] [style*="color:#888" i],
+html[data-theme="light"] [style*="color: #888" i],
+html[data-theme="light"] [style*="color:#999" i],
+html[data-theme="light"] [style*="color: #999" i],
+html[data-theme="light"] [style*="color:#9b94b8" i],
+html[data-theme="light"] [style*="color: #9b94b8" i],
+html[data-theme="light"] [style*="color:#b8b8d1" i],
+html[data-theme="light"] [style*="color: #b8b8d1" i],
+html[data-theme="light"] [style*="color:#9a94ac" i],
+html[data-theme="light"] [style*="color: #9a94ac" i] {
+    color: #635c7a !important;
+}
+
+/* رنگ‌های وضعیت (طلایی/زرد کمرنگ) روی پس‌زمینه‌ی سفید تقریباً نامرئی‌اند؛
+   در تم روشن کمی تیره‌تر می‌شوند تا کنتراست کافی داشته باشند */
+html[data-theme="light"] [style*="#FFD700" i],
+html[data-theme="light"] [style*="#FFC107" i],
+html[data-theme="light"] [style*="#ffd54f" i],
+html[data-theme="light"] [style*="#ffe082" i] {
+    color: #B8860B !important;
+}
+
+/* هر متنی که رنگ اینلاین اصلاً ندارد ولی داخل یک کارت/سطح تیره‌ی
+   قبلاً روشن‌شده قرار گرفته، وارث رنگ تیره‌ی همان سطح می‌شود */
+html[data-theme="light"] .admin-card,
+html[data-theme="light"] .admin-card * ,
+html[data-theme="light"] .stat-card,
+html[data-theme="light"] .stat-card *,
+html[data-theme="light"] .ax-quick-panel,
+html[data-theme="light"] .ax-quick-panel *,
+html[data-theme="light"] .ax-hero-stat,
+html[data-theme="light"] .ax-hero-stat *,
+html[data-theme="light"] .ax-latestreq-row,
+html[data-theme="light"] .ax-latestreq-row * {
+    color: #241a3a;
+}
+/* دکمه‌ها/برچسب‌های رنگی برند داخل همین کارت‌ها باید سفید بمانند */
+html[data-theme="light"] .admin-card .btn,
+html[data-theme="light"] .admin-card .btn *,
+html[data-theme="light"] .ax-quick-panel .ax-quick-badge,
+html[data-theme="light"] .ax-hero-stat .ax-hero-ic {
+    color: #ffffff !important;
+}
+

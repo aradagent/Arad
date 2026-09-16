@@ -1,0 +1,1224 @@
+/* ==========================================================================
+   AvaPay · «Arad Nova — میز معامله»
+   تم کامل صفحه‌ی تبادل ارزی (arad.php)
+   --------------------------------------------------------------------------
+   ایده‌ی طراحی: هر بخش یک «پلاک» است — نوار بالایی روشن‌تر (ریل)، بدنه‌ی
+   تیره‌تر، و یک موی‌خط طلایی روی لبه‌ی بالا. مثل یک برگه‌ی دفترِ حساب که
+   روی میز معامله گذاشته شده. امضای صفحه: کنسول «نبض بازار» با نمودار
+   سطحیِ زنده و خط‌کش‌های دفتری.
+
+   جایگاه فایل: با <link> در انتهای <body> بارگذاری می‌شود تا آخرین حرف
+   کسکید را بزند (بلوک‌های استایل بالای همین صفحه با !important می‌نویسند).
+   ========================================================================== */
+
+:root{
+    /* بستر */
+    --ax-void:#05020F;
+    --ax-plate:#150B2C;
+    --ax-plate-2:#100722;
+    --ax-rail:#1F1243;
+
+    /* رنگ‌های برند */
+    --ax-violet:#7C5CFF;
+    --ax-violet-dim:#5B3FD6;
+    --ax-magenta:#FF4FA3;
+    --ax-gold:#F6D68A;
+    --ax-gold-deep:#C9973A;
+
+    /* معنایی */
+    --ax-mint:#3ED08B;
+    --ax-coral:#FF6B7A;
+    --ax-ice:#38BDF8;
+    --ax-amber:#FFC24B;
+
+    /* مرکب */
+    --ax-ink:#F5F1FF;
+    --ax-dim:rgba(245,241,255,.64);
+    --ax-mute:rgba(245,241,255,.40);
+
+    /* خطوط و سطوح */
+    --ax-line:rgba(255,255,255,.085);
+    --ax-line-soft:rgba(255,255,255,.05);
+    --ax-hair:rgba(246,214,138,.30);
+    --ax-glass:rgba(255,255,255,.045);
+    --ax-glass-hi:rgba(255,255,255,.075);
+
+    /* گرادیان‌ها */
+    --ax-g-brand:linear-gradient(135deg,#7C5CFF 0%,#FF4FA3 100%);
+    --ax-g-gold:linear-gradient(135deg,#F6D68A 0%,#C9973A 100%);
+    --ax-g-mint:linear-gradient(135deg,#3ED08B 0%,#159C68 100%);
+    --ax-g-coral:linear-gradient(135deg,#FF8095 0%,#E23D57 100%);
+    --ax-g-plate:linear-gradient(180deg,#1F1243 0%,#150B2C 34%,#100722 100%);
+
+    /* شعاع و سایه */
+    --ax-r-lg:24px; --ax-r-md:17px; --ax-r-sm:12px; --ax-r-xs:9px;
+    --ax-sh:0 26px 60px -30px rgba(0,0,0,.9);
+    --ax-sh-lift:0 32px 70px -26px rgba(108,77,255,.45);
+    --ax-ease:cubic-bezier(.16,1,.3,1);
+    --av-ease:cubic-bezier(.16,1,.3,1);
+}
+
+/* ══════════════ ۱ · بستر و تایپوگرافی ══════════════ */
+html,body{
+    background:
+        radial-gradient(120% 70% at 50% -12%, rgba(124,92,255,.20), transparent 62%),
+        radial-gradient(80% 46% at 108% 4%, rgba(255,79,163,.11), transparent 58%),
+        var(--ax-void) !important;
+    background-attachment:fixed !important;
+    overflow-x:hidden !important;
+    color:var(--ax-ink);
+}
+body,input,button,select,textarea,.form-control,.form-input,.form-select{
+    font-family:'Vazirmatn',system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif !important;
+    -webkit-font-smoothing:antialiased;
+    letter-spacing:-.012em;
+}
+/* ارقام هم‌عرض: ستون اعداد در کارت‌های مالی تکان نمی‌خورد */
+.axm-price-v,.axm-amount-v,.axs-pill b,.axs-offer-amt,.axs-adbox-v,.axs-deal-amt,
+.info-value,.dc-acc code,.axm-minmax,.axn-metric-v b,.axn-kpi b,.axn-rate-v,
+.av-donut-center b,.av-legend b,.axn-rate-v,.axm-row-deal,.axd-sum{
+    font-variant-numeric:tabular-nums;
+    font-feature-settings:'tnum' 1;
+}
+
+/* هاله‌های محیطی — ثابت، آرام، بدون سرگیجه */
+body::before,body::after{
+    content:''; position:fixed; z-index:-1; border-radius:50%;
+    filter:blur(100px); pointer-events:none; opacity:.45;
+}
+body::before{
+    width:44vmax; height:44vmax; top:-19vmax; inset-inline-start:-15vmax;
+    background:radial-gradient(circle,rgba(124,92,255,.34),transparent 70%);
+    animation:axAuroraA 26s ease-in-out infinite alternate;
+}
+body::after{
+    width:38vmax; height:38vmax; bottom:-17vmax; inset-inline-end:-13vmax;
+    background:radial-gradient(circle,rgba(255,79,163,.22),transparent 70%);
+    animation:axAuroraB 30s ease-in-out infinite alternate;
+}
+@keyframes axAuroraA{ from{transform:translate(0,0) scale(1);} to{transform:translate(4vmax,3vmax) scale(1.1);} }
+@keyframes axAuroraB{ from{transform:translate(0,0) scale(1);} to{transform:translate(-3vmax,-4vmax) scale(1.08);} }
+
+/* ══════════════ ۲ · قانون ایمنی رسپانسیو ══════════════
+   فرزندان گرید/فلکس پیش‌فرض min-width:auto دارند و کوچک‌تر از محتوا
+   نمی‌شوند؛ همین باعث بیرون‌زدگی افقی در موبایل می‌شد. */
+.axm-cta-grid,.axs-grid,.deal-info-grid,.deal-parties,.axm-pay-row,
+.axm-list,.axm-searchbar,.axm-card-mid,.axs-pills,.axs-offer-btns,.dc-actions,
+.axn-hero,.axn-deck,.axn-slide,.axn-kpis,.axn-rates,.axm-row,.axd-item{
+    min-width:0 !important;
+}
+.axm-cta-grid>*,.axs-grid>*,.deal-info-grid>*,.deal-parties>*,
+.axm-list>*,.axs-pills>*,.axs-offer-btns>*,.axn-deck>*,.axm-row-top>*{
+    min-width:0 !important;
+}
+.main-container{
+    max-width:100% !important; overflow-x:hidden !important;
+    padding-inline:14px !important; padding-bottom:104px !important;
+}
+
+/* ══════════════ ۳ · هدر ══════════════ */
+.avapay-header{
+    background:linear-gradient(180deg,rgba(31,18,67,.92),rgba(16,7,34,.72)) !important;
+    backdrop-filter:blur(24px) saturate(160%) !important;
+    -webkit-backdrop-filter:blur(24px) saturate(160%) !important;
+    border:1px solid var(--ax-line) !important; border-top:none !important;
+    border-radius:0 0 26px 26px !important;
+    box-shadow:var(--ax-sh) !important;
+    position:relative;
+}
+/* موی‌خط طلایی زیر هدر — امضای «برگه‌ی دفتر» */
+.avapay-header::after{
+    content:''; position:absolute; inset-inline:22px; bottom:-1px; height:1px;
+    background:linear-gradient(90deg,transparent,var(--ax-hair),transparent);
+}
+.logo-icon{
+    background:var(--ax-g-brand) !important; border-radius:15px !important;
+    box-shadow:0 12px 26px -12px rgba(124,92,255,.85) !important;
+}
+.logo-text h1{
+    background:linear-gradient(120deg,#fff 20%,var(--ax-gold) 100%) !important;
+    -webkit-background-clip:text !important; background-clip:text !important;
+    -webkit-text-fill-color:transparent !important;
+    letter-spacing:-.02em !important;
+}
+.logo-text span{ color:var(--ax-mute) !important; font-size:.66rem !important; }
+.notification-bell .bell-icon,.home-btn{
+    background:var(--ax-glass-hi) !important; border:1px solid var(--ax-line) !important;
+    border-radius:14px !important; color:var(--ax-ink) !important;
+    transition:transform .25s var(--ax-ease),background .25s,border-color .25s !important;
+}
+.notification-bell:hover .bell-icon,.home-btn:hover{
+    background:rgba(124,92,255,.2) !important;
+    border-color:rgba(124,92,255,.45) !important;
+    transform:translateY(-2px) !important;
+}
+.notification-badge{
+    background:var(--ax-g-coral) !important; border:2px solid var(--ax-void) !important;
+    box-shadow:0 4px 12px -3px rgba(226,61,87,.8) !important;
+}
+
+/* ══════════════ ۴ · بنر تخفیف ══════════════ */
+.discount-banner{
+    background:linear-gradient(135deg,rgba(246,214,138,.12),rgba(124,92,255,.08)) !important;
+    border:1px solid var(--ax-hair) !important;
+    border-radius:var(--ax-r-md) !important;
+    color:var(--ax-ink) !important; padding:13px 16px !important;
+    margin-bottom:14px !important; font-size:.82rem !important;
+    box-shadow:0 16px 34px -26px rgba(246,214,138,.6) !important;
+}
+.discount-banner i{ color:var(--ax-gold) !important; }
+.discount-percent{
+    background:var(--ax-g-gold); -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent; font-weight:800; font-size:1.05rem;
+}
+.av-divider{
+    height:1px; margin:16px 2px 18px;
+    background:linear-gradient(90deg,transparent,var(--ax-line),transparent);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   ۵ · امضای صفحه — کنسول «نبض بازار»
+   ══════════════════════════════════════════════════════════════════ */
+.axn-hero{
+    position:relative; overflow:hidden;
+    background:var(--ax-g-plate);
+    border:1px solid var(--ax-line);
+    border-radius:var(--ax-r-lg);
+    padding:0 0 16px;
+    box-shadow:var(--ax-sh);
+    margin-bottom:18px;
+}
+/* لبه‌ی طلایی بالا: نشانه‌ی «سند رسمی» */
+.axn-hero::before{
+    content:''; position:absolute; top:0; inset-inline:0; height:2px;
+    background:linear-gradient(90deg,transparent,var(--ax-gold) 30%,var(--ax-magenta) 70%,transparent);
+    opacity:.85;
+}
+/* خط‌کش‌های دفتری پشت محتوا */
+.axn-hero::after{
+    content:''; position:absolute; inset:0; pointer-events:none; opacity:.5;
+    background:repeating-linear-gradient(180deg,transparent 0 33px,rgba(255,255,255,.022) 33px 34px);
+}
+.axn-hero > *{ position:relative; z-index:1; }
+
+/* ریل بالای کنسول */
+.axn-rail{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:10px 14px 9px;
+    background:linear-gradient(180deg,rgba(255,255,255,.05),transparent);
+    border-bottom:1px solid var(--ax-line-soft);
+}
+.axn-eyebrow{
+    display:inline-flex; align-items:center; gap:7px;
+    font-size:.74rem; font-weight:700; color:var(--ax-gold);
+    letter-spacing:.02em;
+}
+.axn-eyebrow::before{
+    content:''; width:16px; height:2px; border-radius:2px;
+    background:var(--ax-g-gold);
+}
+.axn-live{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:.66rem; font-weight:700; color:var(--ax-mint);
+    background:rgba(62,208,139,.1); border:1px solid rgba(62,208,139,.28);
+    padding:4px 10px; border-radius:999px;
+}
+.axn-live i{ width:6px; height:6px; border-radius:50%; background:var(--ax-mint); display:inline-block;
+    box-shadow:0 0 0 0 rgba(62,208,139,.6); animation:axPulse 2s infinite; }
+@keyframes axPulse{
+    70%{ box-shadow:0 0 0 7px rgba(62,208,139,0); }
+    100%{ box-shadow:0 0 0 0 rgba(62,208,139,0); }
+}
+
+/* ── دکِ کشویی: سه پنل، اسکرول افقی با انگشت ── */
+.axn-deck{
+    display:flex; overflow-x:auto; overflow-y:hidden;
+    scroll-snap-type:x mandatory; scroll-behavior:smooth;
+    scrollbar-width:none; -webkit-overflow-scrolling:touch;
+}
+.axn-deck::-webkit-scrollbar{ display:none; }
+.axn-slide{
+    flex:0 0 100%; width:100%; scroll-snap-align:center;
+    padding:12px 14px 4px; min-width:0;
+}
+.axn-slide-head{
+    display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px;
+}
+.axn-slide-t{
+    display:inline-flex; align-items:center; gap:7px;
+    font-size:.76rem; font-weight:700; color:var(--ax-dim);
+}
+.axn-slide-t i{ color:var(--ax-violet); font-size:.72rem; }
+
+/* عدد اصلی + KPIها */
+.axn-metric-l{ display:block; font-size:.72rem; color:var(--ax-mute); margin-bottom:5px; }
+.axn-metric-v{ display:flex; align-items:baseline; gap:7px; margin-top:5px; }
+.axn-metric-v b{
+    font-size:clamp(1.45rem,6.4vw,2.15rem); font-weight:800; line-height:1.08; letter-spacing:-.03em;
+    background:linear-gradient(120deg,#fff 10%,var(--ax-gold) 95%);
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+}
+.axn-metric-v small{ font-size:.76rem; color:var(--ax-dim); font-weight:600; }
+.axn-metric-sub{
+    display:flex; flex-wrap:wrap; gap:6px 14px; margin-top:7px;
+    font-size:.7rem; color:var(--ax-dim);
+}
+.axn-metric-sub span{ display:inline-flex; align-items:center; gap:5px; }
+.axn-metric-sub i{ color:var(--ax-violet); font-size:.68rem; }
+
+.axn-kpis{ display:grid; grid-template-columns:repeat(3,1fr); gap:7px; margin-top:10px; }
+.axn-kpi{
+    background:rgba(255,255,255,.035); border:1px solid var(--ax-line-soft);
+    border-radius:var(--ax-r-sm); padding:8px 6px; text-align:center;
+    position:relative; overflow:hidden;
+    transition:transform .3s var(--ax-ease),border-color .3s;
+}
+.axn-kpi::before{
+    content:''; position:absolute; top:0; inset-inline:14px; height:1px;
+    background:linear-gradient(90deg,transparent,var(--ax-line),transparent);
+}
+.axn-kpi:hover{ transform:translateY(-2px); border-color:rgba(124,92,255,.35); }
+.axn-kpi b{ display:block; font-size:1.02rem; font-weight:800; color:var(--ax-ink); line-height:1.2; }
+.axn-kpi span{ display:block; font-size:.62rem; color:var(--ax-mute); margin-top:3px; }
+.axn-kpi.mint b{ color:var(--ax-mint); }
+.axn-kpi.amber b{ color:var(--ax-amber); }
+.axn-kpi.ice b{ color:var(--ax-ice); }
+
+/* چیپ‌های ارز */
+.axn-chipbar{
+    display:flex; gap:7px; overflow-x:auto; padding:0 0 8px;
+    scrollbar-width:none; -webkit-overflow-scrolling:touch;
+}
+.axn-chipbar::-webkit-scrollbar{ display:none; }
+.exc-chip{
+    flex:0 0 auto; cursor:pointer;
+    background:rgba(255,255,255,.04); border:1px solid var(--ax-line);
+    color:var(--ax-dim); font-size:.72rem; font-weight:700; font-family:inherit;
+    padding:6px 12px; border-radius:999px;
+    transition:all .25s var(--ax-ease);
+}
+.exc-chip:hover{ color:var(--ax-ink); border-color:rgba(124,92,255,.4); }
+.exc-chip.active{
+    background:var(--ax-g-brand); color:#fff; border-color:transparent;
+    box-shadow:0 10px 22px -12px rgba(124,92,255,.9);
+}
+.axn-chart-sum{
+    font-size:.74rem; font-weight:800; color:var(--ax-gold);
+    background:rgba(246,214,138,.1); border:1px solid var(--ax-hair);
+    padding:4px 11px; border-radius:999px; white-space:nowrap;
+}
+.axn-plot{
+    position:relative; min-height:96px; padding:5px 4px 0;
+    background:rgba(0,0,0,.24); border:1px solid var(--ax-line-soft);
+    border-radius:var(--ax-r-md);
+}
+.axn-hint{
+    display:flex; align-items:center; gap:6px; margin-top:6px;
+    font-size:.6rem; color:var(--ax-mute);
+}
+.axn-hint i{ color:var(--ax-violet); }
+
+/* حباب عددِ ماه هنگام لمس نمودار */
+.axn-tip{
+    position:absolute; transform:translate(-50%,-100%); pointer-events:none; z-index:3;
+    max-width:calc(100% - 12px); box-sizing:border-box;
+    background:linear-gradient(180deg,#2A1856,#160A31);
+    border:1px solid var(--ax-hair); border-radius:var(--ax-r-xs);
+    padding:6px 10px; text-align:center; white-space:nowrap;
+    box-shadow:0 14px 30px -14px rgba(0,0,0,.95);
+    animation:axTipIn .18s var(--ax-ease);
+}
+.axn-tip{ min-width:132px; text-align:start; padding:8px 10px; }
+.axn-tip-m{
+    display:block; font-size:.56rem; color:var(--ax-mute);
+    padding-bottom:5px; margin-bottom:5px; border-bottom:1px solid var(--ax-line-soft);
+}
+.axn-tip-r{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    font-size:.6rem; color:var(--ax-dim); line-height:1.9;
+}
+.axn-tip-r em{ font-style:normal; }
+.axn-tip-r b{ font-weight:800; color:var(--ax-ink); font-variant-numeric:tabular-nums; }
+.axn-tip-r.buy b{ color:var(--ax-mint); }
+.axn-tip-r.sell b{ color:var(--ax-coral); }
+/* اگر بالای نقطه جا نبود، حباب زیر آن می‌نشیند */
+.axn-tip.below{ transform:translate(-50%,0); }
+@keyframes axTipIn{ from{ opacity:0; } to{ opacity:1; } }
+.axn-area .dot.sel{ stroke:var(--ax-gold); r:6; }
+
+/* نمودار سطحی */
+.axn-area{ display:block; width:100%; height:96px; overflow:visible; }
+.axn-area .grid{ stroke:rgba(255,255,255,.06); stroke-width:1; }
+.axn-area .base{ stroke:var(--ax-hair); stroke-width:1; }
+.axn-area .fill{ opacity:0; animation:axFadeIn .9s var(--ax-ease) .25s forwards; }
+.axn-area .line{
+    fill:none; stroke:url(#axLineGrad); stroke-width:2.5;
+    stroke-linecap:round; stroke-linejoin:round;
+    filter:drop-shadow(0 4px 10px rgba(124,92,255,.55));
+    stroke-dasharray:var(--len); stroke-dashoffset:var(--len);
+    animation:axDraw 1.25s var(--ax-ease) forwards;
+}
+.axn-area .dot{ fill:#fff; stroke:var(--ax-violet); stroke-width:2.5; opacity:0;
+    animation:axFadeIn .4s var(--ax-ease) forwards; transition:r .2s var(--ax-ease); }
+.axn-area .dot.last{ stroke:var(--ax-gold); }
+.axn-area .halo{ fill:rgba(246,214,138,.16); opacity:0; animation:axFadeIn .5s ease 1.1s forwards; }
+@keyframes axDraw{ to{ stroke-dashoffset:0; } }
+@keyframes axFadeIn{ to{ opacity:1; } }
+.axn-xlabels{
+    display:grid; grid-template-columns:repeat(6,1fr); gap:2px;
+    margin-top:6px; font-size:.6rem; color:var(--ax-mute); text-align:center;
+}
+.axn-empty{
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+    padding:26px 10px; color:var(--ax-mute); font-size:.78rem; text-align:center;
+}
+.axn-empty i{ font-size:1.4rem; color:rgba(124,92,255,.5); }
+
+/* نقطه‌های راهنمای دک */
+.axn-dots{ display:flex; align-items:center; justify-content:center; gap:7px; padding:4px 0 10px; }
+.axn-dots button{
+    width:7px; height:7px; padding:0; border-radius:999px; cursor:pointer;
+    background:rgba(255,255,255,.2); border:none;
+    transition:width .3s var(--ax-ease),background .3s;
+}
+.axn-dots button.on{ width:22px; background:var(--ax-g-gold); }
+
+/* دونات */
+.axn-chip-gold{
+    font-size:.68rem; font-weight:800; color:var(--ax-gold);
+    background:rgba(246,214,138,.1); border:1px solid var(--ax-hair);
+    padding:3px 10px; border-radius:999px; white-space:nowrap;
+}
+.av-donut-wrap{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+.av-donut{ position:relative; width:94px; height:94px; flex:0 0 94px; }
+.av-donut svg{ width:100%; height:100%; transform:rotate(-90deg); }
+.av-donut .track{ fill:none; stroke:rgba(255,255,255,.06); stroke-width:12; }
+.av-donut .ring{ fill:none; stroke-width:12; stroke-linecap:butt; }
+.av-donut-center{ position:absolute; inset:0; display:grid; place-content:center; text-align:center; }
+.av-donut-center b{ display:block; font-size:1.15rem; font-weight:800; color:var(--ax-ink); }
+.av-donut-center small{ display:block; font-size:.6rem; color:var(--ax-mute); }
+.av-legend{ flex:1; min-width:120px; display:flex; flex-direction:column; gap:7px; }
+.av-legend .row{ display:flex; align-items:center; gap:7px; font-size:.68rem; color:var(--ax-dim); }
+.av-legend .dot{ width:8px; height:8px; border-radius:50%; flex:0 0 8px; }
+.av-legend b{ margin-inline-start:auto; color:var(--ax-ink); font-weight:800; font-size:.72rem; }
+
+/* ── نرخ لحظه‌ای: کارت‌های کنار هم، کشویی ── */
+.axn-rates-box{
+    background:var(--ax-g-plate); border:1px solid var(--ax-line);
+    border-radius:var(--ax-r-lg); box-shadow:var(--ax-sh);
+    padding:13px 0 13px 0; margin-bottom:16px; position:relative; overflow:hidden;
+}
+.axn-rates-box::before{
+    content:''; position:absolute; top:0; inset-inline:18px; height:1px;
+    background:linear-gradient(90deg,transparent,var(--ax-hair),transparent);
+}
+.axn-rates-head{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:0 14px; margin-bottom:11px;
+}
+.axn-rates{
+    display:flex; gap:9px; overflow-x:auto; padding:2px 14px 4px;
+    scroll-snap-type:x proximity; scrollbar-width:none; -webkit-overflow-scrolling:touch;
+}
+.axn-rates::-webkit-scrollbar{ display:none; }
+.axn-rate-card{
+    flex:0 0 148px; scroll-snap-align:start;
+    display:grid; gap:5px; padding:12px;
+    background:rgba(0,0,0,.24); border:1px solid var(--ax-line-soft);
+    border-radius:var(--ax-r-md);
+    transition:transform .28s var(--ax-ease),border-color .28s;
+}
+.axn-rate-card:hover{ transform:translateY(-3px); border-color:rgba(124,92,255,.35); }
+.axn-rate-more{ cursor:pointer; }
+.axn-rate-badge{
+    width:30px; height:30px; border-radius:11px; display:grid; place-items:center;
+    color:#fff; font-weight:800; font-size:.82rem;
+}
+.axn-rate-name{ font-size:.68rem; color:var(--ax-dim); font-weight:700; }
+.axn-rate-v{
+    font-size:1rem; font-weight:800; color:var(--ax-ink);
+    font-variant-numeric:tabular-nums;
+}
+.axn-rate-d{ font-size:.62rem; font-weight:700; color:var(--ax-mute); display:flex; align-items:center; gap:4px; }
+.axn-rate-d.up{ color:var(--ax-mint); }
+.axn-rate-d.down{ color:var(--ax-coral); }
+
+/* ══════════════ ۶ · جستجو / ثبت آگهی / تب‌ها ══════════════ */
+.axm-searchbar{
+    display:flex; gap:9px; margin-bottom:14px; flex-wrap:wrap;
+}
+.axm-search-input,.axm-currency-select{
+    background:rgba(255,255,255,.04) !important;
+    border:1px solid var(--ax-line) !important;
+    border-radius:var(--ax-r-md) !important;
+    color:var(--ax-ink) !important;
+    transition:border-color .25s,background .25s !important;
+}
+.axm-search-input{ flex:1 1 190px; }
+.axm-search-input input{ color:var(--ax-ink) !important; font-family:inherit !important; }
+.axm-search-input input::placeholder{ color:var(--ax-mute) !important; }
+.axm-search-input i{ color:var(--ax-mute) !important; }
+.axm-search-input:focus-within{
+    border-color:rgba(124,92,255,.6) !important;
+    background:rgba(124,92,255,.08) !important;
+    box-shadow:0 0 0 4px rgba(124,92,255,.1) !important;
+}
+.axm-currency-select{ cursor:pointer; }
+.axm-currency-select:hover{ border-color:rgba(124,92,255,.45) !important; }
+.axm-cur-dot{
+    width:22px; height:22px; border-radius:8px; display:grid; place-items:center;
+    font-size:.7rem; font-weight:800; color:#fff;
+}
+.axm-currency-menu{
+    background:linear-gradient(180deg,#1F1243,#100722) !important;
+    border:1px solid var(--ax-line) !important;
+    border-radius:var(--ax-r-md) !important;
+    box-shadow:var(--ax-sh) !important;
+    padding:6px !important; z-index:60 !important;
+}
+.axm-currency-item{
+    border-radius:var(--ax-r-xs) !important; color:var(--ax-dim) !important;
+    font-size:.76rem !important; transition:background .2s,color .2s !important;
+}
+.axm-currency-item:hover{ background:rgba(124,92,255,.16) !important; color:var(--ax-ink) !important; }
+
+/* CTA ثبت آگهی — دو پلاک بزرگ */
+.axm-cta-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:18px; }
+.axm-cta{
+    position:relative; overflow:hidden; cursor:pointer; text-align:start;
+    display:flex; flex-direction:column; gap:3px;
+    padding:15px 14px 14px !important;
+    background:var(--ax-g-plate) !important;
+    border:1px solid var(--ax-line) !important;
+    border-radius:var(--ax-r-lg) !important;
+    box-shadow:var(--ax-sh) !important;
+    transition:transform .3s var(--ax-ease),box-shadow .3s,border-color .3s !important;
+}
+.axm-cta::after{
+    content:''; position:absolute; top:0; inset-inline:18px; height:2px;
+    background:var(--ax-g-mint); border-radius:2px; opacity:.9;
+}
+.axm-cta-sell::after{ background:var(--ax-g-coral); }
+.axm-cta:hover{
+    transform:translateY(-4px) !important;
+    box-shadow:var(--ax-sh-lift) !important;
+    border-color:rgba(124,92,255,.35) !important;
+}
+.axm-cta:active{ transform:translateY(-1px) scale(.99) !important; }
+.axm-cta-badge{
+    width:38px; height:38px; border-radius:13px; display:grid; place-items:center;
+    color:#fff; font-size:.92rem; margin-bottom:7px;
+}
+.axm-cta-buy .axm-cta-badge{ background:var(--ax-g-mint); box-shadow:0 10px 22px -12px rgba(62,208,139,.9); }
+.axm-cta-sell .axm-cta-badge{ background:var(--ax-g-coral); box-shadow:0 10px 22px -12px rgba(226,61,87,.9); }
+.axm-cta-t{ font-size:.86rem; font-weight:800; color:var(--ax-ink); }
+.axm-cta-s{ font-size:.66rem; color:var(--ax-mute); }
+.axm-cta-plus{
+    position:absolute; inset-block-start:14px; inset-inline-end:14px;
+    width:24px; height:24px; border-radius:9px; display:grid; place-items:center;
+    background:rgba(255,255,255,.07); border:1px solid var(--ax-line);
+    color:var(--ax-dim); font-size:.62rem;
+}
+
+/* عنوان بخش‌ها — دستگاه ساختاری مشترک */
+.axm-listtitle,.axsv-title,.deals-section .section-header h3{
+    display:flex; align-items:center; gap:8px;
+    font-size:.9rem !important; font-weight:800 !important; color:var(--ax-ink) !important;
+    margin:0 0 12px !important;
+}
+.axm-listtitle::before,.axsv-title::before,.deals-section .section-header h3::before{
+    content:''; width:3px; height:16px; border-radius:2px; background:var(--ax-g-gold);
+}
+.axm-listtitle i,.axsv-title i{ color:var(--ax-violet) !important; font-size:.82rem !important; }
+
+.axm-listhead{ display:flex; align-items:center; gap:8px; margin-bottom:12px; flex-wrap:wrap; }
+.axm-filter-btn{
+    position:relative; cursor:pointer; font-size:.72rem; font-weight:700;
+    color:var(--ax-dim); background:rgba(255,255,255,.04);
+    border:1px solid var(--ax-line); border-radius:999px; padding:7px 13px;
+    display:inline-flex; align-items:center; gap:6px;
+    transition:border-color .25s,color .25s;
+}
+.axm-filter-btn:hover{ color:var(--ax-ink); border-color:rgba(124,92,255,.4); }
+.axm-filter-panel{
+    background:linear-gradient(180deg,#1F1243,#100722) !important;
+    border:1px solid var(--ax-line) !important; border-radius:var(--ax-r-md) !important;
+    box-shadow:var(--ax-sh) !important; padding:6px !important; z-index:60 !important;
+}
+.axm-filter-title{ font-size:.62rem !important; color:var(--ax-mute) !important; padding:6px 10px !important; }
+.axm-filter-opt{
+    border-radius:var(--ax-r-xs) !important; color:var(--ax-dim) !important;
+    font-size:.74rem !important; padding:8px 10px !important;
+}
+.axm-filter-opt:hover{ background:rgba(124,92,255,.16) !important; color:var(--ax-ink) !important; }
+
+/* ══════════════ ۷ · بازار آگهی‌ها — لیست تک‌ستونه ══════════════
+   هر آگهی یک سطر کامل است: آواتار، یک خط «چه‌کسی چه‌چیزی با چه قیمتی»،
+   و دکمه‌ی اقدام. هیچ‌وقت نصف جمله به سطر بعد نمی‌افتد چون هر تکه‌ی
+   اطلاعات خط خودش را دارد. */
+#adsContainer,#adsContainer.axm-list,.axm-list{
+    display:flex !important; flex-direction:column !important; gap:9px !important;
+}
+.axm-count{
+    margin-inline-start:auto; font-size:.66rem; color:var(--ax-mute); white-space:nowrap;
+}
+.axm-filter-sep{ height:1px; margin:6px 8px; background:var(--ax-line-soft); }
+
+/* لیست ساده: یک کادر واحد، هر آگهی یک ردیف با موی‌خط جداکننده
+   ساختار ردیف (راست به چپ): آواتار گرد · نام و مشخصات · قیمت · دکمه‌ی پیل */
+#adsContainer,#adsContainer.axm-list,.axm-list{
+    display:block !important;
+    background:var(--ax-g-plate);
+    border:1px solid var(--ax-line);
+    border-radius:var(--ax-r-lg);
+    box-shadow:var(--ax-sh);
+    overflow:hidden;
+    position:relative;
+}
+#adsContainer::before{
+    content:''; position:absolute; top:0; inset-inline:18px; height:1px;
+    background:linear-gradient(90deg,transparent,var(--ax-hair),transparent);
+}
+.axm-row{
+    display:flex; align-items:center; gap:11px;
+    padding:13px 14px;
+    border-bottom:1px solid var(--ax-line-soft);
+    animation:axRowIn .4s var(--ax-ease) both;
+    transition:background .25s;
+}
+.axm-row:last-of-type{ border-bottom:none; }
+.axm-row:hover{ background:rgba(255,255,255,.03); }
+.axm-row.is-tappable{ cursor:pointer; }
+.axm-row.is-tappable:active{ background:rgba(124,92,255,.08); }
+.axm-row.is-tappable:focus-visible{ outline:2px solid var(--ax-gold); outline-offset:-3px; }
+@keyframes axRowIn{ from{ opacity:0; transform:translateY(8px); } to{ opacity:1; transform:none; } }
+
+.axm-row-avatar{
+    width:42px; height:42px; flex:0 0 42px; border-radius:50%; object-fit:cover;
+    border:1px solid var(--ax-line); background:rgba(255,255,255,.06);
+}
+.axm-row-main{ flex:1 1 auto; min-width:0; }
+.axm-row-title{
+    display:flex; align-items:baseline; gap:5px; min-width:0;
+    font-size:.82rem; line-height:1.45;
+}
+.axm-row-title b{
+    font-weight:800; color:var(--ax-ink);
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.axm-row-title span{ flex:0 0 auto; font-size:.72rem; color:var(--ax-mute); font-weight:600; }
+.axm-row-title .verified{ flex:0 0 auto; color:var(--ax-ice); font-size:.62rem; }
+.axm-row-sub{
+    margin-top:3px; font-size:.68rem; color:var(--ax-mute);
+    font-variant-numeric:tabular-nums;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+/* مقدار ارز — برجسته‌ترین عدد سطر */
+.axm-row-amt{
+    font-size:.76rem; font-weight:800; color:var(--ax-gold);
+    background:rgba(246,214,138,.1); border:1px solid var(--ax-hair);
+    padding:2px 8px; border-radius:999px; margin-inline-end:3px;
+}
+.axm-row-price{ flex:0 0 auto; text-align:end; }
+.axm-row-p{
+    font-size:.86rem; font-weight:800; color:var(--ax-ink);
+    font-variant-numeric:tabular-nums; line-height:1.4;
+}
+.axm-row-psub{ font-size:.6rem; color:var(--ax-mute); margin-top:1px; }
+.axm-row-act{ flex:0 0 auto; display:flex; align-items:center; gap:6px; }
+
+.axm-row-go{
+    font-size:.68rem; color:var(--ax-mute);
+    transition:transform .25s var(--ax-ease),color .25s;
+}
+.axm-row:hover .axm-row-go{ color:var(--ax-gold); transform:translateX(-3px); }
+.axm-row-del{
+    cursor:pointer; width:30px; height:30px; border-radius:10px;
+    display:grid; place-items:center; font-size:.66rem;
+    background:rgba(255,107,122,.1); color:var(--ax-coral);
+    border:1px solid rgba(255,107,122,.26);
+    transition:background .22s;
+}
+.axm-row-del:hover{ background:rgba(255,107,122,.2); }
+
+.axm-skel{
+    height:104px; border-radius:var(--ax-r-lg);
+    background:linear-gradient(100deg,rgba(255,255,255,.03) 30%,rgba(255,255,255,.07) 50%,rgba(255,255,255,.03) 70%);
+    background-size:220% 100%; animation:axShimmer 1.5s infinite;
+    border:1px solid var(--ax-line-soft);
+}
+@keyframes axShimmer{ from{ background-position:220% 0; } to{ background-position:-20% 0; } }
+.axm-empty{
+    display:flex; flex-direction:column; align-items:center; gap:9px;
+    padding:34px 16px; color:var(--ax-mute); font-size:.78rem; text-align:center;
+    background:rgba(255,255,255,.025); border:1px dashed var(--ax-line);
+    border-radius:var(--ax-r-lg);
+}
+.axm-empty i{ font-size:1.7rem; color:rgba(124,92,255,.45); }
+
+/* ══════════════ ۸ · کارت‌های خلاصه ══════════════ */
+.axs-grid{
+    display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px; margin:20px 0;
+}
+.axs-card{
+    background:var(--ax-g-plate) !important;
+    border:1px solid var(--ax-line) !important;
+    border-radius:var(--ax-r-lg) !important;
+    padding:13px 12px !important;
+    box-shadow:var(--ax-sh) !important;
+    position:relative; overflow:hidden;
+    display:flex; flex-direction:column;
+}
+.axs-card::before{
+    content:''; position:absolute; top:0; inset-inline:16px; height:1px;
+    background:linear-gradient(90deg,transparent,var(--ax-hair),transparent);
+}
+.axs-head{
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    margin-bottom:11px; flex-direction:row-reverse;
+}
+.axs-title{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:.68rem !important; font-weight:500 !important;
+    color:var(--ax-dim) !important; letter-spacing:0;
+}
+.axs-title i{ font-size:.66rem !important; }
+.axs-more{
+    font-size:.62rem; color:var(--ax-mute); cursor:pointer; white-space:nowrap;
+    transition:color .2s;
+}
+.axs-more:hover{ color:var(--ax-gold); }
+.axs-count-badge{
+    display:inline-grid; place-items:center; min-width:17px; height:17px; padding:0 5px;
+    border-radius:999px; background:var(--ax-g-coral); color:#fff;
+    font-size:.6rem; font-weight:800;
+}
+.axs-pills{ display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-bottom:10px; }
+.axs-pill{
+    background:rgba(255,255,255,.035); border:1px solid var(--ax-line-soft);
+    border-radius:var(--ax-r-xs); padding:7px 4px; text-align:center;
+}
+.axs-pill b{ display:block; font-size:.9rem; font-weight:800; color:var(--ax-ink); }
+.axs-pill span{ display:block; font-size:.55rem; color:var(--ax-mute); margin-top:2px; }
+.axs-pill.active b{ color:var(--ax-mint); }
+.axs-pill.pending b{ color:var(--ax-amber); }
+.axs-pill.expired b{ color:var(--ax-mute); }
+
+.axs-adbox{
+    background:rgba(0,0,0,.22); border:1px solid var(--ax-line-soft);
+    border-radius:var(--ax-r-sm); padding:10px;
+}
+.axs-adbox-top{ font-size:.72rem; font-weight:800; color:var(--ax-gold); margin-bottom:7px; }
+.axs-adbox-mid{ display:flex; justify-content:space-between; gap:8px; margin-bottom:8px; }
+.axs-adbox-l{ font-size:.58rem; color:var(--ax-mute); }
+.axs-adbox-v{ font-size:.76rem; font-weight:700; color:var(--ax-ink); }
+.axs-adbox-bottom{ display:flex; align-items:center; justify-content:space-between; gap:6px; }
+.axs-status-dot{ font-size:.6rem; color:var(--ax-mint); display:inline-flex; align-items:center; gap:4px; }
+.axs-status-dot i{ font-size:.4rem; }
+.axs-edit-btn,.axs-more-btn{
+    cursor:pointer; font-family:inherit; font-size:.62rem; font-weight:700;
+    background:rgba(124,92,255,.14); border:1px solid rgba(124,92,255,.3);
+    color:#C9BAFF; border-radius:var(--ax-r-xs); padding:5px 9px;
+    transition:background .2s;
+}
+.axs-edit-btn:hover,.axs-more-btn:hover{ background:rgba(124,92,255,.26); }
+.axs-more-btn{ display:none; }
+
+.axs-group-t{
+    display:flex; align-items:center; gap:7px;
+    margin:14px 0 9px; font-size:.68rem; font-weight:700; color:var(--ax-dim);
+}
+.axs-group-t:first-child{ margin-top:0; }
+.axs-group-t i{ color:var(--ax-violet); font-size:.64rem; }
+.axs-group-t span{
+    margin-inline-start:auto; font-size:.6rem; font-weight:800; color:var(--ax-mute);
+    background:rgba(255,255,255,.05); border:1px solid var(--ax-line);
+    padding:2px 9px; border-radius:999px;
+}
+.axs-group-t.archive i{ color:var(--ax-mute); }
+.axs-empty-mini{
+    text-align:center; padding:18px 8px; font-size:.68rem; color:var(--ax-mute);
+    background:rgba(0,0,0,.16); border:1px dashed var(--ax-line-soft);
+    border-radius:var(--ax-r-sm);
+}
+.axs-offer-list{ display:flex; flex-direction:column; gap:8px; }
+.axs-offer-new-tag{
+    float:inline-start; font-size:.52rem; font-weight:800; color:#2a1a00;
+    background:var(--ax-g-gold); padding:2px 7px; border-radius:999px;
+}
+.axs-offer-item{
+    background:rgba(0,0,0,.22); border:1px solid var(--ax-line-soft);
+    border-radius:var(--ax-r-sm); padding:10px;
+    transition:border-color .25s,transform .25s var(--ax-ease);
+}
+.axs-offer-item:hover{ border-color:rgba(124,92,255,.34); transform:translateY(-2px); }
+.axs-offer-item.axs-offer-new{
+    border-color:rgba(246,214,138,.4);
+    box-shadow:0 0 0 1px rgba(246,214,138,.12) inset;
+}
+.axs-offer-top{ display:flex; align-items:center; gap:7px; margin-bottom:8px; }
+.axs-offer-avatar{
+    width:24px; height:24px; flex:0 0 24px; border-radius:9px; object-fit:cover;
+    border:1px solid var(--ax-line);
+}
+.axs-offer-name{
+    flex:1; min-width:0; font-size:.7rem; font-weight:700; color:var(--ax-ink);
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.axs-offer-time{ font-size:.56rem; color:var(--ax-mute); display:inline-flex; gap:3px; align-items:center; }
+.axs-offer-body{ margin-bottom:9px; }
+.axs-offer-amt{ font-size:.82rem; font-weight:800; color:var(--ax-gold); }
+.axs-offer-sub{ font-size:.6rem; color:var(--ax-mute); margin-top:2px; }
+.axs-offer-btns{ display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.axs-offer-btn{
+    cursor:pointer; font-family:inherit; font-size:.6rem; font-weight:700;
+    padding:7px 4px; border-radius:var(--ax-r-xs);
+    background:rgba(255,255,255,.05); border:1px solid var(--ax-line);
+    color:var(--ax-dim);
+    transition:transform .18s var(--ax-ease),filter .2s;
+}
+.axs-offer-btn:active{ transform:scale(.95); }
+.axs-offer-btn.accept{ background:var(--ax-g-mint); color:#04231a; border-color:transparent; }
+.axs-offer-btn.reject{ background:rgba(255,107,122,.12); color:var(--ax-coral); border-color:rgba(255,107,122,.3); }
+
+.axs-deal-item{
+    background:rgba(0,0,0,.22); border:1px solid var(--ax-line-soft);
+    border-radius:var(--ax-r-sm); padding:10px; margin-bottom:8px; cursor:pointer;
+    transition:border-color .25s,transform .25s var(--ax-ease);
+}
+.axs-deal-item:hover{ border-color:rgba(124,92,255,.34); transform:translateY(-2px); }
+.axs-deal-top{ display:flex; align-items:center; justify-content:space-between; gap:6px; margin-bottom:7px; }
+.axs-deal-badge{
+    font-size:.56rem; font-weight:700; padding:3px 8px; border-radius:999px;
+    background:rgba(255,194,75,.13); color:var(--ax-amber); border:1px solid rgba(255,194,75,.28);
+}
+.axs-deal-badge.submitted{ background:rgba(56,189,248,.12); color:var(--ax-ice); border-color:rgba(56,189,248,.3); }
+.axs-deal-badge.done{ background:rgba(62,208,139,.12); color:var(--ax-mint); border-color:rgba(62,208,139,.3); }
+.axs-deal-time{ font-size:.56rem; color:var(--ax-mute); }
+.axs-deal-type{ font-size:.7rem; font-weight:700; color:var(--ax-ink); }
+.axs-deal-amt{ font-size:.66rem; color:var(--ax-dim); margin-top:3px; }
+.axs-deal-bar{
+    height:4px; border-radius:999px; background:rgba(255,255,255,.07);
+    overflow:hidden; margin-top:8px;
+}
+.axs-deal-fill{
+    height:100%; border-radius:999px; background:var(--ax-g-brand);
+    transition:width .8s var(--ax-ease);
+}
+.axs-deal-fill.submitted{ background:linear-gradient(90deg,#38BDF8,#0EA5E9); }
+.axs-deal-fill.done{ background:var(--ax-g-mint); }
+
+/* ══════════════ ۹ · سرویس‌ها (دسترسی سریع) ══════════════
+   منبع حقیقتِ یکتا برای این کلاس‌ها همین‌جاست (نسخه‌ی تکراری داخل arad.php
+   حذف شد — دو تعریف هم‌وزن روی هم سوار می‌شدند و باعث می‌شد آیتم‌ها عرض
+   کامل ردیف را پر نکنند و یک فاصله‌ی خالی (معمولاً سمت چپ در RTL) بماند).
+   رفتار مدنظر: آیکون‌ها عرض ثابت و شکل یکنواخت دارند (مثل واقعیِ اپ‌های
+   iOS)؛ وقتی تعدادشان کم است و کل ردیف را پر نمی‌کنند، به‌صورت خودکار
+   وسط‌چین می‌شوند (کلاس .axsv-fit، با جاوااسکریپت پایین همین فایل کنترل
+   می‌شود)؛ وقتی تعدادشان زیاد شود و از عرض صفحه بیشتر شوند، به‌طور طبیعی
+   با انگشت افقی اسکرول/سواپ می‌شوند (overflow-x:auto + touch scrolling). */
+.axsv-menu{ position:relative; margin:20px 0; }
+.axsv-grid{
+    display:flex; gap:9px; overflow-x:auto; padding:2px 2px 8px;
+    scrollbar-width:none; -webkit-overflow-scrolling:touch;
+    justify-content:flex-start; scroll-snap-type:x proximity;
+}
+.axsv-grid.axsv-fit{ justify-content:center; }
+.axsv-grid::-webkit-scrollbar{ display:none; }
+.axsv-menu::after{
+    content:''; position:absolute; bottom:8px; inset-inline-start:0; width:34px; top:34px;
+    background:linear-gradient(to left,transparent,var(--ax-void));
+    pointer-events:none;
+}
+html[dir="rtl"] .axsv-menu::after{ background:linear-gradient(to right,transparent,var(--ax-void)); }
+/* اگر ردیف کامل پر باشد (اسکرول لازم نیست)، نور محوشونده‌ی لبه هم لازم نیست */
+.axsv-menu:has(.axsv-grid.axsv-fit)::after{ display:none; }
+.axsv-item{
+    flex:0 0 78px; cursor:pointer; font-family:inherit;
+    display:flex; flex-direction:column; align-items:center; gap:7px;
+    background:transparent; border:none; padding:2px;
+    scroll-snap-align:center;
+}
+.axsv-ic{
+    position:relative; width:52px; height:52px; border-radius:18px;
+    display:grid; place-items:center; color:#fff; font-size:1.05rem;
+    box-shadow:0 14px 28px -16px rgba(0,0,0,.9);
+    transition:transform .28s var(--ax-ease),box-shadow .28s;
+}
+.axsv-ic::after{
+    content:''; position:absolute; inset:0; border-radius:inherit;
+    border:1px solid rgba(255,255,255,.18);
+    background:linear-gradient(180deg,rgba(255,255,255,.22),transparent 55%);
+}
+.axsv-item:hover .axsv-ic{ transform:translateY(-4px) scale(1.05); }
+.axsv-item:active .axsv-ic{ transform:scale(.95); }
+/* آیکون‌های سه‌بعدی PNG (مجموعه‌ی مشترک با داشبورد) — بزرگ‌تر از آیکون فونتی
+   ساده تا وقتی تعداد آیتم‌ها کم است ردیف پر و متوازن دیده شود. */
+.axsv-ic.axsv-img{ width:66px; height:66px; border-radius:20px; background:none; box-shadow:none; padding:0; overflow:hidden; }
+.axsv-ic.axsv-img img{ width:100%; height:100%; object-fit:cover; display:block; border-radius:20px; filter:drop-shadow(0 6px 14px rgba(0,0,0,.45)); }
+.axsv-ic.axsv-img{ transition:transform .15s ease; }
+.axsv-item:active .axsv-ic.axsv-img{ transform:scale(.94); }
+@media (max-width:400px){
+    .axsv-ic.axsv-img{ width:58px; height:58px; border-radius:18px; }
+    .axsv-ic.axsv-img img{ border-radius:18px; }
+}
+.axsv-t{ font-size:.62rem; color:var(--ax-dim); text-align:center; line-height:1.35; font-weight:700; }
+
+/* ══════════════ ۱۰ · معاملات در انتظار تسویه ══════════════ */
+.deals-section{
+    margin:22px 0; padding:16px 14px;
+    background:var(--ax-g-plate);
+    border:1px solid var(--ax-line);
+    border-radius:var(--ax-r-lg);
+    box-shadow:var(--ax-sh);
+    position:relative; overflow:hidden;
+}
+.deals-section::before{
+    content:''; position:absolute; top:0; inset-inline:0; height:2px;
+    background:linear-gradient(90deg,transparent,var(--ax-amber),transparent); opacity:.75;
+}
+.deals-section.is-live{ animation:axSectionIn .55s var(--ax-ease) both; }
+@keyframes axSectionIn{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:none; } }
+.deals-section .section-header{
+    display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:14px;
+}
+.deals-section .section-header h3{ margin:0 !important; }
+.deals-section .section-header h3 i{ color:var(--ax-amber) !important; }
+.refresh-btn{
+    width:34px; height:34px; border-radius:12px; cursor:pointer;
+    background:rgba(255,255,255,.05); border:1px solid var(--ax-line);
+    color:var(--ax-dim);
+    transition:transform .3s var(--ax-ease),color .25s,border-color .25s;
+}
+.refresh-btn:hover{ transform:rotate(180deg); color:var(--ax-gold); border-color:var(--ax-hair); }
+.deals-container,.deals-list{ display:flex; flex-direction:column; gap:12px; }
+.empty-deals{ display:none !important; }
+
+/* ── کارت معامله: یک سطر با ریل مرحله‌ی انیمیشنی ── */
+.axd-item{
+    background:rgba(0,0,0,.24);
+    border:1px solid var(--ax-line-soft);
+    border-radius:var(--ax-r-md);
+    overflow:hidden;
+    animation:axRowIn .5s var(--ax-ease) both;
+    transition:border-color .3s;
+}
+.axd-item:hover{ border-color:rgba(124,92,255,.3); }
+.axd-item.open{ border-color:rgba(124,92,255,.4); }
+
+.axd-head{
+    width:100%; display:flex; align-items:center; gap:9px; flex-wrap:wrap;
+    padding:12px 13px; cursor:pointer; text-align:start;
+    background:linear-gradient(180deg,rgba(255,255,255,.04),transparent);
+    border:none; border-bottom:1px solid var(--ax-line-soft);
+    font-family:inherit; color:var(--ax-ink);
+}
+.axd-code{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:.64rem; font-weight:700; color:var(--ax-gold); letter-spacing:.03em;
+    background:rgba(246,214,138,.09); border:1px solid var(--ax-hair);
+    padding:4px 10px; border-radius:999px; white-space:nowrap;
+}
+.axd-sum{
+    flex:1 1 auto; min-width:0; font-size:.72rem; color:var(--ax-dim);
+    font-variant-numeric:tabular-nums;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.axd-sum b{ color:var(--ax-ink); font-weight:800; font-size:.8rem; }
+.axd-state{
+    font-size:.58rem; font-weight:700; padding:4px 10px; border-radius:999px; white-space:nowrap;
+    background:rgba(255,194,75,.12); color:var(--ax-amber); border:1px solid rgba(255,194,75,.28);
+}
+.axd-state.submitted{ background:rgba(56,189,248,.12); color:var(--ax-ice); border-color:rgba(56,189,248,.3); }
+.axd-state.done{ background:rgba(62,208,139,.12); color:var(--ax-mint); border-color:rgba(62,208,139,.3); }
+.axd-caret{
+    flex:0 0 auto; font-size:.66rem; color:var(--ax-mute);
+    transition:transform .3s var(--ax-ease);
+}
+.axd-item.open .axd-caret{ transform:rotate(180deg); }
+
+/* ریل مرحله — همه‌ی مراحل در یک سطر */
+.axd-rail{ position:relative; padding:16px 16px 13px; }
+.axd-track{
+    position:absolute; top:27px; inset-inline:34px; height:3px; border-radius:3px;
+    background:rgba(255,255,255,.08);
+}
+.axd-fill{
+    height:100%; border-radius:3px; width:0;
+    background:var(--ax-g-brand);
+    box-shadow:0 0 12px -2px rgba(124,92,255,.8);
+    animation:axFill 1.1s var(--ax-ease) .25s forwards;
+}
+.axd-rail.submitted .axd-fill{ background:linear-gradient(90deg,#7C5CFF,#38BDF8); }
+.axd-rail.done .axd-fill{ background:var(--ax-g-mint); }
+@keyframes axFill{ from{ width:0; } to{ width:var(--pct); } }
+
+.axd-nodes{ position:relative; display:grid; grid-template-columns:repeat(4,1fr); gap:4px; }
+.axd-node{
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    animation:axNodeIn .45s var(--ax-ease) both; animation-delay:var(--d);
+}
+@keyframes axNodeIn{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:none; } }
+.axd-node i{
+    width:24px; height:24px; border-radius:9px; display:grid; place-items:center;
+    font-size:.58rem; background:#150B2C; border:1px solid var(--ax-line); color:var(--ax-mute);
+    transition:all .35s var(--ax-ease);
+}
+.axd-node em{ font-size:.55rem; font-style:normal; color:var(--ax-mute); }
+.axd-node.done i{ background:var(--ax-g-mint); border-color:transparent; color:#04231a; }
+.axd-node.done em{ color:var(--ax-dim); }
+.axd-node.cur i{
+    background:var(--ax-g-brand); border-color:transparent; color:#fff;
+    animation:axNodePulse 2.2s ease-in-out infinite;
+}
+.axd-node.cur em{ color:var(--ax-ink); font-weight:700; }
+@keyframes axNodePulse{
+    0%,100%{ box-shadow:0 0 0 0 rgba(124,92,255,.55); }
+    60%{ box-shadow:0 0 0 8px rgba(124,92,255,0); }
+}
+
+.axd-body{
+    display:none; padding:0 13px 13px;
+    animation:axBodyIn .35s var(--ax-ease);
+}
+.axd-item.open .axd-body{ display:block; }
+@keyframes axBodyIn{ from{ opacity:0; transform:translateY(-6px); } to{ opacity:1; transform:none; } }
+.axd-parties{
+    display:flex; flex-wrap:wrap; gap:7px; margin-bottom:11px;
+}
+.axd-parties span{
+    flex:1 1 140px; min-width:0; display:flex; align-items:center; gap:7px;
+    padding:9px 11px; font-size:.68rem; color:var(--ax-ink);
+    background:rgba(255,255,255,.03); border:1px solid var(--ax-line-soft);
+    border-radius:var(--ax-r-xs);
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.axd-parties i{ color:var(--ax-violet); font-size:.68rem; }
+.axd-parties em{
+    margin-inline-start:auto; font-style:normal; font-size:.56rem; color:var(--ax-mute);
+}
+
+/* پنل مدیریت */
+.admin-panel-bottom{
+    margin:22px 0; background:var(--ax-g-plate);
+    border:1px solid var(--ax-hair); border-radius:var(--ax-r-lg);
+    overflow:hidden; box-shadow:var(--ax-sh);
+}
+.admin-panel-header{
+    padding:13px 16px; font-size:.82rem; font-weight:800; color:var(--ax-gold);
+    background:linear-gradient(180deg,rgba(246,214,138,.1),transparent);
+    border-bottom:1px solid var(--ax-line-soft);
+}
+.btn-complete{
+    background:var(--ax-g-gold) !important; color:#241704 !important;
+    font-weight:800 !important; border:none !important;
+    box-shadow:0 14px 28px -16px rgba(201,151,58,.95) !important;
+}
+
+/* ══════════════ ۱۱ · مودال‌ها و فرم‌ها ══════════════ */
+.modal-overlay{
+    background:rgba(5,2,15,.8) !important;
+    backdrop-filter:blur(10px) !important; -webkit-backdrop-filter:blur(10px) !important;
+}
+.modal-content{
+    background:var(--ax-g-plate) !important;
+    border:1px solid var(--ax-line) !important;
+    border-radius:var(--ax-r-lg) !important;
+    box-shadow:var(--ax-sh) !important;
+    color:var(--ax-ink) !important;
+}
+.form-control,.form-input,.form-select,textarea.form-control{
+    background:rgba(0,0,0,.28) !important;
+    border:1px solid var(--ax-line) !important;
+    border-radius:var(--ax-r-sm) !important;
+    color:var(--ax-ink) !important;
+    transition:border-color .25s,box-shadow .25s !important;
+}
+.form-control:focus,.form-input:focus,.form-select:focus{
+    border-color:rgba(124,92,255,.6) !important;
+    box-shadow:0 0 0 4px rgba(124,92,255,.12) !important;
+    outline:none !important;
+}
+.btn-submit{
+    background:var(--ax-g-brand) !important; color:#fff !important;
+    border:none !important; border-radius:var(--ax-r-sm) !important;
+    font-weight:800 !important;
+    box-shadow:0 14px 28px -16px rgba(124,92,255,.95) !important;
+    transition:transform .22s var(--ax-ease),filter .22s !important;
+}
+.btn-submit:hover{ transform:translateY(-2px) !important; filter:brightness(1.07) !important; }
+.notification-dropdown{
+    background:linear-gradient(180deg,#1F1243,#0C0520) !important;
+    border:1px solid var(--ax-line) !important;
+    border-radius:var(--ax-r-lg) !important;
+    box-shadow:var(--ax-sh) !important;
+}
+
+/* گوی پشتیبانی */
+.floating-sphere{
+    background:var(--ax-g-brand) !important;
+    border:1px solid rgba(255,255,255,.16) !important;
+    box-shadow:0 18px 34px -16px rgba(124,92,255,.9) !important;
+    transition:transform .28s var(--ax-ease) !important;
+}
+.floating-sphere:hover{ transform:translateY(-3px) scale(1.05) !important; }
+
+/* اسکرول‌بار */
+::-webkit-scrollbar{ width:8px; height:8px; }
+::-webkit-scrollbar-track{ background:transparent; }
+::-webkit-scrollbar-thumb{
+    background:rgba(124,92,255,.32); border-radius:999px;
+    border:2px solid transparent; background-clip:padding-box;
+}
+::-webkit-scrollbar-thumb:hover{ background:rgba(124,92,255,.5); background-clip:padding-box; }
+
+/* ══════════════ ۱۲ · رسپانسیو ══════════════ */
+@media (max-width:400px){
+    .axn-metric-v b{ font-size:1.45rem; }
+    .axn-kpi b{ font-size:1rem; }
+    .axsv-item{ flex:0 0 70px; }
+    .axsv-ic{ width:46px; height:46px; border-radius:16px; font-size:.95rem; }
+    .axm-row{ gap:9px; padding:12px 11px; }
+    .axm-row-avatar{ width:38px; height:38px; flex:0 0 38px; }
+    .axm-row-title{ font-size:.76rem; }
+    .axm-row-p{ font-size:.78rem; }
+    .axm-row-go{ font-size:.62rem; }
+    .axd-node em{ font-size:.5rem; }
+}
+@media (max-width:360px){
+    .main-container{ padding-inline:10px !important; }
+    .axm-cta-t{ font-size:.78rem; }
+    .axm-cta-s{ display:none; }
+    .axm-row-psub{ display:none; }
+    .axd-sum{ flex-basis:100%; order:3; }
+}
+/* ── تبلت ── */
+@media (min-width:681px){
+    .main-container{ max-width:980px !important; margin-inline:auto !important; padding-inline:22px !important; }
+    .axn-slide{ padding:15px 18px 6px; }
+    .axn-metric-v b{ font-size:2.3rem; }
+    .axn-area{ height:112px; }
+    .axn-plot{ min-height:112px; }
+    .axs-grid{ grid-template-columns:repeat(4,minmax(0,1fr)); }
+    .axm-row{ padding:15px 18px; gap:14px; }
+    .axm-row-avatar{ width:46px; height:46px; flex:0 0 46px; }
+    .axm-row-amt{ font-size:.8rem; }
+    .axn-rate-card{ flex:0 0 172px; }
+}
+/* ── دسکتاپ ── */
+@media (min-width:1024px){
+    .main-container{ max-width:1180px !important; }
+    .axn-metric-v b{ font-size:2.5rem; }
+    .axn-area{ height:124px; }
+    .axn-plot{ min-height:124px; }
+    .axsv-grid{ justify-content:center; flex-wrap:wrap; }
+    .axsv-menu::after{ display:none; }
+    /* در دسکتاپ هر سه پنل کنار هم دیده می‌شوند؛ کشیدن لازم نیست */
+    .axn-deck{ overflow:visible; scroll-snap-type:none; }
+    .axn-slide{ flex:1 1 0; width:auto; border-inline-start:1px solid var(--ax-line-soft); }
+    .axn-slide:first-child{ border-inline-start:none; }
+    .axn-dots{ display:none; }
+}
+@media (min-width:1440px){
+    .main-container{ max-width:1320px !important; }
+}
+
+/* ══════════════ ۱۳ · انیمیشن ورود ══════════════ */
+@media (prefers-reduced-motion:no-preference){
+    .axn-hero,.axm-searchbar,.axm-cta-grid,.axm-wrap,.axs-grid,.axsv-menu,.deals-section{
+        animation:axRise .6s var(--ax-ease) both;
+    }
+    .axm-searchbar{ animation-delay:.05s; }
+    .axm-cta-grid{ animation-delay:.1s; }
+    .axs-grid{ animation-delay:.15s; }
+    .axsv-menu{ animation-delay:.2s; }
+    @keyframes axRise{ from{ opacity:0; transform:translateY(16px); } to{ opacity:1; transform:none; } }
+}
+@media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{
+        animation-duration:.01ms !important; animation-iteration-count:1 !important;
+        transition-duration:.01ms !important;
+    }
+}
+
+/* ══════════════ ۱۴ · دسترسی‌پذیری ══════════════ */
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,
+textarea:focus-visible,[tabindex]:focus-visible,.exc-chip:focus-visible,
+.axm-tab:focus-visible,.axsv-item:focus-visible{
+    outline:2px solid var(--ax-gold) !important;
+    outline-offset:2px !important;
+    border-radius:var(--ax-r-xs);
+}
+
+/* ══════════════ ۱۵ · حالت روشن ══════════════
+   به‌جای بازنویسی تک‌تک کلاس‌ها، فقط توکن‌ها عوض می‌شوند؛ بقیه‌ی
+   شیوه‌نامه بدون تغییر همان رنگ‌ها را از متغیرها می‌خواند. */
+html[data-theme="light"]{
+    --ax-void:#F4F1FB;
+    --ax-plate:#FFFFFF;
+    --ax-plate-2:#F7F4FD;
+    --ax-rail:#FFFFFF;
+    --ax-violet:#6B45E8;
+    --ax-violet-dim:#5433CB;
+    --ax-gold:#A8760F;
+    --ax-gold-deep:#8A5F08;
+    --ax-mint:#12905E;
+    --ax-coral:#D93B52;
+    --ax-ice:#0E86C4;
+    --ax-amber:#B27400;
+    --ax-ink:#1C1033;
+    --ax-dim:rgba(28,16,51,.68);
+    --ax-mute:rgba(28,16,51,.46);
+    --ax-line:rgba(28,16,51,.11);
+    --ax-line-soft:rgba(28,16,51,.07);
+    --ax-hair:rgba(168,118,15,.34);
+    --ax-glass:rgba(28,16,51,.035);
+    --ax-glass-hi:rgba(28,16,51,.055);
+    --ax-g-plate:linear-gradient(180deg,#FFFFFF 0%,#FBF9FF 60%,#F7F4FD 100%);
+    --ax-sh:0 18px 42px -30px rgba(28,16,51,.45);
+    --ax-sh-lift:0 26px 54px -28px rgba(107,69,232,.45);
+}
+html[data-theme="light"] html,
+html[data-theme="light"] body{
+    background:
+        radial-gradient(120% 70% at 50% -12%, rgba(107,69,232,.12), transparent 62%),
+        radial-gradient(80% 46% at 108% 4%, rgba(255,79,163,.07), transparent 58%),
+        #F4F1FB !important;
+    color:var(--ax-ink);
+}
+html[data-theme="light"] body::before,
+html[data-theme="light"] body::after{ opacity:.22; }
+html[data-theme="light"] .avapay-header{
+    background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,.8)) !important;
+}
+html[data-theme="light"] .logo-text h1{
+    background:linear-gradient(120deg,#2A1055,#A8760F) !important;
+    -webkit-background-clip:text !important; background-clip:text !important;
+    -webkit-text-fill-color:transparent !important;
+}
+html[data-theme="light"] .axn-metric-v b{
+    background:linear-gradient(120deg,#2A1055 10%,#A8760F 95%) !important;
+    -webkit-background-clip:text !important; background-clip:text !important;
+    -webkit-text-fill-color:transparent !important;
+}
+html[data-theme="light"] .axn-plot,
+html[data-theme="light"] .axs-adbox,
+html[data-theme="light"] .axs-offer-item,
+html[data-theme="light"] .axs-deal-item,
+html[data-theme="light"] .axn-rate-card,
+html[data-theme="light"] .axd-item,
+html[data-theme="light"] .axm-row,
+html[data-theme="light"] .dc-acc,
+html[data-theme="light"] .deal-card-active{
+    background:rgba(28,16,51,.035) !important;
+}
+html[data-theme="light"] .form-control,
+html[data-theme="light"] .form-input,
+html[data-theme="light"] .form-select{
+    background:#fff !important; color:var(--ax-ink) !important;
+}
+html[data-theme="light"] .axm-buy-btn{ color:#fff !important; }
+html[data-theme="light"] .axm-tab.active{ color:#fff !important; }
+html[data-theme="light"] .axn-area .grid{ stroke:rgba(28,16,51,.1); }
+html[data-theme="light"] .av-donut .track{ stroke:rgba(28,16,51,.08); }

@@ -1,0 +1,219 @@
+/* ==================== زیرمجموعه‌های شما — Referral System CSS ==================== */
+
+/* ---------- بنر کوچک در بخش تبادل ارزی ---------- */
+.arf-banner{
+    direction:rtl; margin:18px 0; padding:14px 16px; border-radius:20px;
+    background:linear-gradient(120deg,#3a1f74 0%,#2a1554 60%,#1b0e3c 100%);
+    border:1px solid rgba(168,132,255,.28);
+    box-shadow:0 10px 28px -12px rgba(90,30,160,.5);
+}
+.arf-banner-top{ display:flex; align-items:center; gap:12px; cursor:pointer; }
+.arf-banner-ic{
+    flex:none; width:42px; height:42px; border-radius:14px;
+    background:linear-gradient(135deg,#a855f7,#6d28d9);
+    display:flex; align-items:center; justify-content:center; color:#fff; font-size:1.05rem;
+    box-shadow:0 6px 16px -4px rgba(168,85,247,.6);
+}
+.arf-banner-txt{ flex:1; min-width:0; }
+.arf-banner-title{ color:#fff; font-weight:800; font-size:.82rem; }
+.arf-banner-sub{
+    color:rgba(255,255,255,.5); font-size:.66rem; margin-top:2px; direction:ltr; text-align:right;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.arf-banner-btn{
+    flex:none; background:linear-gradient(135deg,#a855f7,#7c3aed); border:none; border-radius:13px;
+    color:#fff; font-weight:800; font-size:.72rem; padding:10px 14px; display:flex; align-items:center; gap:6px;
+    cursor:pointer; white-space:nowrap;
+}
+.arf-banner-btn:active{ transform:scale(.96); }
+.arf-banner-copy{
+    width:100%; margin-top:12px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.14);
+    border-radius:12px; color:#e9d9ff; font-weight:700; font-size:.72rem; padding:9px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:6px;
+}
+.arf-banner-copy:active{ transform:scale(.97); }
+.arf-banner-copy.arf-copied{ background:rgba(34,197,94,.15); border-color:rgba(34,197,94,.4); color:#4ade80; }
+
+/* ---------- مودال کامل «زیرمجموعه‌های شما» ---------- */
+.arf-modal-overlay{
+    display:none; position:fixed; inset:0; background:rgba(10,4,24,.72); backdrop-filter:blur(4px);
+    z-index:9999; align-items:flex-end; justify-content:center;
+}
+.arf-modal-overlay.arf-open{ display:flex; }
+
+#arfPanelOverlay .arf-card{
+    width:100%; max-width:480px; max-height:92vh; overflow-y:auto;
+    border-radius:24px 24px 0 0; border-bottom:none;
+    padding-bottom:calc(20px + env(safe-area-inset-bottom));
+}
+
+.arf-card{
+    direction:rtl; position:relative; overflow:hidden; margin:0;
+    border-radius:24px; padding:20px 18px;
+    background:linear-gradient(155deg,#3a1f74 0%,#231149 55%,#150a2e 100%);
+    border:1px solid rgba(168,132,255,.28);
+    box-shadow:0 -14px 40px -14px rgba(90,30,160,.55);
+}
+.arf-card-close{
+    position:absolute; top:14px; left:14px; z-index:3;
+    width:32px; height:32px; border-radius:10px; border:none;
+    background:rgba(255,255,255,.08); color:#fff; cursor:pointer; font-size:.85rem;
+}
+.arf-glow{
+    position:absolute; inset:-30% -20% auto auto; width:60%; height:60%;
+    background:radial-gradient(circle,rgba(180,100,255,.22),transparent 70%);
+    pointer-events:none; animation:arfSpin 14s linear infinite;
+}
+@keyframes arfSpin{ from{ transform:rotate(0deg);} to{ transform:rotate(360deg);} }
+
+.arf-head{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px; position:relative; z-index:1; }
+.arf-head-ic{
+    width:46px; height:46px; border-radius:16px; flex:none;
+    background:linear-gradient(135deg,#a855f7,#6d28d9);
+    display:flex; align-items:center; justify-content:center; color:#fff; font-size:1.15rem;
+    box-shadow:0 8px 20px -6px rgba(168,85,247,.6);
+}
+.arf-head-title{ color:#fff; font-weight:900; font-size:1rem; }
+.arf-head-sub{ color:rgba(255,255,255,.6); font-size:.72rem; font-weight:600; margin-top:2px; }
+
+/* ---------- تب‌ها ---------- */
+.arf-tabs{
+    display:flex; gap:6px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08);
+    border-radius:16px; padding:5px; margin-bottom:16px; position:relative; z-index:1;
+}
+.arf-tab{
+    flex:1; border:none; background:transparent; color:rgba(255,255,255,.6); font-weight:800; font-size:.76rem;
+    padding:10px 6px; border-radius:12px; display:flex; align-items:center; justify-content:center; gap:6px;
+    cursor:pointer; transition:.15s;
+}
+.arf-tab.active{ background:linear-gradient(135deg,#a855f7,#7c3aed); color:#fff; box-shadow:0 6px 16px -6px rgba(168,85,247,.6); }
+
+.arf-pane{ display:none; position:relative; z-index:1; }
+.arf-pane.active{ display:block; animation:arfFadeIn .25s ease; }
+@keyframes arfFadeIn{ from{ opacity:0; transform:translateY(6px);} to{ opacity:1; transform:translateY(0);} }
+
+/* ---------- تب کاربران ---------- */
+.arf-list-head{ display:flex; align-items:center; justify-content:space-between; color:#e9d9ff; font-weight:800; font-size:.82rem; margin-bottom:10px; }
+.arf-count-badge{
+    background:rgba(168,132,255,.18); border:1px solid rgba(168,132,255,.35); color:#c4a3ff;
+    font-size:.68rem; font-weight:800; border-radius:10px; padding:4px 10px;
+}
+.arf-list{ display:flex; flex-direction:column; gap:8px; max-height:420px; overflow-y:auto; }
+.arf-empty{ color:rgba(255,255,255,.5); font-size:.78rem; text-align:center; padding:24px 0; }
+
+.arf-row{
+    display:flex; align-items:center; gap:10px; background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:11px 12px;
+}
+.arf-row-avatar{
+    width:40px; height:40px; border-radius:12px; object-fit:cover; flex:none;
+    background:linear-gradient(135deg,#a855f7,#6d28d9); display:flex; align-items:center; justify-content:center;
+    color:#fff; font-size:1rem;
+}
+.arf-row-info{ flex:1; min-width:0; }
+.arf-row-name{ color:#fff; font-weight:800; font-size:.8rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.arf-row-meta{ color:rgba(255,255,255,.5); font-size:.68rem; margin-top:3px; }
+.arf-row-right{ flex:none; text-align:left; display:flex; align-items:center; gap:6px; }
+.arf-row-earned{ color:#4ade80; font-weight:900; font-size:.85rem; }
+.arf-row-chevron{ color:rgba(255,255,255,.35); font-size:.75rem; }
+
+/* ---------- تب دعوت ---------- */
+.arf-invite-hero{ text-align:center; padding:10px 0 18px; }
+.arf-gift-ic{
+    width:78px; height:78px; margin:0 auto 14px; border-radius:24px;
+    background:linear-gradient(135deg,#a855f7,#6d28d9); display:flex; align-items:center; justify-content:center;
+    color:#fff; font-size:2.1rem; box-shadow:0 12px 30px -8px rgba(168,85,247,.65);
+}
+.arf-invite-title{ color:#fff; font-weight:900; font-size:1.05rem; margin-bottom:6px; }
+.arf-invite-sub{ color:rgba(255,255,255,.55); font-size:.76rem; }
+
+.arf-link-row{ display:flex; align-items:center; gap:8px; margin-bottom:16px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); border-radius:14px; padding:6px 6px 6px 12px; }
+.arf-link-ic{ color:#c4a3ff; flex:none; font-size:.85rem; }
+.arf-link-row input{
+    flex:1; min-width:0; background:transparent; border:none; outline:none;
+    padding:9px 6px; color:#e9d9ff; font-size:.72rem; font-family:inherit;
+    direction:ltr; text-align:left;
+}
+.arf-link-row button{
+    flex:none; background:linear-gradient(135deg,#a855f7,#7c3aed); border:none; border-radius:11px;
+    color:#fff; font-weight:800; font-size:.72rem; padding:9px 14px; display:flex; align-items:center; gap:6px;
+    cursor:pointer; white-space:nowrap;
+}
+.arf-link-row button:active{ transform:scale(.96); }
+.arf-link-row button.arf-copied{ background:linear-gradient(135deg,#22c55e,#16a34a); }
+
+.arf-stats-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+.arf-stats-grid-2{ margin-bottom:16px; }
+.arf-stat{
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:16px;
+    padding:14px 10px; text-align:center;
+}
+.arf-stat-ic{ color:#c4a3ff; font-size:.9rem; margin-bottom:6px; }
+.arf-stat-v{ color:#fff; font-weight:900; font-size:1.1rem; }
+.arf-stat-l{ color:rgba(255,255,255,.55); font-size:.66rem; font-weight:600; margin-top:3px; }
+
+.arf-howto{ background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:14px; }
+.arf-howto-head{ color:#facc15; font-weight:800; font-size:.78rem; margin-bottom:12px; display:flex; align-items:center; gap:6px; }
+.arf-howto-row{ display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-top:1px solid rgba(255,255,255,.06); }
+.arf-howto-row:first-of-type{ border-top:none; }
+.arf-howto-txt{ color:rgba(255,255,255,.8); font-size:.74rem; }
+.arf-howto-num{
+    flex:none; width:22px; height:22px; border-radius:8px; background:rgba(168,132,255,.2);
+    color:#c4a3ff; font-weight:900; font-size:.68rem; display:flex; align-items:center; justify-content:center;
+}
+
+/* ---------- تب آمار ---------- */
+.arf-chart-card{ background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:18px; padding:14px; margin-bottom:16px; }
+.arf-chart-head{ margin-bottom:6px; }
+.arf-chart-title{ color:rgba(255,255,255,.6); font-size:.74rem; font-weight:700; }
+.arf-chart-val{ display:flex; align-items:baseline; gap:10px; margin-bottom:10px; }
+.arf-chart-val span:first-child{ color:#fff; font-weight:900; font-size:1.4rem; }
+.arf-chart-pct{ color:#4ade80; font-size:.76rem; font-weight:800; display:flex; align-items:center; gap:4px; }
+.arf-chart-pct.arf-neg{ color:#f87171; }
+.arf-chart-wrap{ margin-top:4px; height:150px; position:relative; }
+.arf-chart-wrap canvas{ width:100% !important; height:100% !important; }
+
+.arf-settle-btn{
+    width:100%; background:linear-gradient(135deg,#f59e0b,#d97706); border:none; border-radius:16px;
+    color:#fff; font-weight:900; font-size:.85rem; padding:14px; display:flex; align-items:center; justify-content:center;
+    gap:8px; cursor:pointer;
+}
+.arf-settle-btn:active{ transform:scale(.98); }
+
+/* ---------- مودال تسویه ---------- */
+.arf-modal{
+    width:100%; max-width:480px; background:linear-gradient(165deg,#2a1554 0%,#160b30 100%);
+    border-radius:24px 24px 0 0; border:1px solid rgba(168,132,255,.3); border-bottom:none;
+    max-height:88vh; overflow-y:auto; direction:rtl; padding-bottom:env(safe-area-inset-bottom);
+}
+.arf-modal-head{
+    display:flex; align-items:center; justify-content:space-between; padding:16px 18px;
+    border-bottom:1px solid rgba(255,255,255,.08); color:#fff; font-weight:900; font-size:.9rem; position:sticky; top:0;
+    background:inherit; z-index:2;
+}
+.arf-modal-head button{ background:rgba(255,255,255,.08); border:none; color:#fff; width:32px; height:32px; border-radius:10px; cursor:pointer; }
+.arf-modal-body{ padding:16px 18px; }
+.arf-modal-balance{ color:#e9d9ff; font-size:.8rem; margin-bottom:4px; }
+.arf-modal-balance b{ color:#4ade80; }
+.arf-modal-note{ color:rgba(255,255,255,.5); font-size:.7rem; margin-bottom:14px; }
+
+.arf-field-label{ display:block; color:#c4a3ff; font-size:.72rem; font-weight:700; margin:12px 0 6px; }
+.arf-select, .arf-input{
+    width:100%; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); border-radius:12px;
+    padding:11px 12px; color:#fff; font-size:.8rem; font-family:inherit; box-sizing:border-box;
+}
+.arf-add-ben-btn{
+    margin-top:10px; background:none; border:none; color:#38BDF8; font-weight:800; font-size:.76rem; cursor:pointer;
+    display:flex; align-items:center; gap:6px;
+}
+.arf-save-ben-btn{
+    margin-top:12px; width:100%; background:rgba(168,132,255,.18); border:1px solid rgba(168,132,255,.4);
+    color:#fff; font-weight:800; border-radius:12px; padding:11px; cursor:pointer; font-size:.8rem;
+}
+.arf-modal-error{ color:#f87171; font-size:.74rem; margin-top:10px; min-height:16px; }
+.arf-submit-btn{
+    width:100%; margin-top:14px; background:linear-gradient(135deg,#a855f7,#7c3aed); border:none; border-radius:14px;
+    color:#fff; font-weight:900; font-size:.85rem; padding:14px; display:flex; align-items:center; justify-content:center;
+    gap:8px; cursor:pointer;
+}
+.arf-submit-btn:disabled{ opacity:.5; cursor:not-allowed; }

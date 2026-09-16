@@ -1,0 +1,238 @@
+
+        /* Recipient info styles */
+        #recipientInfo {
+            margin-top: 10px;
+            display: none;
+        }
+        
+        /* Loading overlay */
+        #loadingOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(120% 120% at 50% 0%, #241556 0%, #150C36 45%, #0C0620 100%);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            overflow: hidden;
+        }
+        #loadingOverlay::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+              radial-gradient(360px 360px at 22% 28%, rgba(168,85,247,.28), transparent 62%),
+              radial-gradient(320px 320px at 78% 72%, rgba(56,189,248,.22), transparent 62%),
+              radial-gradient(280px 280px at 62% 18%, rgba(255,77,141,.18), transparent 62%);
+            animation: avlAuraGlow 8s ease-in-out infinite;
+        }
+        @keyframes avlAuraGlow { 0%,100% { transform: scale(1); opacity: .85; } 50% { transform: scale(1.14); opacity: 1; } }
+
+        #loadingSpinner {
+            width: 64px;
+            height: 64px;
+            position: relative;
+            z-index: 1;
+            isolation: isolate;
+            animation: avaSpinnerGlow 1.6s ease-in-out infinite;
+        }
+        #loadingSpinner::before,
+        #loadingSpinner::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+        }
+        #loadingSpinner::before {
+            border: 3px solid rgba(255, 255, 255, 0.1);
+        }
+        #loadingSpinner::after {
+            background: conic-gradient(from 0deg, transparent 0%, #7C3AED 12%, #A855F7 32%, #EC4899 52%, #A855F7 70%, transparent 84%);
+            -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 5px), #000 calc(100% - 5px));
+            mask: radial-gradient(farthest-side, transparent calc(100% - 5px), #000 calc(100% - 5px));
+            animation: avaSpinnerRotate 0.8s cubic-bezier(.5,.05,.5,.95) infinite;
+        }
+        @keyframes avaSpinnerRotate { to { transform: rotate(360deg); } }
+        @keyframes avaSpinnerGlow {
+            0%, 100% { filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.4)); }
+            50%      { filter: drop-shadow(0 0 22px rgba(168, 85, 247, 0.9)); }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Currency Rate Section - Full Screen */
+        #currencyRateSection {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 1000;
+            background: var(--primary-dark);
+        }
+        
+        /* Currency Rate Header */
+        .currency-rate-header {
+            height: 60px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1001;
+        }
+        
+        .back-button {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: var(--transition);
+        }
+        
+        .back-button:hover {
+            color: var(--accent-purple);
+        }
+        
+        .currency-rate-title {
+            flex: 1;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .refresh-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-light);
+            padding: 8px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .refresh-btn:hover {
+            background: rgba(108, 64, 197, 0.1);
+            border-color: var(--accent-purple);
+        }
+        
+        /* Bottom Navigation Styles */
+        .bottom-nav {
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            background: rgba(26, 11, 46, 0.95) !important;
+            backdrop-filter: blur(20px) !important;
+            border-top: 1px solid var(--glass-border) !important;
+            display: flex !important;
+            justify-content: space-around !important;
+            padding: 15px 0 !important;
+            z-index: 1002 !important;
+            height: 80px !important;
+        }
+        
+        /* Ensure content doesn't hide behind footer */
+        .dashboard {
+            padding-bottom: 100px !important;
+        }
+        
+        /* Hide main dashboard when currency rate is active */
+        #mainDashboard.hidden {
+            display: none;
+        }
+        
+        /* Adjust body padding when currency rate is active */
+        body.currency-rate-active {
+            overflow: hidden;
+        }
+        
+        /* Hide scroll indicators on mobile */
+        @media (max-width: 768px) {
+            .scroll-indicator {
+                display: none;
+            }
+            
+            .action-circle {
+                width: 65px;
+                height: 65px;
+            }
+            
+            .action-circle i {
+                font-size: 1.3rem;
+            }
+        }
+        
+        .filter-select {
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--accent-purple);
+        }
+        
+        /* Summary cards */
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .summary-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .summary-amount.positive {
+            color: #4CD964;
+        }
+        
+        .summary-amount.negative {
+            color: #FF3B30;
+        }
+    
+    
+    
+    
+    
+   

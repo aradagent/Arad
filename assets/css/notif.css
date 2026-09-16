@@ -1,0 +1,309 @@
+
+
+.notification-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #FF3B30;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--primary-purple);
+    display: none;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* Notification Dropdown */
+.notification-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 350px;
+    background: black;
+    border: 1px solid var(--glass-border);
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    display: none;
+    margin-top: 10px;
+    max-height: 500px;
+    overflow: hidden;
+}
+
+.notification-dropdown.show {
+    display: block;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.notification-item {
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.notification-item:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.notification-item.unread {
+    background: rgba(108, 64, 197, 0.1);
+}
+
+.notification-title {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--text-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification-title i {
+    margin-right: 8px;
+}
+
+.notification-unread-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--accent-purple);
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.notification-message {
+    font-size: 0.9rem;
+    color: var(--text-gray);
+    margin-bottom: 8px;
+}
+
+.notification-time {
+    font-size: 0.8rem;
+    color: var(--text-gray);
+    opacity: 0.7;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.notification-loading {
+    padding: 30px;
+    text-align: center;
+    color: var(--text-gray);
+}
+
+.notification-loading i {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.notification-empty {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--text-gray);
+}
+
+.notification-empty i {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+.notification-footer {
+    padding: 15px 20px;
+    border-top: 1px solid var(--glass-border);
+    text-align: center;
+}
+
+.notification-footer a {
+    color: var(--accent-purple);
+    text-decoration: none;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.notification-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .notification-dropdown {
+        position: fixed;
+        top: 70px;
+        right: 15px;
+        left: 15px;
+        width: auto;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+}
+/* ============================================================
+   REDESIGN: dropdown اعلان‌ها — استایل اپلیکیشنی مدرن
+   ============================================================ */
+.notification-dropdown {
+    position: fixed !important;
+    background: linear-gradient(180deg, #1e0f38, #150a28) !important;
+    border: 1px solid rgba(255,255,255,0.10) !important;
+    border-radius: 22px !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.55) !important;
+    overflow: hidden !important;
+    max-height: 72vh !important;
+    display: none;
+    z-index: 9200 !important;
+}
+.notification-dropdown.show { display: flex !important; flex-direction: column; animation: notifSheetUp .28s cubic-bezier(.2,.9,.3,1.2); }
+
+/* دسکتاپ: زیر زنگوله */
+@media (min-width: 769px) {
+    .notification-dropdown { top: 74px !important; right: 24px !important; left: auto !important; width: 380px !important; }
+}
+/* موبایل: bottom-sheet اپلیکیشنی — همیشه داخل صفحه، هرگز بیرون از کادر */
+@media (max-width: 768px) {
+    .notification-dropdown {
+        position: fixed !important;
+        top: auto !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100vw !important;
+        max-width: 100vw !important;
+        margin: 0 !important;
+        transform: none !important;          /* جلوگیری از پرت‌شدن به بیرون صفحه */
+        border-radius: 22px 22px 0 0 !important;
+        max-height: 82vh !important;
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+    .notification-dropdown.show { animation: notifSheetSlideUp .3s cubic-bezier(.2,.9,.3,1.1); }
+    /* هندل بالای شیت */
+    .notification-dropdown::after {
+        content: '';
+        position: absolute;
+        top: 7px; left: 50%; transform: translateX(-50%);
+        width: 42px; height: 4px; border-radius: 4px;
+        background: rgba(255,255,255,0.25);
+    }
+}
+@keyframes notifSheetUp { from { opacity: 0; transform: translateY(-8px) scale(.98); } to { opacity: 1; transform: none; } }
+@keyframes notifSheetSlideUp { from { transform: translateY(40%); opacity: .5; } to { transform: none; opacity: 1; } }
+
+.notification-dropdown .dropdown-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 18px 12px; border-bottom: 1px solid rgba(255,255,255,0.07);
+    position: sticky; top: 0; background: inherit; z-index: 2;
+}
+.notification-dropdown .dropdown-title {
+    color: #fff; font-size: .95rem; font-weight: 800; margin: 0;
+    display: flex; align-items: center; gap: 8px;
+}
+.notification-dropdown .dropdown-title i { color: #FF4D8D; }
+.notification-dropdown .header-actions { display: flex; gap: 8px; }
+.notification-dropdown .mark-all-read-btn,
+.notification-dropdown .close-dropdown-btn {
+    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.10);
+    color: rgba(255,255,255,0.85); border-radius: 12px; cursor: pointer;
+    font-size: .7rem; padding: 7px 12px; display: inline-flex; align-items: center; gap: 5px;
+    transition: background .2s;
+}
+.notification-dropdown .mark-all-read-btn:hover { background: rgba(76,217,100,0.15); color: #4CD964; }
+.notification-dropdown .close-dropdown-btn { padding: 7px 10px; }
+.notification-dropdown .close-dropdown-btn:hover { background: rgba(255,59,48,0.15); color: #ff6b6b; }
+.notification-dropdown .dropdown-body { flex: 1; overflow-y: auto; padding: 10px 12px 14px; }
+.notification-dropdown .dropdown-body::-webkit-scrollbar { width: 4px; }
+.notification-dropdown .dropdown-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+
+.notification-overlay { position: fixed; inset: 0; background: rgba(6,3,14,0.55); backdrop-filter: blur(3px); z-index: 9100; display: none; }
+.notification-overlay.active, .notification-overlay.show { display: block; }
+
+/* آیتم اعلان مدرن */
+.notification-item {
+    background: rgba(255,255,255,0.045) !important;
+    border: 1px solid rgba(255,255,255,0.07) !important;
+    border-radius: 14px !important;
+    padding: 12px 14px !important;
+    margin-bottom: 8px !important;
+}
+.notification-item.unread { border-color: rgba(255,77,141,0.35) !important; background: rgba(255,77,141,0.06) !important; }
+
+/* تم روشن */
+html[data-theme="light"] .notification-dropdown { background: #ffffff !important; border-color: rgba(20,10,40,0.10) !important; }
+html[data-theme="light"] .notification-dropdown .dropdown-title { color: #1a0b2e; }
+html[data-theme="light"] .notification-dropdown .mark-all-read-btn,
+html[data-theme="light"] .notification-dropdown .close-dropdown-btn { background: rgba(20,10,40,0.05); color: #4a4460; border-color: rgba(20,10,40,0.1); }
+html[data-theme="light"] .notification-item { background: rgba(20,10,40,0.03) !important; border-color: rgba(20,10,40,0.08) !important; }
+
+/* ============================================================
+   دکمه‌های پذیرش/رد داخل آیتم نوتیفیکیشن (سازگار همه صفحات)
+   ============================================================ */
+.notification-dropdown .notification-actions {
+    display: flex; gap: 8px; margin-top: 10px;
+}
+.notification-dropdown .notification-actions .action-btn {
+    flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 9px 10px; border-radius: 12px; border: none; cursor: pointer;
+    font-size: .78rem; font-weight: 700; color: #fff; transition: transform .12s, filter .12s;
+    background: rgba(255,255,255,0.08);
+}
+.notification-dropdown .notification-actions .action-btn i { font-size: .8rem; }
+.notification-dropdown .notification-actions .action-btn.accept { background: linear-gradient(135deg,#22c55e,#16a34a); }
+.notification-dropdown .notification-actions .action-btn.reject { background: linear-gradient(135deg,#FF3B30,#e11d48); }
+.notification-dropdown .notification-actions .action-btn:hover { filter: brightness(1.08); }
+.notification-dropdown .notification-actions .action-btn:active { transform: scale(.96); }
+.notification-dropdown .notification-actions .action-btn:disabled { opacity: .6; cursor: default; }
+
+/* دکمه حذف تکی نوتیفیکیشن */
+.notification-dropdown .notification-delete {
+    background: transparent; border: none; color: rgba(255,255,255,0.35);
+    cursor: pointer; font-size: .9rem; padding: 4px 6px; border-radius: 8px; align-self: flex-start;
+}
+.notification-dropdown .notification-delete:hover { color: #ff6b6b; background: rgba(255,59,48,0.12); }
+
+/* چیدمان آیتم نوتیفیکیشن */
+.notification-dropdown .notification-item {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 12px 14px; border-radius: 14px; margin-bottom: 8px;
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+}
+.notification-dropdown .notification-item.unread { background: rgba(108,64,197,0.12); border-color: rgba(108,64,197,0.3); }
+.notification-dropdown .notification-icon {
+    width: 38px; height: 38px; border-radius: 11px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; color: #fff;
+    background: linear-gradient(135deg,#6C40C5,#FF4D8D);
+}
+.notification-dropdown .notification-content { flex: 1; min-width: 0; }
+.notification-dropdown .notification-title { font-weight: 700; font-size: .85rem; color: #fff; }
+.notification-dropdown .notification-message { font-size: .76rem; color: rgba(255,255,255,0.7); margin-top: 3px; line-height: 1.5; }
+.notification-dropdown .notification-time { font-size: .66rem; color: rgba(255,255,255,0.4); margin-top: 5px; }
+
+/* دکمه «خواندن همه» واضح‌تر */
+.notification-dropdown .mark-all-read-btn { background: rgba(76,217,100,0.14) !important; color: #22c55e !important; border-color: rgba(76,217,100,0.25) !important; }
+
+/* تم روشن برای دکمه‌ها و آیتم‌ها */
+html[data-theme="light"] .notification-dropdown .notification-item { background: #f6f4fc; border-color: rgba(20,10,40,0.06); }
+html[data-theme="light"] .notification-dropdown .notification-item.unread { background: rgba(108,64,197,0.08); border-color: rgba(108,64,197,0.2); }
+html[data-theme="light"] .notification-dropdown .notification-delete { color: rgba(20,10,40,0.35); }

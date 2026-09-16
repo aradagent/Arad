@@ -1,0 +1,59 @@
+# ===================================================================
+# .htaccess ریشه‌ی سایت
+# ---------------------------------------------------------------
+# بخش ۱) افزایشِ سقفِ حجمِ آپلود — همان چیزی که باعثِ خطای «حداکثر ۵
+# مگابایت» در «آپدیت سایت» (و هر آپلودِ دیگری) می‌شد. upload_max_filesize
+# و post_max_size از نوعِ PHP_INI_PERDIR هستند، یعنی با ini_set() در کدِ
+# PHP اصلاً قابلِ تغییر نیستند و فقط از این‌جا (برای هاستِ Apache+mod_php
+# یا LiteSpeed) یا از فایلِ .user.ini (برای PHP-FPM/CGI) قابلِ تنظیم‌اند —
+# به همین دلیل هر دو را همزمان گذاشتیم تا مطمئن شویم روی هر نوع هاستی
+# حداقل یکی از این دو مسیر اثر می‌کند.
+<IfModule mod_php.c>
+    php_value upload_max_filesize 200M
+    php_value post_max_size 200M
+    php_value max_execution_time 300
+    php_value max_input_time 300
+    php_value memory_limit 512M
+</IfModule>
+<IfModule mod_php7.c>
+    php_value upload_max_filesize 200M
+    php_value post_max_size 200M
+    php_value max_execution_time 300
+    php_value max_input_time 300
+    php_value memory_limit 512M
+</IfModule>
+<IfModule lsapi_module>
+    php_value upload_max_filesize 200M
+    php_value post_max_size 200M
+    php_value max_execution_time 300
+    php_value max_input_time 300
+    php_value memory_limit 512M
+</IfModule>
+
+# اگر هاست شما هیچ‌کدام از این ماژول‌ها را نداشت (مثلاً Nginx یا PHP-FPM
+# بدون پشتیبانیِ .user.ini) و بازهم همان خطا را دیدید، یعنی این مقدار باید
+# مستقیماً از پنلِ هاستینگ (مثلاً «MultiPHP INI Editor» در cPanel، یا تنظیماتِ
+# php-fpm pool) تغییر کند — از طریقِ کدِ اپلیکیشن قابلِ دور زدن نیست.
+
+# ---------------------------------------------------------------
+# بخش ۲) فشرده‌سازیِ gzip برای پاسخ‌های متنی
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript
+    AddOutputFilterByType DEFLATE application/javascript application/x-javascript application/json
+    AddOutputFilterByType DEFLATE application/xml application/rss+xml application/font-woff application/font-woff2
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# ---------------------------------------------------------------
+# بخش ۳) کش مرورگر برای فایل‌های ایستا
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType text/css "access plus 1 week"
+    ExpiresByType application/javascript "access plus 1 week"
+    ExpiresByType font/woff2 "access plus 1 month"
+</IfModule>

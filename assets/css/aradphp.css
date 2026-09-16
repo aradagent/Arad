@@ -1,0 +1,1610 @@
+    * {
+            box-sizing: border-box;
+        }
+ /* استایل دکمه‌های ناوبری بزرگ و جذاب */
+   /* نوار ناوبری سه دکمه */
+        .nav-buttons-section {
+            margin: 16px 0 20px 0;
+        }
+        
+        .nav-buttons-large {
+            display: flex;
+            gap: 12px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(108, 64, 197, 0.08));
+            backdrop-filter: blur(20px);
+            border-radius: 60px;
+            padding: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-large-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 16px;
+            background: transparent;
+            border-radius: 50px;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-large-btn.active {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #1a1a2e;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+        
+        .nav-large-btn:not(.active):hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 600px) {
+            .nav-large-btn {
+                padding: 10px;
+                font-size: 0.75rem;
+                gap: 6px;
+            }
+            .nav-large-btn i {
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-buttons-large {
+                gap: 12px;
+            }
+            .nav-large-btn {
+                min-width: 140px;
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+            .nav-large-btn i {
+                font-size: 1.1rem;
+            }
+          
+        }
+        
+        @media (max-width: 480px) {
+            .nav-large-btn {
+                min-width: 120px;
+                padding: 10px 16px;
+                font-size: 0.8rem;
+            }
+        }
+
+@media all and (display-mode: standalone) {
+    .header {
+        margin-top: calc(2px + env(safe-area-inset-top, 0px));
+    }
+}
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+       .logo-text h1 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 0;
+    background: linear-gradient(23deg, #ffffff, #c6ff06);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+        .logo-text p {
+            font-size: 0.6rem;
+            color: var(--text-gray);
+            margin: 0;
+        }
+
+        .discount-banner {
+            background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,165,0,0.1));
+            border-radius: 16px;
+            padding: 12px;
+            margin-top: 12px;
+            text-align: center;
+            border: 1px solid rgba(255,215,0,0.3);
+            animation: discountGlow 2s ease-in-out infinite;
+        }
+        
+        @keyframes discountGlow {
+            0% { box-shadow: 0 0 0 0 rgba(255,215,0,0.2); }
+            50% { box-shadow: 0 0 15px 0 rgba(255,215,0,0.4); }
+            100% { box-shadow: 0 0 0 0 rgba(255,215,0,0.2); }
+        }
+        
+        .discount-banner i {
+            color: #FFD700;
+            margin-left: 8px;
+        }
+        
+        .discount-banner .discount-percent {
+            color: #FFD700;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        /* ==================== کارت موجودی شیشه‌ای مدرن ==================== */
+        .glass-balance-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(108,64,197,0.08));
+            backdrop-filter: blur(20px);
+            border-radius: 28px;
+            padding: 20px 16px;
+            margin: 16px 0;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        @keyframes cardFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .currency-icon-small.irr {
+            background: linear-gradient(135deg, #6C40C5, #4CD964);
+            color: white;
+        }
+        
+        .currency-icon-small.usd {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+        }
+        
+        .currency-icon-small.eur {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+        
+        .currency-icon-small.usdt {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #1a1a2e;
+        }
+        
+        .currency-amount.negative {
+            background: linear-gradient(135deg, #FF6B6B, #FF3B30);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        @keyframes statFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* ==================== پنل ادمین در پایین ==================== */
+        .admin-panel-bottom {
+            background: linear-gradient(135deg, rgba(108,64,197,0.2), rgba(76,217,100,0.05));
+            border-radius: 20px;
+            margin: 20px 0;
+            border: 1px solid var(--accent-purple);
+            overflow: hidden;
+        }
+        
+        .admin-panel-header {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            padding: 12px 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+        
+        .admin-panel-header i {
+            transition: transform 0.3s ease;
+        }
+        
+        .admin-panel-body {
+            padding: 15px;
+            display: block;
+        }
+        
+        .admin-panel-body.collapsed {
+            display: none;
+        }
+        
+        .form-group {
+            margin-bottom: 10px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 4px;
+            color: var(--text-gray);
+            font-size: 0.7rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 10px;
+            color: white;
+            font-size: 0.8rem;
+        }
+        
+        .btn-submit {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #1a1a2e;
+        }
+        
+        .btn-complete {
+            background: linear-gradient(135deg, #4CD964, #2ecc71);
+            border: none;
+            padding: 4px 8px;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.6rem;
+            transition: all 0.3s ease;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 16px 0 12px;
+        }
+
+        .section-header h3 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .refresh-btn {
+            background: rgba(255,255,255,0.05);
+            border: none;
+            border-radius: 30px;
+            padding: 5px 10px;
+            color: var(--text-gray);
+            cursor: pointer;
+            font-size: 0.65rem;
+        }
+        
+        @media (max-width: 500px) {
+            .ads-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+        }
+        
+        @media (max-width: 400px) {
+            .ads-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+
+        .ad-type.buy {
+            background: rgba(76, 217, 100, 0.2);
+            color: #4CD964;
+        }
+
+        .ad-type.sell {
+            background: rgba(255, 59, 48, 0.2);
+            color: #FF3B30;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 8px;
+            background: transparent;
+            border: none;
+            border-radius: 50px;
+            color: var(--text-gray);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            color: white;
+        }
+
+        .tab-badge {
+            background: #FF3B30;
+            color: white;
+            border-radius: 30px;
+            padding: 2px 6px;
+            font-size: 0.55rem;
+        }
+
+        .offer-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 18px;
+            padding: 12px;
+            border-right: 3px solid #FFC107;
+            margin-bottom: 10px;
+            animation: fadeInUp 0.3s ease forwards;
+            opacity: 0;
+        }
+
+        .offer-card.accepted {
+            border-right-color: #4CD964;
+        }
+
+        .offer-card.rejected {
+            border-right-color: #FF3B30;
+            opacity: 0.7;
+        }
+
+        .offer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .offer-user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .offer-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.7rem;
+        }
+
+        .offer-user-name {
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        .offer-user-telegram {
+            font-size: 0.55rem;
+            color: var(--text-gray);
+        }
+
+        .offer-status {
+            font-size: 0.55rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+
+        .offer-status.pending {
+            background: rgba(255,193,7,0.2);
+            color: #FFC107;
+        }
+
+        .offer-status.accepted {
+            background: rgba(76,217,100,0.2);
+            color: #4CD964;
+        }
+
+        .offer-status.rejected {
+            background: rgba(255,59,48,0.2);
+            color: #FF3B30;
+        }
+
+        .offer-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            margin: 8px 0;
+        }
+        
+        @media (max-width: 500px) {
+            .offer-details {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .offer-detail {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 5px;
+            text-align: center;
+        }
+
+        .offer-detail-label {
+            font-size: 0.5rem;
+            color: var(--text-gray);
+        }
+
+        .offer-detail-value {
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        .offer-message {
+            background: rgba(108,64,197,0.1);
+            border-radius: 10px;
+            padding: 6px;
+            margin: 6px 0;
+            font-size: 0.65rem;
+            border-right: 2px solid var(--accent-purple);
+        }
+
+        .offer-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .btn-accept {
+            flex: 1;
+            padding: 6px;
+            background: #4CD964;
+            border: none;
+            border-radius: 20px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.65rem;
+        }
+
+        .btn-reject {
+            flex: 1;
+            padding: 6px;
+            background: #FF3B30;
+            border: none;
+            border-radius: 20px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.65rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 25px 15px;
+            color: var(--text-gray);
+        }
+
+        /* ==================== استایل‌های مودال ویرایش ==================== */
+        .edit-form-group {
+            margin-bottom: 15px;
+        }
+
+        .edit-form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--text-gray);
+            font-size: 0.75rem;
+        }
+
+        .edit-form-group label i {
+            margin-left: 5px;
+            color: #FFD700;
+        }
+
+        .edit-form-control {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            color: white;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .edit-form-control:focus {
+            outline: none;
+            border-color: #FFD700;
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        /* ==================== معاملات فعال ==================== */
+        .deals-section, .completed-deals-section {
+            margin-top: 20px;
+        }
+        
+        .deals-container, .completed-deals-container {
+            min-height: 150px;
+        }
+        
+        .deal-card-active {
+            background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(108,64,197,0.08));
+            backdrop-filter: blur(20px);
+            border-radius: 22px;
+            margin-bottom: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .deal-card-active .deal-header {
+            background: linear-gradient(135deg, rgba(108,64,197,0.3), rgba(76,217,100,0.1));
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .deal-code-badge {
+            background: rgba(0,0,0,0.4);
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-family: monospace;
+            font-size: 0.7rem;
+        }
+        
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 0.6rem;
+            font-weight: 600;
+        }
+        
+        .status-badge.waiting {
+            background: rgba(255,193,7,0.2);
+            color: #FFC107;
+            animation: glow 2s ease-in-out infinite;
+        }
+        
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px rgba(255,193,7,0.3); }
+            50% { box-shadow: 0 0 15px rgba(255,193,7,0.5); }
+        }
+        
+        .deal-body {
+            padding: 14px;
+        }
+        
+        .timeline-step.completed .step-icon {
+            background: linear-gradient(135deg, #4CD964, #2ecc71);
+        }
+        
+        .timeline-step.active .step-icon {
+            background: linear-gradient(135deg, #FFC107, #FFA500);
+            animation: pulse 1.5s infinite;
+        }
+        
+        .timeline-step .step-label {
+            font-size: 0.55rem;
+            color: var(--text-gray);
+            white-space: nowrap;
+        }
+        
+        .timeline-step.completed .step-label {
+            color: #4CD964;
+        }
+        
+        .timeline-step.active .step-label {
+            color: #FFC107;
+            font-weight: 600;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+        
+        .deal-info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        
+        .info-card {
+            background: rgba(0,0,0,0.2);
+            border-radius: 14px;
+            padding: 8px;
+            text-align: center;
+        }
+        
+        .info-card .info-icon {
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+        
+        .info-card .info-label {
+            font-size: 0.55rem;
+            color: var(--text-gray);
+            display: block;
+        }
+        
+        .info-card .info-value {
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-top: 3px;
+        }
+        
+        .info-card .info-value.highlight {
+            color: #4CD964;
+        }
+        
+        /* استایل کامل برای بخش دو طرف معامله */
+/* ساختار دو ستونه با Grid */
+.deal-parties {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+    width: 100%;
+}
+
+.party-card {
+    background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+    border-radius: 16px;
+    padding: 12px 8px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border: 1px solid rgba(108,64,197,0.1);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.party-avatar {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #6C40C5, #FF4D8D);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 8px auto;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    box-shadow: 0 3px 10px rgba(108,64,197,0.3);
+}
+
+.party-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 4px;
+    word-break: break-word;
+}
+
+.party-role {
+    font-size: 11px;
+    color: #6C40C5;
+    font-weight: 500;
+    background: rgba(108,64,197,0.1);
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 20px;
+}
+
+.party-vs {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #6C40C5, #FF4D8D);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 14px;
+    box-shadow: 0 2px 8px rgba(108,64,197,0.3);
+}
+
+/* رنگ‌های جداگانه برای دو طرف */
+.party-card:first-child {
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+    border-right: 3px solid #4caf50;
+}
+
+.party-card:first-child .party-role {
+    background: rgba(76,175,80,0.15);
+    color: #2e7d32;
+}
+
+.party-card:first-child .party-avatar {
+    background: linear-gradient(135deg, #4caf50, #2e7d32);
+}
+
+.party-card:last-child {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    border-left: 3px solid #2196f3;
+}
+
+.party-card:last-child .party-role {
+    background: rgba(33,150,243,0.15);
+    color: #1565c0;
+}
+
+.party-card:last-child .party-avatar {
+    background: linear-gradient(135deg, #2196f3, #1565c0);
+}
+
+/* موبایل - همچنان دو ستونه */
+@media (max-width: 768px) {
+    .deal-parties {
+        grid-template-columns: 1fr auto 1fr !important;
+        gap: 8px;
+    }
+    
+    .party-card {
+        padding: 10px 6px;
+    }
+    
+    .party-avatar {
+        width: 40px;
+        height: 40px;
+        font-size: 14px;
+    }
+    
+    .party-name {
+        font-size: 11px;
+    }
+    
+    .party-role {
+        font-size: 9px;
+        padding: 2px 6px;
+    }
+    
+    .party-vs {
+        width: 28px;
+        height: 28px;
+        font-size: 11px;
+    }
+}
+
+/* حتی برای کوچکترین موبایل */
+@media (max-width: 480px) {
+    .deal-parties {
+        grid-template-columns: 1fr auto 1fr !important;
+        gap: 6px;
+    }
+    
+    .party-name {
+        font-size: 10px;
+    }
+    
+    .party-avatar {
+        width: 35px;
+        height: 35px;
+        font-size: 12px;
+        margin-bottom: 5px;
+    }
+}
+        
+        .completed-badge {
+            background: rgba(76,217,100,0.2);
+            color: #4CD964;
+            padding: 3px 10px;
+            border-radius: 16px;
+            font-size: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .empty-deals {
+            text-align: center;
+            padding: 35px 20px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 22px;
+        }
+        
+        .empty-deals i {
+            font-size: 2.5rem;
+            color: var(--accent-purple);
+            opacity: 0.4;
+            margin-bottom: 12px;
+        }
+        
+        .empty-deals p {
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+        }
+        
+        .empty-deals span {
+            font-size: 0.6rem;
+            color: var(--text-gray);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(15px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #2d1b3e, #1a0b2e);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            width: 90%;
+            max-width: 450px;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .modal-body {
+            padding: 12px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--text-gray);
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(20, 20, 35, 0.97);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            padding: 8px 16px;
+            border-radius: 30px;
+            color: #ffffff;
+            z-index: 100000;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            opacity: 0;
+            font-size: 0.75rem;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .type-selector {
+            display: flex;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
+        .type-btn {
+            flex: 1;
+            padding: 8px;
+            border-radius: 10px;
+            border: 2px solid;
+            background: transparent;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .type-btn.buy {
+            border-color: #4CD964;
+            color: #4CD964;
+        }
+
+        .type-btn.sell {
+            border-color: #FF3B30;
+            color: #FF3B30;
+        }
+
+        .type-btn.active.buy {
+            background: #4CD964;
+            color: white;
+        }
+
+        .type-btn.active.sell {
+            background: #FF3B30;
+            color: white;
+        }
+        
+        @media (max-width: 600px) {
+            .currency-cards {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            
+            .stats-compact-row {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            
+            .stat-compact-card {
+                flex: 1;
+                min-width: calc(33.33% - 7px);
+            }
+            
+            .deal-timeline {
+                gap: 2px;
+            }
+            
+            .timeline-step .step-label {
+                white-space: normal;
+                font-size: 0.5rem;
+                line-height: 1.2;
+            }
+            
+            .timeline-step .step-icon {
+                width: 28px;
+                height: 28px;
+                font-size: 0.8rem;
+            }
+            
+            .deal-info-grid {
+                gap: 6px;
+            }
+            
+            .deal-parties {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .party-vs {
+                transform: rotate(90deg);
+            }
+            
+            .party-card {
+                width: 100%;
+            }
+            
+            .party-avatar {
+                width: 36px;
+                height: 36px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @keyframes linePulse {
+            0%, 100% { opacity: 0.5; box-shadow: 0 0 5px rgba(108,64,197,0.3); }
+            50% { opacity: 1; box-shadow: 0 0 20px rgba(108,64,197,0.7); }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+ /* ==================== استایل نوتیفیکیشن زنگوله ==================== */
+/* ==================== هدر حرفه‌ای AvaPay ==================== */
+.avapay-header {
+    background: linear-gradient(135deg, rgba(26, 11, 46, 0.95), rgba(43, 26, 63, 0.95));
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 12px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    margin-bottom: 16px;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 100%;
+}
+
+/* لوگو سکشن */
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-icon {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, rgba(108, 64, 197, 0.2), rgba(255, 77, 141, 0.2));
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.logo-text h1 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin: 0;
+    background: linear-gradient(135deg, #FFD700, #6C40C5, #FF4D8D);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.5px;
+}
+
+.logo-text span {
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.5);
+    display: block;
+    margin-top: 2px;
+}
+
+/* بخش راست هدر */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+}
+
+/* ==================== زنگوله نوتیفیکیشن ==================== */
+.notification-bell {
+    position: relative;
+    cursor: pointer;
+}
+
+.bell-icon {
+    width: 42px;
+    height: 42px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    position: relative;
+}
+
+.bell-icon i {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.7);
+    transition: all 0.3s ease;
+}
+
+.notification-bell:hover .bell-icon {
+    background: rgba(108, 64, 197, 0.3);
+    border-color: #FFD700;
+    transform: scale(1.05);
+}
+
+.notification-bell:hover .bell-icon i {
+    color: #FFD700;
+}
+
+/* نشانگر نوتیفیکیشن - دات قرمز کوچک */
+.bell-dot {
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    width: 10px;
+    height: 10px;
+    background: #FF3B30;
+    border-radius: 50%;
+    border: 2px solid #1A0B2E;
+    animation: pulse-red 1.5s infinite;
+}
+
+/* شمارنده نوتیفیکیشن */
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #FF3B30;
+    color: white;
+    border-radius: 30px;
+    min-width: 20px;
+    height: 20px;
+    font-size: 0.55rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 5px;
+    border: 2px solid #1A0B2E;
+    font-family: monospace;
+}
+
+/* دکمه خانه */
+.home-btn {
+    width: 42px;
+    height: 42px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+}
+
+.home-btn i {
+    font-size: 1.2rem;
+}
+
+.home-btn:hover {
+    background: rgba(108, 64, 197, 0.3);
+    border-color: #FFD700;
+    color: #FFD700;
+    transform: scale(1.05);
+}
+
+@keyframes pulse-red {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(1.2);
+    }
+}
+
+/* ==================== دراپ‌داون نوتیفیکیشن - موقعیت صحیح ==================== */
+.notification-dropdown {
+    position: fixed;
+    top: 70px;
+    right: 20px;
+    width: 380px;
+    max-width: calc(100vw - 40px);
+    max-height: 80vh;
+    background: linear-gradient(135deg, #1e122f, #120824);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 215, 0, 0.1);
+    z-index: 10000;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+    animation: dropdownSlideDown 0.25s ease;
+    display: none;
+}
+
+@keyframes dropdownSlideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* فلش بالا در دسکتاپ */
+@media (min-width: 769px) {
+    .notification-dropdown::before {
+        content: '';
+        position: absolute;
+        top: -8px;
+        right: 18px;
+        width: 16px;
+        height: 16px;
+        background: linear-gradient(135deg, #1e122f, #120824);
+        border-top: 1px solid rgba(255, 215, 0, 0.2);
+        border-left: 1px solid rgba(255, 215, 0, 0.2);
+        transform: rotate(45deg);
+    }
+}
+
+/* در موبایل - وسط صفحه */
+@media (max-width: 768px) {
+    .notification-dropdown {
+        position: fixed;
+        top: 65px;
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+        width: calc(100vw - 30px);
+        max-width: 380px;
+    }
+    
+    .notification-dropdown::before {
+        display: none;
+    }
+}
+
+/* هدر دراپ‌داون */
+.dropdown-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.header-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.header-title i {
+    font-size: 1rem;
+    color: #FFD700;
+}
+
+.header-title span {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: white;
+}
+
+.mark-all-read-btn {
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    border-radius: 25px;
+    padding: 5px 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.mark-all-read-btn i {
+    font-size: 0.7rem;
+    color: #FFD700;
+}
+
+.mark-all-read-btn span {
+    font-size: 0.65rem;
+    color: #FFD700;
+}
+
+.mark-all-read-btn:hover {
+    background: rgba(255, 215, 0, 0.2);
+    transform: scale(0.98);
+}
+
+/* بدنه دراپ‌داون */
+.dropdown-body {
+    max-height: 450px;
+    overflow-y: auto;
+}
+
+/* اسکرول بار */
+.dropdown-body::-webkit-scrollbar {
+    width: 4px;
+}
+
+.dropdown-body::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.dropdown-body::-webkit-scrollbar-thumb {
+    background: #FFD700;
+    border-radius: 4px;
+}
+
+/* آیتم نوتیفیکیشن */
+.notification-item {
+    display: flex;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.notification-item:hover {
+    background: rgba(108, 64, 197, 0.15);
+}
+
+.notification-item.unread {
+    background: rgba(255, 215, 0, 0.04);
+    border-right: 3px solid #FFD700;
+}
+
+/* آیکون نوتیفیکیشن */
+.notification-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1rem;
+}
+
+.notification-icon.offer_received {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 165, 0, 0.1));
+    color: #FFC107;
+}
+
+.notification-icon.offer_accepted {
+    background: linear-gradient(135deg, rgba(76, 217, 100, 0.2), rgba(46, 204, 113, 0.1));
+    color: #4CD964;
+}
+
+.notification-icon.offer_rejected {
+    background: linear-gradient(135deg, rgba(255, 59, 48, 0.2), rgba(231, 76, 60, 0.1));
+    color: #FF3B30;
+}
+
+.notification-icon.deal_completed {
+    background: linear-gradient(135deg, rgba(108, 64, 197, 0.2), rgba(255, 77, 141, 0.1));
+    color: #6C40C5;
+}
+
+/* محتوای نوتیفیکیشن */
+.notification-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.notification-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: white;
+}
+
+.notification-message {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 4px;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+.notification-time {
+    font-size: 0.55rem;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+/* حالت خالی */
+.empty-state {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.empty-state i {
+    font-size: 2.5rem;
+    opacity: 0.4;
+    margin-bottom: 12px;
+    color: #FFD700;
+}
+
+.empty-state p {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.loading-state {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    position: relative;
+    margin: 0 auto 12px;
+    animation: avaSpinnerGlow 1.6s ease-in-out infinite;
+}
+.loading-spinner::before,
+.loading-spinner::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+}
+.loading-spinner::before {
+    border: 3px solid rgba(255, 255, 255, 0.1);
+}
+.loading-spinner::after {
+    background: conic-gradient(from 0deg, transparent 0%, #FFD700 12%, #FFB347 32%, #FF8A5C 52%, #FFB347 70%, transparent 84%);
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 4px));
+    mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 4px));
+    animation: avaSpinnerRotate 0.8s cubic-bezier(.5,.05,.5,.95) infinite;
+}
+@keyframes avaSpinnerRotate { to { transform: rotate(360deg); } }
+@keyframes avaSpinnerGlow {
+    0%, 100% { filter: drop-shadow(0 0 5px rgba(255, 179, 71, 0.4)); }
+    50%      { filter: drop-shadow(0 0 14px rgba(255, 179, 71, 0.85)); }
+}
+
+/* اوورلی برای بستن دراپ‌داون */
+.notification-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: none;
+}
+
+.notification-overlay.active {
+    display: block;
+}
+
+/* ==================== ریسپانسیو موبایل ==================== */
+@media (max-width: 768px) {
+    .avapay-header {
+        padding: 10px 16px;
+    }
+    
+    .logo-icon {
+        width: 38px;
+        height: 38px;
+    }
+    
+    .logo-text h1 {
+        font-size: 1.2rem;
+    }
+    
+    .logo-text span {
+        font-size: 0.55rem;
+    }
+    
+    .bell-icon, .home-btn, .sound-toggle-btn {
+        width: 38px;
+        height: 38px;
+    }
+    
+    .bell-icon i, .home-btn i, .sound-toggle-btn i {
+        font-size: 1rem;
+    }
+    
+    .notification-badge {
+        min-width: 18px;
+        height: 18px;
+        font-size: 0.5rem;
+        top: -6px;
+        right: -6px;
+    }
+    
+    .bell-dot {
+        width: 8px;
+        height: 8px;
+        top: 1px;
+        right: 3px;
+    }
+}
+
+/* برای PWA و حالت standalone */
+@media all and (display-mode: standalone) {
+    .avapay-header {
+        padding-top: calc(12px + env(safe-area-inset-top));
+    }
+}
+
+/* انیمیشن برای آیتم جدید */
+@keyframes highlightNew {
+    0% {
+        background: rgba(255, 215, 0, 0.2);
+    }
+    100% {
+        background: transparent;
+    }
+}
+
+.notification-item.new {
+    animation: highlightNew 1s ease;
+}
+
+/* استایل توست */
+.custom-toast {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(20px);
+    padding: 10px 20px;
+    border-radius: 50px;
+    color: white;
+    z-index: 11000;
+    transition: all 0.3s ease;
+    opacity: 0;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    white-space: nowrap;
+    font-family: inherit;
+}
+
+.custom-toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.custom-toast i {
+    color: #FFD700;
+}
+
+@media (max-width: 600px) {
+    .custom-toast {
+        white-space: normal;
+        max-width: 85%;
+        text-align: center;
+        font-size: 0.7rem;
+        padding: 8px 16px;
+        bottom: 80px;
+    }
+}
+
+/* آیکن‌های "در حال بارگذاری" (fa-spinner) در سراسر برنامه — لیست‌ها، مودال‌ها،
+   دکمه‌ها. قبلاً همه‌جا رنگ خاکستریِ پیش‌فرض Font Awesome بود؛ حالا هم‌راستا
+   با اسپینر اصلی برند می‌چرخد و درخشش بنفش دارد. */
+i.fa-spinner {
+    color: #C084FC;
+}
+.fa-spinner.fa-spin,
+.fa-spinner.spin {
+    animation: avaIconSpin 0.85s cubic-bezier(.5,.05,.5,.95) infinite;
+}
+@keyframes avaIconSpin {
+    0%   { transform: rotate(0deg);   text-shadow: 0 0 5px rgba(168,85,247,.4); }
+    50%  { transform: rotate(180deg); text-shadow: 0 0 14px rgba(168,85,247,.9); }
+    100% { transform: rotate(360deg); text-shadow: 0 0 5px rgba(168,85,247,.4); }
+}

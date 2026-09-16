@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="theme-color" content="#0a0f2e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="/ledor/manifest.php">
+    <link rel="icon" type="image/png" href="/ledor/AVAPAY.PNG">
+    <link rel="apple-touch-icon" href="/ledor/apple-touch-icon.png">
+    <title>AvaPay | آشنایی با امکانات</title>
+    <link rel="preload" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css"></noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        *{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+        html, body{ width:100%; height:100%; background:#0a0f2e; overflow:hidden; }
+        body{
+            font-family:'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, sans-serif;
+            color:#fff; position:relative;
+        }
+
+        /* پس‌زمینه‌ی مشترکِ آسمانِ تهران، برای هر سه اسلاید یکسان -
+           فقط رنگ‌مایه‌ی گرادیانِ روش به ازای هر اسلاید کمی تغییر می‌کند */
+        .ob-bg{
+            position:fixed; inset:0; width:100%; height:100%;
+            background-image:
+                linear-gradient(180deg, rgba(10,15,46,.55) 0%, rgba(10,15,46,.35) 38%, rgba(8,6,20,.75) 68%, rgba(8,6,20,.96) 100%),
+                url('assets/img/onboarding-bg.jpg');
+            background-size:cover; background-position:center; background-repeat:no-repeat;
+        }
+
+        .ob-topbar{
+            position:fixed; top:calc(env(safe-area-inset-top, 0px) + 18px); left:0; right:0;
+            display:flex; align-items:center; justify-content:space-between; padding:0 20px; z-index:5;
+        }
+        .ob-dots{ display:flex; gap:6px; }
+        .ob-dot{ width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,.28); transition:.3s; }
+        .ob-dot.on{ width:20px; border-radius:99px; background:linear-gradient(90deg,#7C3AED,#A855F7); }
+        .ob-skip{
+            font-family:inherit; font-size:.68rem; font-weight:600; color:rgba(255,255,255,.55);
+            background:none; border:none; cursor:pointer; padding:6px 4px;
+        }
+
+        .ob-track{
+            position:fixed; inset:0; display:flex; width:300%; height:100%;
+            transition:transform .45s cubic-bezier(.22,.9,.32,1);
+        }
+        .ob-slide{
+            width:calc(100% / 3); height:100%; position:relative;
+            display:flex; flex-direction:column; justify-content:flex-end;
+            padding:0 24px calc(env(safe-area-inset-bottom, 0px) + 26px);
+        }
+
+        .ob-icon{
+            width:64px; height:64px; border-radius:20px; margin-bottom:22px;
+            background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16);
+            backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+            display:flex; align-items:center; justify-content:center; font-size:1.5rem;
+            color:#fff;
+        }
+        .ob-slide:nth-child(1) .ob-icon{ background:rgba(124,58,237,.22); border-color:rgba(168,85,247,.4); color:#C084FC; }
+        .ob-slide:nth-child(2) .ob-icon{ background:rgba(56,189,248,.2); border-color:rgba(56,189,248,.4); color:#38BDF8; }
+        .ob-slide:nth-child(3) .ob-icon{ background:rgba(34,197,94,.2); border-color:rgba(34,197,94,.4); color:#22C55E; }
+
+        .ob-title{ font-size:1.45rem; font-weight:800; line-height:1.5; margin-bottom:10px; }
+        .ob-body{ font-size:.82rem; line-height:1.9; color:rgba(255,255,255,.68); max-width:340px; margin-bottom:28px; }
+
+        .ob-actions{ display:flex; align-items:center; gap:12px; }
+        .ob-next{
+            flex:1; font-family:inherit; font-size:.86rem; font-weight:800; color:#fff; cursor:pointer;
+            background:linear-gradient(135deg,#7C3AED,#A855F7); border:none; border-radius:16px;
+            padding:15px; box-shadow:0 10px 26px rgba(124,58,237,.4);
+            display:flex; align-items:center; justify-content:center; gap:8px;
+        }
+        .ob-next i{ font-size:.78rem; }
+
+        @media (min-width:600px){
+            .ob-slide{ align-items:center; text-align:center; }
+            .ob-body{ max-width:420px; }
+            .ob-actions{ max-width:340px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ob-bg"></div>
+
+    <div class="ob-topbar">
+        <button type="button" class="ob-skip" id="obSkip">رد کردن</button>
+        <div class="ob-dots" id="obDots">
+            <div class="ob-dot on"></div>
+            <div class="ob-dot"></div>
+            <div class="ob-dot"></div>
+        </div>
+    </div>
+
+    <div class="ob-track" id="obTrack">
+
+        <div class="ob-slide">
+            <div class="ob-icon"><i class="fas fa-arrow-right-arrow-left"></i></div>
+            <div class="ob-title">خرید و فروش آنیِ ارز</div>
+            <div class="ob-body">دلار، یورو، تتر و طلا رو در چند ثانیه و با بهترین قیمت بازار، مستقیم از آگهی‌های فعال کاربران دیگه معامله کن.</div>
+            <div class="ob-actions">
+                <button type="button" class="ob-next" data-next>بعدی <i class="fas fa-chevron-left"></i></button>
+            </div>
+        </div>
+
+        <div class="ob-slide">
+            <div class="ob-icon"><i class="fas fa-brain"></i></div>
+            <div class="ob-title">پیش‌بینی هوشمند با هوش مصنوعی</div>
+            <div class="ob-body">روند هر ارز رو با تحلیل زنده‌ی AI دنبال کن، هدف قیمتی ببین و بفهم پیش‌بینی‌های قبلی دقیقاً چند درصد درست از آب دراومدن.</div>
+            <div class="ob-actions">
+                <button type="button" class="ob-next" data-next>بعدی <i class="fas fa-chevron-left"></i></button>
+            </div>
+        </div>
+
+        <div class="ob-slide">
+            <div class="ob-icon"><i class="fas fa-shield-halved"></i></div>
+            <div class="ob-title">امن، سریع و همیشه در دسترس</div>
+            <div class="ob-body">با احراز هویت و رمزنگاری استاندارد، و پشتیبانی همیشگی، خیالت از امنیت دارایی‌هات توی AvaPay راحته.</div>
+            <div class="ob-actions">
+                <button type="button" class="ob-next" id="obStart">شروع کنید <i class="fas fa-arrow-left"></i></button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        (function () {
+            var track = document.getElementById('obTrack');
+            var dots = document.querySelectorAll('.ob-dot');
+            var total = 3;
+            var idx = 0;
+
+            function render() {
+                track.style.transform = 'translateX(' + (idx * (100 / total)) + '%)';
+                dots.forEach(function (d, i) { d.classList.toggle('on', i === idx); });
+            }
+
+            function finish() {
+                // (جدید) به‌جای localStorage، روی حساب کاربری خودش سمت سرور ثبت
+                // می‌کنیم که آنبوردینگ دیده شده — این‌طوری واقعاً فقط یک‌بار،
+                // برای همیشه و مستقل از دستگاه، نمایش داده می‌شود.
+                // (قبل از رفتن به داشبورد صبر می‌کنیم تا درخواست واقعاً کامل شود؛
+                // وگرنه ناوبری صفحه ممکن است درخواستِ نیمه‌تمام را لغو کند.)
+                var went = false;
+                var go = function () { if (went) return; went = true; window.location.href = 'dashboard.php'; };
+                fetch('api/onboarding_api.php?action=mark_seen', { method: 'POST' })
+                    .then(go).catch(go);
+                setTimeout(go, 800); // محافظ: اگر شبکه کند بود هم کاربر معطل نماند
+            }
+
+            document.querySelectorAll('[data-next]').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    if (idx < total - 1) { idx++; render(); }
+                });
+            });
+            document.getElementById('obStart').addEventListener('click', finish);
+            document.getElementById('obSkip').addEventListener('click', finish);
+            dots.forEach(function (d, i) {
+                d.addEventListener('click', function () { idx = i; render(); });
+            });
+
+            // ژست کشیدن انگشت برای رفتن به اسلاید بعد/قبل
+            var startX = null;
+            document.body.addEventListener('touchstart', function (e) { startX = e.touches[0].clientX; }, { passive: true });
+            document.body.addEventListener('touchend', function (e) {
+                if (startX === null) return;
+                var dx = e.changedTouches[0].clientX - startX;
+                startX = null;
+                if (Math.abs(dx) < 40) return;
+                // راست‌به‌چپ (RTL): کشیدن به چپ = بعدی، به راست = قبلی
+                if (dx < 0 && idx < total - 1) { idx++; render(); }
+                else if (dx > 0 && idx > 0) { idx--; render(); }
+            }, { passive: true });
+
+            render();
+        })();
+    </script>
+</body>
+</html>

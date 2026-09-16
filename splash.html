@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="theme-color" content="#0a0f2e">
+    <meta name="msapplication-navbutton-color" content="#0a0f2e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="/ledor/manifest.php">
+    <link rel="icon" type="image/png" href="/ledor/AVAPAY.PNG">
+    <link rel="apple-touch-icon" href="/ledor/apple-touch-icon.png">
+    <!-- ============================================================
+         لانچ‌اسکرین‌های بومیِ iOS (apple-touch-startup-image)
+         این‌ها همان لحظه‌ای که کاربر آیکون را لمس می‌کند نشان داده می‌شوند —
+         قبل از اینکه حتی یک خط از splash.html بارگذاری شود، و کاملاً
+         مستقل از Service Worker / کشِ مرورگر عمل می‌کنند (خودِ iOS این
+         عکس‌ها را موقعِ Add to Home Screen می‌گیرد و نگه می‌دارد).
+         ============================================================ -->
+    <link rel="apple-touch-startup-image" href="assets/img/launch/phone-750x1334.jpg" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="assets/img/launch/phone-1170x2532.jpg" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="assets/img/launch/phone-1179x2556.jpg" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="assets/img/launch/phone-828x1792.jpg" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="assets/img/launch/phone-1284x2778.jpg" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="assets/img/launch/phone-1290x2796.jpg" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="assets/img/launch/phone-1125x2436.jpg" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="assets/img/launch/phone-1242x2688.jpg" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="assets/img/launch/tablet-1536x2048.jpg" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="assets/img/launch/tablet-2048x1536.jpg" media="(device-width: 1024px) and (device-height: 768px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+    <link rel="apple-touch-startup-image" href="assets/img/launch/tablet-1620x2160.jpg" media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="assets/img/launch/tablet-2160x1620.jpg" media="(device-width: 1080px) and (device-height: 810px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+    <link rel="apple-touch-startup-image" href="assets/img/launch/tablet-1640x2360.jpg" media="(device-width: 820px) and (device-height: 1180px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="assets/img/launch/tablet-2360x1640.jpg" media="(device-width: 1180px) and (device-height: 820px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+    <link rel="apple-touch-startup-image" href="assets/img/launch/tablet-1668x2388.jpg" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="assets/img/launch/tablet-2388x1668.jpg" media="(device-width: 1194px) and (device-height: 834px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+    <link rel="apple-touch-startup-image" href="assets/img/launch/tablet-2048x2732.jpg" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="assets/img/launch/tablet-2732x2048.jpg" media="(device-width: 1366px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+    <title>AvaPay</title>
+    <link rel="preload" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css"></noscript>
+    <style>
+        *{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+        html, body{ width:100%; height:100%; background:#0a0f2e; overflow:hidden; }
+        body{
+            font-family:'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, sans-serif;
+            position:relative;
+        }
+
+        /* عکسِ کامل که کاربر فرستاده - لوگو، نام برند و شعار همه از قبل داخل خودِ
+           تصویر طراحی شده‌اند. دو نسخه داریم: یکی افقی/فشرده‌تر که برای آیپد و
+           تبلت‌ها (عرض گشادتر) ساخته شده، یکی عمودی/کشیده که برای گوشی طراحی
+           شده. پیش‌فرض همان نسخه‌ی موبایل است؛ از عرض ۷۶۸px به بالا (تبلت/آیپد
+           و بزرگ‌تر) به نسخه‌ی آیپد سوییچ می‌کنیم. */
+        .splash-photo{
+            position:fixed; top:0; left:0; right:0; bottom:0; width:100%; height:100%;
+            background-image:url('assets/img/splash-bg-mobile.jpg');
+            background-size:cover; background-position:top center; background-repeat:no-repeat;
+        }
+        /* توجه: سوییچِ موبایل/آیپد دیگر با media query روی background-image
+           انجام نمی‌شود، بلکه با یک اسکریپتِ کوچکِ همزمان (پایین‌تر، بلافاصله
+           بعد از این div) — چون در برخی موتورهای قدیمی‌تر وقتی دو url() برای
+           یک ویژگی (یکی در قاعده‌ی پایه، یکی داخل media query) تعریف شود،
+           لودِ تصویر گاهی به‌کل fail می‌شود. با جاوااسکریپت این ریسک از بین
+           می‌رود چون در هر لحظه فقط یک url() واقعاً به المنت اعمال می‌شود. */
+
+        /* ------------------------------------------------------------------
+           لودرِ کاملاً جدید (طبق درخواست): به‌جای رینگِ دایره‌ای، یک عددِ
+           درصدِ بزرگ با گرادیانِ برند + یک نوارِ کپسولی‌شکلِ درخشان با
+           جلوه‌ی shimmer (نورِ متحرک) — تا هم خیلی خواناتر باشد، هم کاملاً
+           متفاوت از طرحِ قبلی به‌نظر برسد.
+           ------------------------------------------------------------------ */
+        .splash-loader{
+            position:fixed; left:0; right:0; top:56%; transform:translateY(-50%); z-index:2;
+            display:flex; flex-direction:column; align-items:center; gap:12px;
+            padding:26px 34px 24px; margin:0 auto; width:260px; max-width:80vw;
+            opacity:0; transform:translateY(calc(-50% + 10px));
+            animation:loaderIn .7s cubic-bezier(.2,.8,.2,1) .45s forwards;
+            background:rgba(10,8,30,.46);
+            -webkit-backdrop-filter:blur(16px) saturate(150%);
+            backdrop-filter:blur(16px) saturate(150%);
+            border:1px solid rgba(255,255,255,.16);
+            border-radius:24px;
+            box-shadow:0 10px 34px rgba(0,0,0,.4);
+        }
+        .splash-big-pct{
+            direction:ltr; line-height:1; font-weight:900; font-size:2.7rem;
+            font-variant-numeric:tabular-nums; letter-spacing:-.5px;
+            background:linear-gradient(90deg,#A855F7,#EC4899,#F97362);
+            -webkit-background-clip:text; background-clip:text; color:transparent; -webkit-text-fill-color:transparent;
+            filter:drop-shadow(0 2px 10px rgba(168,85,247,.45));
+            animation:pctPulse 1.6s ease-in-out infinite;
+        }
+        .splash-big-pct .sign{ font-size:1.5rem; font-weight:800; color:rgba(255,255,255,.82); -webkit-text-fill-color:rgba(255,255,255,.82); }
+        @keyframes pctPulse{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.045); } }
+
+        .splash-bar-track{
+            position:relative; width:100%; max-width:190px; height:9px;
+            border-radius:99px; background:rgba(255,255,255,.16); overflow:hidden;
+        }
+        .splash-bar-fill{
+            position:absolute; top:0; left:0; bottom:0; width:0%;
+            border-radius:99px;
+            background:linear-gradient(90deg,#7C3AED,#A855F7,#EC4899,#F97362);
+            transition:width .16s ease-out;
+        }
+        .splash-bar-fill::after{
+            content:''; position:absolute; inset:0;
+            background:linear-gradient(100deg, transparent 30%, rgba(255,255,255,.65) 50%, transparent 70%);
+            background-size:200% 100%;
+            animation:barShine 1.3s linear infinite;
+        }
+        @keyframes barShine{ 0%{ background-position:160% 0; } 100%{ background-position:-60% 0; } }
+
+        .splash-status{
+            font-size:.86rem; font-weight:700; color:rgba(255,255,255,.92); letter-spacing:.2px;
+            text-shadow:0 1px 4px rgba(0,0,0,.5);
+        }
+        @keyframes loaderIn{ to{ opacity:1; transform:translateY(-50%); } }
+
+        .splash-root{ position:fixed; top:0; left:0; right:0; bottom:0; }
+
+        /* ------------------------------------------------------------------
+           انیمیشنِ خروج: به‌جای یک محوشدنِ ساده، یک دایره‌ی روشن از همان نقطه‌ی
+           لودر باز می‌شود و رنگِ پس‌زمینه‌ی خودِ داشبورد (--ava-bg: #0A0520)
+           را نشان می‌دهد — انگار داریم وارد اپ می‌شویم، نه فقط رفتن به صفحه‌ی
+           بعد. بعد از تمام‌شدنِ این افکت، ناوبری واقعی انجام می‌شود.
+           ------------------------------------------------------------------ */
+        .splash-iris{
+            position:fixed; top:0; left:0; right:0; bottom:0; z-index:5; background:#0A0520;
+            clip-path:circle(0% at 50% 56%);
+            -webkit-clip-path:circle(0% at 50% 56%);
+            pointer-events:none;
+        }
+        .splash-iris.opening{
+            clip-path:circle(150% at 50% 56%);
+            -webkit-clip-path:circle(150% at 50% 56%);
+            transition:clip-path .68s cubic-bezier(.65,0,.35,1), -webkit-clip-path .68s cubic-bezier(.65,0,.35,1);
+        }
+        .splash-photo, .splash-loader{ transition:opacity .5s ease, filter .6s ease, transform .68s cubic-bezier(.4,0,.2,1); }
+        .splash-root.leaving .splash-photo{ filter:brightness(1.15) saturate(1.1); transform:scale(1.04); }
+        .splash-root.leaving .splash-loader{ opacity:0; transform:translateY(calc(-50% + 10px)) scale(.94); }
+    </style>
+</head>
+<body>
+
+    <div class="splash-root" id="splashRoot">
+        <div class="splash-photo" id="splashPhoto"></div>
+        <script>
+            // همزمان و بلافاصله اجرا می‌شود (نه منتظرِ DOMContentLoaded) تا قبل
+            // از اولین رنگ‌آمیزیِ صفحه، عکسِ درست انتخاب شده باشد و هیچ پرش/چشمک
+            // بینِ عکسِ موبایل و آیپد دیده نشود.
+            (function () {
+                var isTablet = window.innerWidth >= 768;
+                if (isTablet) {
+                    var ph = document.getElementById('splashPhoto');
+                    if (ph) {
+                        ph.style.backgroundImage = "url('assets/img/splash-bg-ipad.jpg')";
+                        ph.style.backgroundPosition = 'center center';
+                    }
+                }
+            })();
+        </script>
+
+        <div class="splash-loader">
+            <div class="splash-big-pct" id="splashPct">0<span class="sign">%</span></div>
+            <div class="splash-bar-track">
+                <div class="splash-bar-fill" id="splashBarFill"></div>
+            </div>
+            <div class="splash-status" id="splashStatus">در حال آماده‌سازی…</div>
+        </div>
+
+        <div class="splash-iris" id="splashIris"></div>
+    </div>
+
+    <script>
+        (function () {
+            var pctEl = document.getElementById('splashPct');
+            var barFillEl = document.getElementById('splashBarFill');
+            var statusEl = document.getElementById('splashStatus');
+            var rootEl = document.getElementById('splashRoot');
+            var irisEl = document.getElementById('splashIris');
+            var pct = 0;
+            var messages = ['در حال آماده‌سازی…', 'دریافت نرخ‌های لحظه‌ای…', 'تقریباً آماده‌ست…'];
+
+            // وضعیتِ «آیا این کاربر آنبوردینگ را قبلاً دیده» را از سرور می‌پرسیم
+            // (نه localStorage — چون با پاک‌شدنِ کش یا ورود از دستگاهی دیگر
+            // دوباره صفر می‌شود؛ این‌طوری برای هر حساب فقط یک‌بار نمایش داده می‌شود)
+            var onboardCheck = fetch('api/onboarding_api.php?action=check')
+                .then(function (r) { return r.json(); })
+                .catch(function () { return { success: false }; });
+
+            function setPct(v) {
+                pct = v;
+                if (barFillEl) barFillEl.style.width = v + '%';
+                if (pctEl) pctEl.innerHTML = v + '<span class="sign">%</span>';
+                if (statusEl) statusEl.textContent = messages[Math.min(messages.length - 1, Math.floor(v / 34))];
+            }
+
+            function goNext() {
+                onboardCheck.then(function (res) {
+                    var dest = (res && res.success && res.seen) ? 'dashboard.php' : 'onboarding.html';
+                    // انیمیشنِ خروج: عکس کمی بزرگ/روشن می‌شود، لودر محو می‌شود،
+                    // و دایره‌ی رنگِ داشبورد از همان نقطه‌ی لودر باز می‌شود
+                    rootEl.classList.add('leaving');
+                    requestAnimationFrame(function () {
+                        irisEl.classList.add('opening');
+                    });
+                    setTimeout(function () { window.location.href = dest; }, 680);
+                });
+            }
+
+            var timer = setInterval(function () {
+                setPct(Math.min(100, pct + Math.floor(Math.random() * 9) + 4));
+                if (pct >= 100) {
+                    clearInterval(timer);
+                    setTimeout(goNext, 450);
+                }
+            }, 110);
+
+            // اگر لود صفحه زودتر از انیمیشن تمام شد هم دیر نشود، ولی حداقل یک
+            // نمایشِ کوتاه و آرام تضمین می‌شود
+            window.addEventListener('load', function () {
+                setTimeout(function () {
+                    if (pct < 100) { clearInterval(timer); setPct(100); setTimeout(goNext, 350); }
+                }, 1800);
+            });
+        })();
+    </script>
+</body>
+</html>

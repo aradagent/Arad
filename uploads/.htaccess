@@ -1,0 +1,15 @@
+# جلوگیری از اجرای هر نوع اسکریپت داخل این پوشه (فقط فایل ثابت/عکس سرو شود)
+<FilesMatch "\.(php|phtml|php3|php4|php5|php7|pl|py|cgi|asp|aspx|sh|exe)$">
+    Require all denied
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # اگر فایل درخواستی همین‌جا (مسیر قدیمی) واقعاً وجود دارد، همین‌جا سرو شود
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^ - [L]
+    # در غیر این صورت (فایل‌های جدید که از این پس در ریشه‌ی public_html
+    # ذخیره می‌شوند) به‌صورت شفاف از پوشه‌ی avapay_uploads/ سرو شود —
+    # آدرس برای کاربر/مرورگر بدون تغییر می‌ماند
+    RewriteRule ^(.*)$ ../../avapay_uploads/$1 [L]
+</IfModule>
