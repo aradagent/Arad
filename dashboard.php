@@ -4724,6 +4724,115 @@ script{ display:none !important; }
     .ava-smart-gauge-wrap{ width:66px; height:66px; }
     .ava-smart-chart-wrap{ height:88px; }
 }
+
+/* ================================================================
+   AVA BENTO — بازطراحی موزائیکی داشبورد (کادرهای کوچک/بزرگ کنار هم)
+   فقط CSS، بدون تغییر منطق/آی‌دی‌های موجود؛ چیده‌شده روی همان کلاس‌ها
+   تا با سیستم JS/شخصی‌سازی فعلی کاملاً سازگار بماند.
+   ================================================================ */
+
+/* ---------- ۱) عمق پس‌زمینه: هاله‌های محیطی ثابت (فقط تم تیره) ---------- */
+html:not([data-theme="light"]) #mainDashboard.ava-dash{ position:relative; isolation:isolate; }
+html:not([data-theme="light"]) #mainDashboard.ava-dash::before{
+    content:"";
+    position:fixed; inset:0; z-index:-1; pointer-events:none;
+    background:
+        radial-gradient(38% 26% at 12% 8%,  rgba(168,85,247,.20), transparent 68%),
+        radial-gradient(34% 24% at 92% 14%, rgba(255,77,141,.14), transparent 68%),
+        radial-gradient(40% 30% at 50% 96%, rgba(34,211,160,.10), transparent 70%);
+}
+
+/* ---------- ۲) کارت‌ها: شیشه‌ای، عمق‌دار، با واکنش لمسی ---------- */
+.ava-dash .ava-card{
+    background:linear-gradient(165deg, var(--ava-card2) 0%, var(--ava-card) 62%);
+    border-color:var(--ava-line);
+    box-shadow:0 10px 26px -14px rgba(6,3,20,.65), inset 0 1px 0 rgba(255,255,255,.05);
+    transition:transform .18s ease, border-color .2s ease, box-shadow .2s ease;
+}
+[data-theme="light"] .ava-dash .ava-card{
+    box-shadow:0 10px 24px -16px rgba(76,29,149,.22), inset 0 1px 0 rgba(255,255,255,.6);
+}
+@media (hover:hover) and (pointer:fine){
+    .ava-dash .ava-card:hover{ border-color:rgba(168,85,247,.4); box-shadow:0 16px 34px -16px rgba(124,58,237,.35), inset 0 1px 0 rgba(255,255,255,.06); }
+}
+.ava-sec-title{ letter-spacing:.01em; }
+
+/* ---------- ۳) ردیف بالا: کیف پول (بزرگ) + صورت‌حساب‌ها (کوچک) ---------- */
+.ava-top-grid{ grid-template-columns:1.18fr .82fr; align-items:stretch; }
+.ava-wallet-card{ min-height:206px; }
+.ava-top-inv{ min-height:206px; }
+@media (max-width:380px){ .ava-top-grid{ grid-template-columns:1fr; } }
+
+/* ---------- ۴) نوار آماری کوچک: خلاصه‌ی وضعیت (سه کاشی موزائیکی) ---------- */
+.ava-stat-strip{
+    display:grid; grid-template-columns:1.2fr 1fr 1fr; gap:10px;
+    margin:0 0 14px;
+}
+.ava-stat-strip > *{ min-width:0; }
+.ava-stat-chip{
+    position:relative; overflow:hidden; min-width:0;
+    background:linear-gradient(160deg, rgba(124,58,237,.16), rgba(21,16,52,.92) 70%);
+    border:1px solid var(--ava-line);
+    border-radius:16px; padding:12px 12px 11px;
+    display:flex; flex-direction:column; gap:7px;
+    box-shadow:0 8px 20px -14px rgba(6,3,20,.6);
+}
+[data-theme="light"] .ava-stat-chip{ background:linear-gradient(160deg, rgba(124,58,237,.08), #FFFFFF 70%); }
+.ava-stat-chip--accent{
+    background:linear-gradient(155deg, rgba(255,77,141,.24), rgba(124,58,237,.26) 55%, rgba(21,16,52,.94));
+    border-color:rgba(168,85,247,.42);
+}
+[data-theme="light"] .ava-stat-chip--accent{ background:linear-gradient(155deg, rgba(255,77,141,.14), rgba(124,58,237,.10) 55%, #FFFFFF); }
+.ava-stat-ic{
+    width:28px; height:28px; border-radius:9px; flex:none;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(255,255,255,.10); color:#D8B4FE; font-size:.76rem;
+}
+.ava-stat-v{ font-size:.92rem; font-weight:900; color:var(--ava-txt); line-height:1.3; overflow-wrap:break-word; }
+.ava-stat-l{ font-size:.6rem; color:var(--ava-mut); font-weight:700; }
+
+/* ---------- ۵) عملیات سریع: از کروسل افقی به کاشی‌های موزائیکی ۳×۲ ---------- */
+.ava-qa{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:10px;
+    overflow:visible; scroll-snap-type:none;
+}
+.ava-qa-item{ width:auto; }
+@media (hover:hover) and (pointer:fine){
+    .ava-qa-item:hover{ border-color:rgba(124,58,237,.55); transform:translateY(-2px); }
+}
+
+/* ---------- ۶) بنر تبلیغاتی: باریک‌تر و شیک‌تر ---------- */
+.ava-promo{ box-shadow:0 12px 28px -16px rgba(6,3,20,.55); }
+
+/* ---------- ۷) سبد دارایی + نرخ‌های مورد علاقه: بدون کروسل، کاشی‌های بزرگ پشت‌هم ---------- */
+.ava-mid-grid{
+    display:flex; flex-direction:column; overflow:visible;
+    scroll-snap-type:none; padding-bottom:0;
+}
+.ava-mid-grid > *{ flex:1 1 auto; scroll-snap-align:none; }
+@media (min-width:760px){
+    .ava-mid-grid{ display:grid; grid-template-columns:1fr 1fr; align-items:stretch; }
+}
+
+/* ---------- ۸) فعالیت و دسترسی سریع: دو کاشی کوچک + یک کاشی بزرگ ----------
+   ترتیب DOM: ۱) تراکنش‌های اخیر  ۲) سفارشات/حواله‌ها  ۳) هشدارهای قیمت
+   کاشی سوم (هشدارها) تمام‌عرض می‌شود تا کنتراست کوچک/بزرگ موزائیکی شکل بگیرد. */
+.ava-quad-scroll{
+    display:grid; grid-template-columns:1fr 1fr; gap:12px;
+    overflow:visible; scroll-snap-type:none; padding-bottom:0;
+}
+.ava-quad-scroll > *{ flex:initial; min-width:0; }
+.ava-quad-scroll > *:nth-child(3){ grid-column:1 / -1; }
+@media (max-width:360px){
+    .ava-quad-scroll{ grid-template-columns:1fr; }
+    .ava-quad-scroll > *:nth-child(3){ grid-column:auto; }
+}
+
+/* ---------- ۹) کاهش حرکت برای کاربران حساس ---------- */
+@media (prefers-reduced-motion:reduce){
+    html:not([data-theme="light"]) #mainDashboard.ava-dash::before{ display:none; }
+    .ava-dash .ava-card{ transition:none; }
+}
 </style>
 
 </head>
@@ -4991,6 +5100,39 @@ script{ display:none !important; }
                 <?php endforeach; endif; ?>
             </div>
 
+        </div>
+    </div>
+
+    <?php
+        // ===== (جدید) نوار آماری کوچک: خلاصه‌ی وضعیت کاربر =====
+        // از داده‌های همین بالا (avaHeroData/avaWallets/avaActiveAds) دوباره
+        // استفاده می‌شود؛ هیچ کوئری جدیدی به دیتابیس زده نمی‌شود.
+        $__avaTotalTomanAll = 0.0;
+        foreach ($avaHeroData as $__hd) { $__avaTotalTomanAll += (float)($__hd['toman'] ?? 0); }
+        $__avaCompactToman = function($n) {
+            $n = (float)$n; $neg = $n < 0; $n = abs($n);
+            if ($n >= 1000000000)      $s = number_format($n / 1000000000, 1) . ' میلیارد';
+            elseif ($n >= 1000000)     $s = number_format($n / 1000000, 1) . ' میلیون';
+            elseif ($n >= 1000)        $s = number_format($n / 1000, 1) . ' هزار';
+            else                       $s = number_format($n);
+            return ($neg ? '−' : '') . ava_fa($s);
+        };
+    ?>
+    <div class="ava-stat-strip">
+        <div class="ava-stat-chip ava-stat-chip--accent">
+            <span class="ava-stat-ic"><i class="fas fa-sack-dollar"></i></span>
+            <span class="ava-stat-v"><?php echo $__avaCompactToman($__avaTotalTomanAll); ?> <small style="font-size:.56rem;font-weight:700;color:var(--ava-mut);">تومان</small></span>
+            <span class="ava-stat-l">ارزش کل دارایی</span>
+        </div>
+        <div class="ava-stat-chip">
+            <span class="ava-stat-ic"><i class="fas fa-coins"></i></span>
+            <span class="ava-stat-v"><?php echo ava_fa(count($avaWallets)); ?></span>
+            <span class="ava-stat-l">ارز فعال</span>
+        </div>
+        <div class="ava-stat-chip">
+            <span class="ava-stat-ic"><i class="fas fa-bullhorn"></i></span>
+            <span class="ava-stat-v"><?php echo ava_fa(count($avaActiveAds)); ?></span>
+            <span class="ava-stat-l">آگهی فعال بازار</span>
         </div>
     </div>
 
