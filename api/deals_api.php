@@ -115,7 +115,15 @@ if ($action === 'complete_deal' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmt->affected_rows < 1) { throw new Exception('وضعیت معامله تغییر نکرد'); }
         
         $conn->commit();
-        
+
+        // (جدید) معامله همین الان تکمیل شد — به شمارنده‌ی معاملات تکمیل‌شده
+        // (امتیاز/نشان اعتماد) هر دو طرف یک واحد اضافه شود. چون بالاتر
+        // (خط ۹۸) اگر معامله از قبل completed بوده زودتر خارج شده بودیم،
+        // اینجا همیشه یعنی این اولین‌بار است که معامله کامل می‌شود.
+        foreach (array_unique(array_filter([(int)$deal['buyer_id'], (int)$deal['seller_id']])) as $__uid) {
+            @$conn->query("UPDATE users SET completed_orders_count = completed_orders_count + 1 WHERE id = " . (int)$__uid);
+        }
+
         // ========== نوتیفیکیشن‌ها (خطای این بخش نباید تکمیل معامله را خراب کند) ==========
         try {
             $pushTitle = "🎉 معامله شما تکمیل شد!";

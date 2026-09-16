@@ -271,10 +271,16 @@ class NotificationManager {
         document.addEventListener('click', (e) => {
             const dropdown = document.getElementById('notificationDropdown');
             const bellElement = document.getElementById('notificationBell');
-            if (this.isDropdownOpen && dropdown && bellElement && 
-                !dropdown.contains(e.target) && !bellElement.contains(e.target)) {
-                this.closeDropdown();
-            }
+            if (!this.isDropdownOpen || !dropdown || !bellElement) return;
+            if (dropdown.contains(e.target) || bellElement.contains(e.target)) return;
+            // (رفع باگ) مودال‌هایی مثل «رد پیشنهاد» (و مودال‌های dashboard.php/
+            // arad.php/money_transfer.php) با insertAdjacentHTML مستقیم به body
+            // اضافه می‌شوند، یعنی از نظر DOM داخل دراپ‌داون نیستند. بدون این
+            // بررسی، کلیک روی هر نقطه‌ای از آن مودال‌ها (even دکمه‌های خودشان)
+            // به این شنونده می‌رسید و دراپ‌داون را که پشتشان باز مانده بود
+            // می‌بست — از دید کاربر انگار «پشت مودال یک پنجره می‌افتاد».
+            if (e.target.closest('.custom-modal-overlay, .ava-fs-modal, .ava-sheet, .modal-overlay, .arf-modal-overlay')) return;
+            this.closeDropdown();
         });
     }
     

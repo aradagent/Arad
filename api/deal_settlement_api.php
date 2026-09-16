@@ -315,6 +315,20 @@ function dsNotify($conn, $uid, $title, $body, $opts = []) {
     } catch (Throwable $e) { /* نادیده */ }
 }
 
+/**
+ * (جدید) وقتی یک معامله برای اولین‌بار کاملاً تسویه می‌شود، به شمارنده‌ی
+ * معاملات تکمیل‌شده‌ی هر دو طرف (خریدار و فروشنده) یک واحد اضافه می‌شود —
+ * همان مقداری که به‌عنوان «سطح کاربری»/نشان اعتماد در داشبورد و کنار
+ * آگهی‌ها نمایش داده می‌شود. باید فقط یک‌بار به ازای هر معامله صدا زده شود؛
+ * فراخوانی‌کننده مسئول است که این را فقط در لحظه‌ی گذار به completed انجام دهد.
+ */
+function dsAwardCompletionPoints($conn, $buyerId, $sellerId) {
+    $ids = array_unique(array_filter([(int)$buyerId, (int)$sellerId]));
+    foreach ($ids as $uid) {
+        @$conn->query("UPDATE users SET completed_orders_count = completed_orders_count + 1 WHERE id = " . (int)$uid);
+    }
+}
+
 /** به‌روزرسانی امن ad_deals */
 function dsUpdate($conn, $dealId, array $sets) {
     $parts = [];
@@ -669,6 +683,10 @@ if ($action === 'admin_complete_side' && $_SERVER['REQUEST_METHOD'] === 'POST') 
     $fresh = dsGetDeal($conn, $dealId);
     $bothDone = (($fresh['buyer_side_status'] ?? '') === 'completed')
              && (($fresh['seller_side_status'] ?? '') === 'completed');
+    // (جدید) این بلوک ممکن است برای یک طرف که قبلاً هم completed بوده دوباره
+    // صدا زده شود (مثلاً آپلود دوباره‌ی فیش)؛ برای جلوگیری از دوبار افزودن
+    // امتیاز باید فقط وقتی که معامله *تازه* completed می‌شود امتیاز بدهیم.
+    $wasAlreadyCompleted = (($fresh['status'] ?? '') === 'completed');
     if ($bothDone) {
         dsUpdate($conn, $dealId, [
             'status'          => 'completed',
@@ -676,6 +694,9 @@ if ($action === 'admin_complete_side' && $_SERVER['REQUEST_METHOD'] === 'POST') 
             'completed_by'    => (int)$userId,
             'completed_at'    => 'NOW()',
         ]);
+        if (!$wasAlreadyCompleted) {
+            dsAwardCompletionPoints($conn, $fresh['buyer_id'] ?? $deal['buyer_id'], $fresh['seller_id'] ?? $deal['seller_id']);
+        }
     }
 
     // اعلان به کاربرِ همان طرف
@@ -754,6 +775,11 @@ if ($action === 'admin_finalize_deal' && $_SERVER['REQUEST_METHOD'] === 'POST') 
     ])) {
         ds_fail('خطا در ثبت تسویه: ' . $conn->error, 'db');
     }
+
+    // (جدید) معامله همین الان برای اولین‌بار کامل شد (اگر قبلاً کامل بود،
+    // بالاتر در بلوک «already» زودتر خارج شده بودیم) — امتیاز/شمارنده‌ی
+    // معاملات تکمیل‌شده‌ی هر دو طرف را یک واحد افزایش بده.
+    dsAwardCompletionPoints($conn, $deal['buyer_id'], $deal['seller_id']);
 
     // پس از تسویه‌ی نهایی، آگهیِ مرتبط باید از لیست آگهی‌های فعالِ «تبادل ارزی» خارج شود.
     // (در مسیر عادیِ پذیرش پیشنهاد این کار انجام می‌شود، ولی اگر معامله از مسیر دیگری

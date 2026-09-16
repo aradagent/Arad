@@ -4833,6 +4833,23 @@ html:not([data-theme="light"]) #mainDashboard.ava-dash::before{
     html:not([data-theme="light"]) #mainDashboard.ava-dash::before{ display:none; }
     .ava-dash .ava-card{ transition:none; }
 }
+
+/* ---------- ۱۰) رفع مشکلات پوسته‌ی روشن ----------
+   .ava-fs-modal (همه‌ی مودال‌های تمام‌صفحه: اخبار، فیش‌ها، معرفی حساب،
+   آرشیوها و ...) همیشه یک پس‌زمینه‌ی تیرهٔ ثابت داشت، صرف‌نظر از تم — اما
+   متن/آیکون داخلش از var(--ava-txt) استفاده می‌کند که در تم روشن به رنگ
+   تیره تغییر می‌کند. نتیجه: متن تیره روی زمینه‌ی تقریباً مشکی، یعنی عملاً
+   ناخوانا. همچنین چند کادر/دکمه‌ی کوچکِ دیگر فقط با یک لایه‌ی سفیدِ
+   نیمه‌شفاف روی پس‌زمینه‌ی تیره طراحی شده بودند (مثل دکمه‌ی بستن شیت‌ها با
+   آیکون سفید روی دایره‌ی تقریباً سفید، یا دایره‌ی پرچم/آیکون ارزها) که در
+   تم روشن یا نامرئی می‌شدند یا با پس‌زمینه‌ی سفیدِ کارت یکی می‌شدند. */
+[data-theme="light"] .ava-fs-modal{ background:#FFFFFF; }
+[data-theme="light"] .ava-sheet-close{ background:rgba(0,0,0,.06); color:#1F1235; }
+[data-theme="light"] .ava-flag{ background:rgba(0,0,0,.05); }
+[data-theme="light"] .ava-order{ background:rgba(0,0,0,.025); }
+[data-theme="light"] .ava-port-tabs,
+[data-theme="light"] .ava-news-tabs{ background:rgba(0,0,0,.04); }
+[data-theme="light"] .ava-cn-img{ background:rgba(0,0,0,.05); }
 </style>
 
 </head>
@@ -4860,6 +4877,7 @@ html:not([data-theme="light"]) #mainDashboard.ava-dash::before{
             <?php if ($isUserAdmin): ?>
             <a href="admin_panel.php" class="ava-ico-btn" title="پنل مدیریت" style="color:gold;"><i class="fas fa-crown"></i></a>
             <?php endif; ?>
+            <button class="ava-ico-btn" onclick="avaToggleTheme()" title="تغییر پوسته‌ی روشن/تیره" id="avaThemeBtn"><i class="fas fa-sun" id="avaThemeIcon"></i></button>
             <button class="ava-ico-btn" onclick="avaToggleLayoutEdit()" title="نمایش/مخفی‌کردن بخش‌های داشبورد" id="avaLayoutEditBtn"><i class="fas fa-eye"></i></button>
             <!-- زنگوله نوتیفیکیشن (همان سیستم قبلی) -->
             <div class="ava-ico-btn notification-bell" id="notificationBell">
@@ -10335,6 +10353,40 @@ document.addEventListener('DOMContentLoaded', function(){
         avaGadgetTimer = setInterval(avaGadgetRotate, 4000);
     }
 });
+
+/* ====================================================================
+   تغییر پوسته‌ی روشن/تیره — دکمه‌ی خورشید/ماه در هدر. از توابع سراسری
+   avaSetTheme/avaGetTheme که در includes/footer_menu.php تعریف شده‌اند
+   استفاده می‌کند (همان‌ها که تم را در سرور/localStorage ذخیره می‌کنند).
+   ==================================================================== */
+(function(){
+    function syncThemeIcon(){
+        const icon = document.getElementById('avaThemeIcon');
+        if (!icon) return;
+        const cur = (typeof window.avaGetTheme === 'function')
+            ? window.avaGetTheme()
+            : (document.documentElement.getAttribute('data-theme') || 'dark');
+        icon.className = (cur === 'light') ? 'fas fa-moon' : 'fas fa-sun';
+    }
+    window.avaToggleTheme = function(){
+        const cur = (typeof window.avaGetTheme === 'function')
+            ? window.avaGetTheme()
+            : (document.documentElement.getAttribute('data-theme') || 'dark');
+        const next = (cur === 'light') ? 'dark' : 'light';
+        if (typeof window.avaSetTheme === 'function') {
+            window.avaSetTheme(next);
+        } else {
+            document.documentElement.setAttribute('data-theme', next);
+            try { localStorage.setItem('ava_theme', next); } catch(e){}
+        }
+        syncThemeIcon();
+    };
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', syncThemeIcon);
+    } else {
+        syncThemeIcon();
+    }
+})();
 
 /* ====================================================================
    نمایش/مخفی‌کردن بخش‌های داشبورد — یک مودال ساده با لیست همه‌ی بخش‌ها
