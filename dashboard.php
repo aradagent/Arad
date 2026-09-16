@@ -4284,11 +4284,47 @@ script{ display:none !important; }
 }
 .ava-conv-swap:active{ transform:scale(.9) rotate(180deg); }
 
+/* ===== «آگهی‌های فعال» + کادر کوچک «تخفیف اختصاصی» ===== */
+.ava-ads-grid{ display:flex; flex-direction:column; gap:14px; align-items:stretch; }
+@media (min-width:760px){
+    .ava-ads-grid{ display:grid; grid-template-columns:2fr 1fr; }
+}
+.ava-ads-grid > #avaActiveAdsCard,
+.ava-ads-grid > .ava-discount-card{ margin-bottom:0; height:100%; display:flex; flex-direction:column; }
+.ava-discount-card{
+    position:relative; overflow:hidden;
+    background:
+        radial-gradient(120% 100% at 100% 0%, rgba(251,191,36,.20), transparent 55%),
+        radial-gradient(120% 100% at 0% 100%, rgba(168,85,247,.16), transparent 55%),
+        linear-gradient(165deg,#2E1B0F 0%,#1B1034 55%,#120A28 100%);
+    border:1px solid rgba(251,191,36,.32); border-radius:24px;
+    box-shadow:0 16px 38px rgba(20,12,4,.35), inset 0 1px 0 rgba(255,255,255,.05);
+}
+.ava-discount-card .ava-sec-title i{ color:#FBBF24; }
+.ava-discount-badge{
+    display:inline-flex; align-items:center; gap:6px; align-self:flex-start;
+    color:#1A0F02; font-size:.68rem; font-weight:900; padding:6px 12px; border-radius:99px; margin-bottom:10px;
+}
+.ava-discount-pct{ font-size:1.5rem; font-weight:900; color:#fff; margin-bottom:10px; }
+.ava-discount-pct span{ font-size:.62rem; font-weight:700; color:rgba(255,255,255,.5); margin-right:4px; }
+.ava-discount-next{ font-size:.68rem; color:rgba(255,255,255,.65); line-height:1.9; margin-bottom:8px; }
+.ava-discount-next b{ color:#FBBF24; font-weight:800; }
+.ava-discount-bar{ height:7px; border-radius:99px; background:rgba(255,255,255,.08); overflow:hidden; margin-bottom:4px; }
+.ava-discount-bar-fill{ height:100%; border-radius:99px; background:linear-gradient(90deg,#F59E0B,#FBBF24); transition:width .5s ease; }
+
 /* ===== (آپدیت) گجت هوشمند بازار: پیش‌بینی قیمت + تمایل بازار ===== */
 
 /* گجت خلاصه‌ی داشبورد — بدون قاب/کادر جدا، یک پنل شیشه‌ای یکپارچه با نمودار
    زمینه، مچ اصلی طراحی داشبورد (بنفش تیره + گرد iOS‑مانند)؛ با زدنش کل
    ابزار در مدال تمام‌صفحه باز می‌شود */
+/* «پیش‌بینی هوشمند ارز» + «سود ۳۰ روز گذشته»: زیرِهم در موبایل، دو ستونی هم‌ارتفاع از ۷۶۰px */
+.ava-forecast-grid{ display:flex; flex-direction:column; gap:14px; align-items:stretch; }
+@media (min-width:760px){
+    .ava-forecast-grid{ display:grid; grid-template-columns:1fr 1fr; }
+}
+.ava-forecast-grid > .ava-smart-gadget,
+.ava-forecast-grid > .ava-profit30-card{ margin-bottom:0; height:100%; }
+
 .ava-smart-gadget{
     position:relative; display:flex; flex-direction:column; cursor:pointer; overflow:hidden; isolation:isolate;
     background:
@@ -4298,6 +4334,32 @@ script{ display:none !important; }
     border-radius:24px; padding:16px 18px 14px; margin-bottom:14px;
     box-shadow:0 16px 38px rgba(59,15,140,.32), inset 0 1px 0 rgba(255,255,255,.05);
 }
+
+.ava-profit30-card{
+    position:relative; overflow:hidden;
+    background:
+        radial-gradient(120% 100% at 100% 0%, rgba(34,197,94,.18), transparent 55%),
+        radial-gradient(120% 100% at 0% 100%, rgba(168,85,247,.14), transparent 55%),
+        linear-gradient(165deg,#12281E 0%,#161034 55%,#120A28 100%);
+    border:1px solid rgba(34,197,94,.3); border-radius:24px;
+    box-shadow:0 16px 38px rgba(6,20,15,.35), inset 0 1px 0 rgba(255,255,255,.05);
+}
+.ava-profit30-card .ava-sec-title i{ color:#22C55E; }
+.ava-profit30-sub{ font-size:.68rem; color:rgba(255,255,255,.5); line-height:1.8; margin:2px 0 12px; }
+.ava-profit30-list{ display:flex; flex-direction:column; gap:10px; flex:1; overflow-y:auto; max-height:260px; }
+.ava-profit30-row{
+    background:rgba(255,255,255,.045); border:1px solid rgba(255,255,255,.08); border-radius:14px;
+    padding:10px 12px;
+}
+.ava-profit30-row-head{ display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:5px; }
+.ava-profit30-name{ display:flex; align-items:center; gap:7px; font-size:.76rem; font-weight:800; color:#fff; }
+.ava-profit30-name i{ width:18px; text-align:center; color:#22C55E; }
+.ava-profit30-name img{ width:20px; height:20px; border-radius:50%; object-fit:cover; }
+.ava-profit30-chg{ font-size:.72rem; font-weight:900; display:inline-flex; align-items:center; gap:3px; }
+.ava-profit30-chg.up{ color:#22C55E; }
+.ava-profit30-chg.dn{ color:#FF5A6E; }
+.ava-profit30-txt{ font-size:.68rem; color:rgba(255,255,255,.65); line-height:1.9; }
+.ava-profit30-txt b{ color:#fff; font-weight:800; }
 .ava-smart-gadget::after{
     content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none; z-index:0;
     background:linear-gradient(180deg, rgba(255,255,255,.05), transparent 45%);
@@ -5349,7 +5411,8 @@ html:not([data-theme="light"]) #mainDashboard.ava-dash::before{
         <i class="fas fa-chevron-left ava-promo-arrow"></i>
     </div>
 
-    <!-- ===== آگهی‌های فعال بازار (تمام‌عرض) ===== -->
+    <!-- ===== آگهی‌های فعال بازار + تخفیف اختصاصی ===== -->
+    <div class="ava-ads-grid">
     <div class="ava-card ava-sec" id="avaActiveAdsCard" data-avasec="ads" data-avasec-title="آگهی‌های فعال" data-avasec-icon="fas fa-bullhorn">
         <div class="ava-sec-head">
             <div class="ava-sec-title"><i class="fas fa-bullhorn"></i> آگهی‌های فعال</div>
@@ -5383,6 +5446,43 @@ html:not([data-theme="light"]) #mainDashboard.ava-dash::before{
             <?php endforeach; ?>
         </div>
         <?php endif; ?>
+    </div>
+
+    <?php
+    // ===== (جدید) کادر کوچک «تخفیف اختصاصی» — از همان سیستم سطح‌بندی/تخفیف
+    // خودکار (includes/tier_system.php) که در profile.php هم استفاده می‌شود؛
+    // حجم معاملات لازم برای رسیدن به سطح/تخفیف بعدی را نشان می‌دهد.
+    require_once __DIR__ . '/includes/tier_system.php';
+    $__tierInfo = avapay_get_user_tier($conn, $userId);
+    $__tierCurLabels = ['IRR' => 'تومان', 'USD' => 'دلار', 'EUR' => 'یورو', 'USDT' => 'تتر'];
+    $__tierCurLabel = $__tierCurLabels[$__tierInfo['volume_currency'] ?? 'IRR'] ?? 'تومان';
+    ?>
+    <div class="ava-card ava-discount-card" data-avasec="discount" data-avasec-title="تخفیف اختصاصی" data-avasec-icon="fas fa-gem">
+        <div class="ava-sec-head">
+            <div class="ava-sec-title"><i class="fas fa-gem"></i> تخفیف اختصاصی</div>
+        </div>
+        <?php if ($__tierInfo['current']): $__tc = $__tierInfo['current']; ?>
+        <div class="ava-discount-badge" style="background:linear-gradient(135deg,<?php echo htmlspecialchars($__tc['badge_color']); ?>,#FF9F45);">
+            <i class="fas <?php echo htmlspecialchars($__tc['badge_icon']); ?>"></i> سطح <?php echo htmlspecialchars($__tc['name']); ?>
+        </div>
+        <div class="ava-discount-pct"><?php echo number_format((float)$__tc['discount_percent'], 0); ?>٪ <span>تخفیف فعال</span></div>
+        <?php else: ?>
+        <div class="ava-discount-badge" style="background:linear-gradient(135deg,#6C40C5,#A855F7);"><i class="fas fa-medal"></i> کاربر عادی</div>
+        <div class="ava-discount-pct">0٪ <span>تخفیف فعال</span></div>
+        <?php endif; ?>
+
+        <?php if ($__tierInfo['next']): $__tn = $__tierInfo['next']; ?>
+        <div class="ava-discount-next">
+            برای رسیدن به سطح <b><?php echo htmlspecialchars($__tn['name']); ?></b> (<?php echo number_format((float)$__tn['discount_percent'], 0); ?>٪ تخفیف)
+            <b><?php echo number_format($__tierInfo['remaining_toman']); ?> <?php echo $__tierCurLabel; ?></b> حجم معامله‌ی دیگر لازم است.
+        </div>
+        <div class="ava-discount-bar"><div class="ava-discount-bar-fill" style="width:<?php echo (float)$__tierInfo['progress_percent']; ?>%;"></div></div>
+        <?php else: ?>
+        <div class="ava-discount-next">شما به بالاترین سطح تخفیف رسیده‌اید 🎉</div>
+        <?php endif; ?>
+
+        <a href="profile.php#apTierSection" class="ava-more" style="margin-top:8px;">جزئیات سطح‌بندی <i class="fas fa-chevron-left"></i></a>
+    </div>
     </div>
     <div class="ava-slot" data-slot="ads"></div>
 
@@ -5917,9 +6017,10 @@ html:not([data-theme="light"]) #mainDashboard.ava-dash::before{
     } catch (\Throwable $e) { $__aiUserCoins = []; }
     ?>
 
-    <!-- ===== گجت خلاصه‌ی «پیش‌بینی هوشمند بازار» — با زدنش کل ابزار در مدال باز می‌شود ===== -->
+    <!-- ===== گجت خلاصه‌ی «پیش‌بینی هوشمند بازار» + کادر «سود ۳۰ روز گذشته» ===== -->
     <div class="ava-quad-label"><i class="fas fa-brain"></i> پیش‌بینی هوشمند ارز</div>
     <?php $__gChg = (float)($__aiData['USD']['change'] ?? 0); ?>
+    <div class="ava-forecast-grid">
     <div class="ava-smart-gadget" data-avasec="smartai" data-avasec-title="پیش‌بینی هوشمند ارز" data-avasec-icon="fas fa-brain" onclick="avaGadgetOpenFullscreen()">
         <div class="ava-smart-gadget-spark-bg" id="avaGadgetSparkBg"><?php echo ava_ai_sparkline_area_svg($__aiData['USD']['history'], $__gChg >= 0 ? '#22C55E' : '#FF5A6E', 340, 120); ?></div>
 
@@ -5945,6 +6046,18 @@ html:not([data-theme="light"]) #mainDashboard.ava-dash::before{
             </div>
             <span class="ava-smart-gadget-cta">تحلیل کامل <i class="fas fa-chevron-left"></i></span>
         </div>
+    </div>
+
+    <!-- ===== (جدید) کادر توضیحی «سود ۳۰ روز گذشته» — اگر سی روز پیش خریده بودید چقدر سود می‌کردید ===== -->
+    <div class="ava-card ava-profit30-card" id="avaProfit30Card" data-avasec="profit30" data-avasec-title="سود ۳۰ روز گذشته" data-avasec-icon="fas fa-sack-dollar">
+        <div class="ava-sec-head">
+            <div class="ava-sec-title"><i class="fas fa-sack-dollar"></i> سود ۳۰ روز گذشته</div>
+        </div>
+        <div class="ava-profit30-sub">اگر ۳۰ روز پیش این ارزها را خریده بودید، امروز چقدر سود کرده بودید؟</div>
+        <div class="ava-profit30-list" id="avaProfit30List">
+            <div class="ava-empty"><i class="fas fa-spinner fa-spin"></i> در حال محاسبه…</div>
+        </div>
+    </div>
     </div>
 
     <script>
@@ -9154,6 +9267,88 @@ function avaConvCalc(dir){
 }
 document.addEventListener('DOMContentLoaded', function(){
     if (typeof avaConvInit === 'function') avaConvInit();
+});
+
+/* ====================================================================
+   (جدید) کادر «سود ۳۰ روز گذشته» — به‌صورت کاملاً توضیحی/تایپی می‌گوید
+   اگر ۳۰ روز پیش این ارز را خریده بودید امروز چقدر سود/زیان کرده بودید،
+   برای دلار/یورو/تتر (بر حسب تومان) و بیت‌کوین/اتریوم/ارزهای دیجیتال
+   واچ‌لیست کاربر (بر حسب دلار) — به ازای هر ۱۰۰ و هر ۱۰۰۰ واحد.
+   ==================================================================== */
+const AVA_PROFIT30_FIAT = [
+    { code:'USD',  label:'دلار آمریکا', icon:'fas fa-dollar-sign', unit:'تومان' },
+    { code:'EUR',  label:'یورو',        icon:'fas fa-euro-sign',   unit:'تومان' },
+    { code:'USDT', label:'تتر',         icon:'fas fa-coins',       unit:'تومان' },
+];
+const AVA_PROFIT30_CRYPTO = [
+    { id:'bitcoin',  symbol:'BTC', label:'بیت‌کوین' },
+    { id:'ethereum', symbol:'ETH', label:'اتریوم' },
+];
+
+async function avaProfit30FetchFiat(code){
+    try {
+        const res = await fetch('dashboard.php?ava=ai_history&currency=' + encodeURIComponent(code) + '&range=1m');
+        const j = await res.json();
+        if (!j || !j.success) return null;
+        const hist = j.history || [];
+        if (hist.length < 2 || !hist[0]) return null;
+        return { change: (hist[hist.length-1] - hist[0]) / hist[0] * 100 };
+    } catch(e){ return null; }
+}
+async function avaProfit30FetchCrypto(id){
+    try {
+        const res = await fetch('api/crypto_market_api.php?action=history&id=' + encodeURIComponent(id) + '&days=30');
+        const j = await res.json();
+        const pts = (j && j.points) || [];
+        if (!j || !j.success || pts.length < 2) return null;
+        const first = Number(pts[0].p), last = Number(pts[pts.length-1].p);
+        if (!first) return null;
+        return { change: (last - first) / first * 100 };
+    } catch(e){ return null; }
+}
+function avaProfit30Row(name, iconHtml, change){
+    const up = change >= 0;
+    const p100  = (100  * change / 100);
+    const p1000 = (1000 * change / 100);
+    const fmt = (v) => (v >= 0 ? '+' : '') + Math.round(v).toLocaleString('en-US');
+    return '<div class="ava-profit30-row">'
+         + '<div class="ava-profit30-row-head">'
+         +   '<span class="ava-profit30-name">' + iconHtml + ' ' + name + '</span>'
+         +   '<span class="ava-profit30-chg ' + (up ? 'up' : 'dn') + '"><i class="fas fa-caret-' + (up?'up':'down') + '"></i> ' + (up?'+':'') + change.toFixed(2) + '٪</span>'
+         + '</div>'
+         + '<div class="ava-profit30-txt">اگر ۳۰ روز پیش خریده بودید، امروز به ازای هر <b>۱۰۰</b> واحد <b>' + fmt(p100) + '</b> و به ازای هر <b>۱۰۰۰</b> واحد <b>' + fmt(p1000) + '</b> ' + (up ? 'سود' : 'زیان') + ' کرده بودید.</div>'
+         + '</div>';
+}
+async function avaProfit30Load(){
+    const box = document.getElementById('avaProfit30List');
+    if (!box) return;
+
+    const jobs = [];
+    AVA_PROFIT30_FIAT.forEach(f => {
+        jobs.push(avaProfit30FetchFiat(f.code).then(r => r && {
+            html: avaProfit30Row(f.label + ' (' + f.unit + ')', '<i class="' + f.icon + '"></i>', r.change)
+        }));
+    });
+    const cryptoList = AVA_PROFIT30_CRYPTO.concat((window.AVA_SMART_COINS || []).map(c => ({ id:c.coin_id, symbol:c.coin_symbol, label:c.coin_name, image:c.coin_image })));
+    const seenIds = new Set();
+    cryptoList.forEach(c => {
+        if (!c.id || seenIds.has(c.id)) return;
+        seenIds.add(c.id);
+        const iconHtml = c.image ? '<img src="' + c.image + '" alt="">' : '<i class="fab fa-bitcoin"></i>';
+        jobs.push(avaProfit30FetchCrypto(c.id).then(r => r && {
+            html: avaProfit30Row((c.label || c.symbol || c.id) + ' ($)', iconHtml, r.change)
+        }));
+    });
+
+    const results = (await Promise.all(jobs)).filter(Boolean);
+    if (!results.length){
+        box.innerHTML = '<div class="ava-empty">داده‌ی کافی برای محاسبه موجود نیست</div>';
+        return;
+    }
+    box.innerHTML = results.map(r => r.html).join('');
+}
+document.addEventListener('DOMContentLoaded', function(){
+    avaProfit30Load();
 });
 
 /* ====================================================================
