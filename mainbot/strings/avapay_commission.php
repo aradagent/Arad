@@ -34,14 +34,11 @@ if (!function_exists('avapay_site_db')) {
         $pass = 'VIJVC9Gn5z9Y?D.$';
         $name = 'aradexch_app';
 
-        try {
-            $c = @new mysqli($host, $user, $pass, $name);
-            if ($c->connect_error) { $conn = null; return null; }
-            $c->set_charset('utf8mb4');
-            $conn = $c;
-        } catch (\Throwable $e) {
-            $conn = null;
-        }
+        // (اصلاح) قبلاً new mysqli(...) بدون مهلتِ اتصال بود؛ هر پیامِ ورودیِ
+        // تلگرام از همین‌جا رد می‌شد، پس یک دیتابیسِ کندِ سایت می‌توانست کلِ
+        // ربات را هنگ کند. حالا حداکثر ۳ ثانیه، مطابق includes/fast_mysqli.php.
+        require_once __DIR__ . '/../../includes/fast_mysqli.php';
+        $conn = avapay_fast_mysqli($host, $user, $pass, $name, 3);
         return $conn;
     }
 }

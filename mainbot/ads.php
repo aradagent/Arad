@@ -6,15 +6,15 @@ $password = "dA!G&&aSq7-1";
 $dbname = "aradexch_bot";
 
 // Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+// (اصلاح) قبلاً new mysqli(...) بدون مهلتِ اتصال بود که می‌توانست تا سقفِ
+// پیش‌فرضِ سیستم بلاک شود. حالا حداکثر ۳ ثانیه، مطابق includes/fast_mysqli.php.
+require_once __DIR__ . '/../includes/fast_mysqli.php';
+$conn = avapay_fast_mysqli($servername, $username, $password, $dbname, 3, 'utf8');
 
 // Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+if (!$conn) {
+    die("Connection failed or timed out");
 }
-
-// Set the character set to UTF-8
-$conn->set_charset("utf8");
 
 // Pagination settings
 $records_per_page = 15;

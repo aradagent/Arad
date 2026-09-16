@@ -243,6 +243,13 @@ class NotificationManager {
         this.totalCount = 0;
         this.soundManager = new NotificationSoundManager();
         this.pendingActions = new Set();
+        // (رفع باگ هنگ‌کردنِ اپ) این هندلر باید یک رفرنس ثابت باشد؛ اگر هر بار که
+        // دراپ‌داون باز می‌شود یک تابع arrow جدید به resize/scroll اضافه شود،
+        // removeEventListener در closeDropdown() (که خودش هم تابعِ جدیدی می‌سازد)
+        // هرگز واقعاً آن را حذف نمی‌کند — چون رفرنس‌ها یکی نیستند. نتیجه: با هر بار
+        // باز/بسته‌شدنِ زنگوله، دو شنونده‌ی دائمی روی scroll/resize اضافه می‌شود که
+        // هیچ‌وقت پاک نمی‌شوند و بعد از چند بار کلیک، کل اپ روی اسکرول هنگ می‌کند.
+        this.boundPositionDropdown = this.positionDropdown.bind(this);
         this.init();
     }
     
@@ -799,8 +806,8 @@ class NotificationManager {
             markAllBtn.onclick = (e) => { e.stopPropagation(); this.markAllAsRead(); };
         }
         
-        window.addEventListener('resize', () => this.positionDropdown());
-        window.addEventListener('scroll', () => this.positionDropdown());
+        window.addEventListener('resize', this.boundPositionDropdown);
+        window.addEventListener('scroll', this.boundPositionDropdown, { passive: true });
     }
     
     closeDropdown() {
@@ -811,8 +818,8 @@ class NotificationManager {
         if (overlay) { overlay.classList.remove('active'); overlay.classList.remove('show'); }
         this.isDropdownOpen = false;
         
-        window.removeEventListener('resize', () => this.positionDropdown());
-        window.removeEventListener('scroll', () => this.positionDropdown());
+        window.removeEventListener('resize', this.boundPositionDropdown);
+        window.removeEventListener('scroll', this.boundPositionDropdown);
     }
     
    // متد positionDropdown در کلاس NotificationManager
@@ -881,7 +888,7 @@ positionDropdown() {
                     transform: translateX(-50%) translateY(100px);
                     background: rgba(0,0,0,0.95);
                     padding: 12px 24px; border-radius: 50px; color: white;
-                    z-index: 11000; transition: all 0.3s ease; opacity: 0;
+                    z-index: 999999; transition: all 0.3s ease; opacity: 0;
                     font-size: 0.85rem; display: flex; align-items: center; gap: 10px;
                     border: 1px solid rgba(255,215,0,0.3); font-weight: 500;
                     white-space: nowrap;

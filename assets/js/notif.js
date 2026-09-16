@@ -469,7 +469,7 @@ function showNotifToast(message, type = 'info') {
                 padding: 12px 20px;
                 color: white;
                 font-weight: 500;
-                z-index: 9999;
+                z-index: 999999;
                 opacity: 0;
                 transition: transform 0.3s, opacity 0.3s;
                 max-width: 90%;

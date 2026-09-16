@@ -26,16 +26,21 @@ define('ADMIN_TELEGRAM_ID', '5330629504');
 define('BOT_TOKEN', '5937135973:AAEwK4lxar3xRM_mwvapLWNuw26VUv2c6e4');
 
 // Create connection
-$conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+// (اصلاح) قبلاً new mysqli(...) بدون مهلتِ اتصال بود — این خط توسط *هر* صفحه
+// و *هر* API در سایت اجرا می‌شود، پس اگر دیتابیس لحظه‌ای کند/شلوغ باشد (مثلاً
+// زیر بارِ چند کاربرِ هم‌زمان)، این اتصال می‌توانست تا سقفِ پیش‌فرضِ سیستم بلاک
+// شود؛ چون تعداد workerهای PHP-FPM محدود است، با چند درخواستِ هم‌زمانِ گیرکرده
+// کلِ استخر پر می‌شد و کل سایت (نه فقط یک کاربر) از کار می‌افتاد تا زمانی که
+// آن اتصال‌های معلق منقضی می‌شدند. حالا حداکثر ۳ ثانیه، مطابق همان الگویی که
+// در includes/fast_mysqli.php برای بقیه‌ی نقاطِ پروژه استفاده شده.
+require_once __DIR__ . '/../includes/fast_mysqli.php';
+$conn = avapay_fast_mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME, 3);
 
 // Check connection
-if ($conn->connect_error) {
-    error_log("Database connection failed: " . $conn->connect_error);
+if (!$conn) {
+    error_log("Database connection failed or timed out");
     die(json_encode(['success' => false, 'message' => 'Database connection error']));
 }
-
-// Set charset
-$conn->set_charset("utf8mb4");
 
 // مسیرهای ذخیره‌سازیِ آپلود کاربران (KYC/فیش/چت/آواتار) — جدا از کدِ برنامه
 require_once __DIR__ . '/../includes/upload_paths.php';
