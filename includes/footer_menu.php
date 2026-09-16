@@ -2804,6 +2804,97 @@ function renderFooterMenu($activePage = 'dashboard') {
       }, { passive: true });
     })();
 
+    /* ===================================================================
+       (آپدیت جدید) پشته‌ی z-index برای مدال‌های تودرتو
+       -------------------------------------------------------------------
+       قبلاً هر نوع مدال یک z-index ثابت در CSS داشت (مثلاً همه‌ی
+       .modal-overlayها 99999). وقتی مدالی از *داخل* مدال دیگری باز
+       می‌شد، چون z-index هر دو یکسان بود، ترتیب نمایش فقط به جایگاه آن‌ها
+       در DOM بستگی داشت — نتیجه این می‌شد که گاهی مدال دوم پشت مدال اول
+       پنهان می‌ماند و کاربر فکر می‌کرد چیزی باز نشده.
+       این بلوک با MutationObserver هر مدال/شیت/دراور شناخته‌شده را زیر
+       نظر می‌گیرد و همین که «باز» شد (کلاس open/active/show گرفت یا
+       display غیر none شد)، آن را بالای پشته می‌برد و z-index بالاتری
+       از همه‌ی لایه‌های باز فعلی می‌دهد؛ وقتی بسته شد از پشته حذف و
+       z-index اینلاینش پاک می‌شود تا استایل پیش‌فرض CSS برگردد.
+       =================================================================== */
+    (function(){
+      if (window.__avaLayerStackReady) return;
+      window.__avaLayerStackReady = true;
+
+      var BASE_Z = 100000;
+      var STEP = 10;
+      var stack = []; // لایه‌های باز، از پایین به بالا
+
+      var LAYER_SELECTOR = [
+        '.ava-fs-modal', '.ava-sheet', '.news-modal-overlay', '.tp-modal-overlay',
+        '.ava-sec-modal-overlay', '.avag-modal', '.ava-story-viewer', '.arf-modal-overlay',
+        '.ax-quick-modal-overlay', '.modal-overlay', '.axdeal-overlay', '.ax-img-lightbox',
+        '#slideEditorModal', '#qaEditorModal', '.notification-overlay', '.notification-dropdown',
+        '.ava-prof-drawer', '#friendDetailsModal', '[id^="rejectModal_"]'
+      ].join(',');
+
+      function isOpenState(el){
+        if (el.classList.contains('open') || el.classList.contains('active') || el.classList.contains('show')) return true;
+        var cs = window.getComputedStyle(el);
+        return cs.display !== 'none';
+      }
+
+      function restack(){
+        stack.forEach(function(layer, i){ layer.style.zIndex = BASE_Z + (i * STEP); });
+      }
+
+      function bringToFront(el){
+        var idx = stack.indexOf(el);
+        if (idx !== -1) stack.splice(idx, 1);
+        stack.push(el);
+        restack();
+      }
+
+      function drop(el){
+        var idx = stack.indexOf(el);
+        if (idx === -1) return;
+        stack.splice(idx, 1);
+        el.style.zIndex = '';
+        restack();
+      }
+
+      function sync(el){
+        if (!el || el.nodeType !== 1 || !el.matches || !el.matches(LAYER_SELECTOR)) return;
+        if (isOpenState(el)) {
+          if (stack[stack.length - 1] !== el) bringToFront(el);
+        } else if (stack.indexOf(el) !== -1) {
+          drop(el);
+        }
+      }
+
+      var observer = new MutationObserver(function(mutations){
+        mutations.forEach(function(m){
+          if (m.type === 'attributes') {
+            sync(m.target);
+          } else if (m.type === 'childList') {
+            m.addedNodes.forEach(function(n){
+              if (n.nodeType !== 1) return;
+              sync(n);
+              if (n.querySelectorAll) n.querySelectorAll(LAYER_SELECTOR).forEach(sync);
+            });
+            m.removedNodes.forEach(function(n){
+              if (n.nodeType !== 1) return;
+              if (stack.indexOf(n) !== -1) drop(n);
+            });
+          }
+        });
+      });
+
+      observer.observe(document.documentElement, {
+        attributes: true, attributeFilter: ['class', 'style'],
+        childList: true, subtree: true
+      });
+
+      // در دسترس گذاشتن برای فراخوانی دستی از سایر بخش‌های صفحه در صورت نیاز
+      window.avaBringLayerToFront = bringToFront;
+    })();
+
     (function(){
       if (window.__avaSwipeBackReady) return;
       window.__avaSwipeBackReady = true;

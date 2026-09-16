@@ -686,7 +686,8 @@ font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
     padding: 15px 20px;
     color: #ffffff;
     font-weight: 500;
-    z-index: 100000;
+    /* همیشه بالاتر از هر مدال/شیت بازی بماند، حتی وقتی چند مدال تودرتو باز است */
+    z-index: 999999;
     opacity: 0;
     transition: transform 0.3s, opacity 0.3s;
     max-width: 90%;

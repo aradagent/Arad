@@ -881,7 +881,7 @@ positionDropdown() {
                     transform: translateX(-50%) translateY(100px);
                     background: rgba(0,0,0,0.95);
                     padding: 12px 24px; border-radius: 50px; color: white;
-                    z-index: 11000; transition: all 0.3s ease; opacity: 0;
+                    z-index: 999999; transition: all 0.3s ease; opacity: 0;
                     font-size: 0.85rem; display: flex; align-items: center; gap: 10px;
                     border: 1px solid rgba(255,215,0,0.3); font-weight: 500;
                     white-space: nowrap;

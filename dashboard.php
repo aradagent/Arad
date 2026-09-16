@@ -4116,11 +4116,14 @@ script{ display:none !important; }
     overflow:hidden; min-height:2.7em;
 }
 .ava-qa-badge{
-    width:52px; height:52px; border-radius:16px; flex:none;
+    width:52px; height:52px; border-radius:50%; flex:none;
     background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1);
     display:flex; align-items:center; justify-content:center; overflow:hidden;
-    margin:0 !important;
+    margin:0 !important; box-shadow:0 6px 16px -6px var(--ava-qa-glow, rgba(108,64,197,.55));
+    transition:transform .2s;
 }
+.ava-qa-item:active .ava-qa-badge{ transform:scale(.92); }
+.ava-qa-badge i{ font-size:1.28rem; color:#fff; filter:drop-shadow(0 1px 2px rgba(0,0,0,.25)); }
 .ava-qa-img img{ width:26px; height:26px; object-fit:contain; }
 
 /* ===== (آپدیت جدید) نشان به‌روزرسانی روی آیکون «حساب‌ها و فیش‌ها» در عملیات سریع ===== */
@@ -4155,17 +4158,13 @@ script{ display:none !important; }
     .ava-ordtr-mini .ava-inv-tab{ font-size:.58rem; padding:6px 2px; }
 }
 
-/* ===== (آپدیت جدید) کادر بزرگ اخبار بازار + اخبار اقتصادی ایران ===== */
+/* ===== کادر بزرگ اخبار بازار جهانی ===== */
 .ava-news-mega{ min-height:420px; }
 .ava-news-pane{ display:block; }
 .ava-news-mega-list .ava-news-item{ padding:13px 0; gap:13px; }
 .ava-news-mega-list .ava-news-thumb{ width:58px; height:58px; border-radius:14px; font-size:1.05rem; }
 .ava-news-mega-list .ava-news-title{ font-size:.8rem; line-height:1.85; }
 .ava-news-mega-list .ava-news-date{ font-size:.64rem; margin-top:4px; }
-.ava-news-mega .ava-irn-pager-head{ display:flex; justify-content:flex-end; margin-bottom:10px; }
-.ava-news-mega .ava-irn-thumb{ width:86px; height:70px; }
-.ava-news-mega .ava-irn-title{ font-size:.82rem; }
-.ava-news-mega .ava-irn-row{ padding:12px 14px; }
 @media (max-width:480px){
     .ava-news-mega{ min-height:360px; }
     .ava-news-mega-list .ava-news-thumb{ width:48px; height:48px; }
@@ -5174,28 +5173,28 @@ html:not([data-theme="light"]) #mainDashboard.ava-dash::before{
         </div>
         <div class="ava-qa">
             <div class="ava-qa-item<?php echo $avaAcctHasUpdate ? ' ava-qa-pulse' : ''; ?>" style="order:<?php echo $avaAcctHasUpdate ? '-1' : '5'; ?>;" onclick="avaOpenFsModal('avaRecAccModal')">
-                <span class="ava-qa-badge ava-qa-img"><img src="assets/images/qa/accounts.png" alt="" loading="lazy"></span>
+                <span class="ava-qa-badge" style="background:linear-gradient(135deg,#FF9A3D,#FF4D8D);--ava-qa-glow:rgba(255,77,141,.5);"><i class="fas fa-file-invoice-dollar"></i></span>
                 <?php if ($avaAcctHasUpdate): ?><span class="ava-qa-count"><?php echo ava_fa($avaAcctUpdateCount); ?></span><?php endif; ?>
                 <span>حساب‌ها و فیش‌ها</span>
             </div>
             <div class="ava-qa-item" onclick="avaOpenServiceModal('transfer')">
-                <span class="ava-qa-badge ava-qa-img"><img src="assets/images/qa/transfer.png" alt="" loading="lazy"></span>
+                <span class="ava-qa-badge" style="background:linear-gradient(135deg,#38BDF8,#6C40C5);--ava-qa-glow:rgba(56,189,248,.5);"><i class="fas fa-paper-plane"></i></span>
                 <span>حواله ارزی</span>
             </div>
             <div class="ava-qa-item" onclick="avaOpenServiceModal('settlement')">
-                <span class="ava-qa-badge ava-qa-img"><img src="assets/images/qa/settlement.png" alt="" loading="lazy"></span>
+                <span class="ava-qa-badge" style="background:linear-gradient(135deg,#22C55E,#06B6D4);--ava-qa-glow:rgba(34,197,94,.5);"><i class="fas fa-handshake"></i></span>
                 <span>تسویه حساب</span>
             </div>
             <div class="ava-qa-item" onclick="avaOpenTopup()">
-                <span class="ava-qa-badge ava-qa-img"><img src="assets/images/qa/topup.png" alt="" loading="lazy"></span>
+                <span class="ava-qa-badge" style="background:linear-gradient(135deg,#A855F7,#EC4899);--ava-qa-glow:rgba(168,85,247,.5);"><i class="fas fa-wallet"></i></span>
                 <span>شارژ کیف پول</span>
             </div>
             <div class="ava-qa-item" onclick="avaOpenFsModal('avaBeneMainModal'); avaBenMainTab('add', document.querySelector('#avaBeneMainModal [data-bmtab=add]'));">
-                <span class="ava-qa-badge ava-qa-img"><img src="assets/images/qa/bene.png" alt="" loading="lazy"></span>
+                <span class="ava-qa-badge" style="background:linear-gradient(135deg,#FBBF24,#F97316);--ava-qa-glow:rgba(251,191,36,.5);"><i class="fas fa-user-plus"></i></span>
                 <span>معرفی حساب</span>
             </div>
             <div class="ava-qa-item" onclick="avaOpenFsModal('avaNewsMegaModal'); if(typeof avaNewsLoad==='function'){avaNewsLoad('fa');}">
-                <span class="ava-qa-badge ava-qa-img"><img src="assets/images/qa/news.png" alt="" loading="lazy"></span>
+                <span class="ava-qa-badge" style="background:linear-gradient(135deg,#F43F5E,#FB923C);--ava-qa-glow:rgba(244,63,94,.5);"><i class="fas fa-newspaper"></i></span>
                 <span>اخبار</span>
             </div>
         </div>
@@ -6186,25 +6185,16 @@ html:not([data-theme="light"]) #mainDashboard.ava-dash::before{
 
     <div class="ava-slot" data-slot="grid"></div>
 
-    <!-- ===== (آپدیت جدید) کادر بزرگ یکپارچه: اخبار بازار جهانی + اخبار اقتصادی ایران ===== -->
+    <!-- ===== کادر بزرگ اخبار بازار جهانی ===== -->
     <div class="ava-fs-modal" id="avaNewsMegaModal">
         <div class="ava-fs-top">
-            <span><i class="fas fa-newspaper"></i> اخبار بازار و اقتصاد ایران</span>
+            <span><i class="fas fa-newspaper"></i> اخبار بازار جهانی</span>
             <button type="button" class="ava-fs-close" onclick="avaCloseFsModal('avaNewsMegaModal')"><i class="fas fa-times"></i> خروج</button>
         </div>
         <div class="ava-fs-body" style="align-items:stretch;justify-content:flex-start;flex-direction:column;overflow-y:auto;padding:14px;">
         <div class="ava-news-mega" id="avaNewsMegaCard" style="width:100%;">
             <div class="ava-recacc-actions" style="justify-content:flex-end;display:flex;margin-bottom:10px;">
                 <button type="button" class="ava-more" id="avaNewsAllBtn" style="display:none;" onclick="avaMarketNewsOpenAll()">مشاهده همه <i class="fas fa-chevron-left"></i></button>
-            </div>
-
-            <div class="ava-inv-switch">
-                <button type="button" class="ava-inv-tab active" data-newstab="market" onclick="avaNewsMegaTab('market', this)">
-                    <i class="fas fa-globe"></i> اخبار بازار جهانی
-                </button>
-                <button type="button" class="ava-inv-tab" data-newstab="iran" onclick="avaNewsMegaTab('iran', this)">
-                    <i class="fas fa-landmark"></i> اخبار اقتصادی ایران
-                </button>
             </div>
 
             <!-- پنل: اخبار بازار جهانی -->
@@ -6217,22 +6207,9 @@ html:not([data-theme="light"]) #mainDashboard.ava-dash::before{
                     <div class="ava-empty"><i class="fas fa-spinner fa-spin"></i></div>
                 </div>
             </div>
-
-            <!-- پنل: اخبار اقتصادی ایران -->
-            <div class="ava-news-pane" id="avaNewsPaneIran" style="display:none;">
-                <div class="ava-irn-pager-head">
-                    <button type="button" class="ava-more" onclick="avaIrnLoad(true)"><i class="fas fa-rotate"></i> به‌روزرسانی</button>
-                </div>
-                <div class="ava-irn-pager" id="avaIrnStrip">
-                    <div class="ava-empty" style="width:100%;"><i class="fas fa-circle-notch fa-spin"></i> در حال دریافت اخبار…</div>
-                </div>
-                <div class="ava-irn-dots" id="avaIrnDots"></div>
-            </div>
         </div>
         </div><!-- /ava-fs-body -->
     </div><!-- /avaNewsMegaModal -->
-
-    <div class="ava-slot" data-slot="irannews"></div>
 
     <div class="ava-slot" data-slot="bottom"></div>
 
@@ -6265,15 +6242,6 @@ html:not([data-theme="light"]) #mainDashboard.ava-dash::before{
             <span>روی <i class="fas fa-eye-slash" style="color:#FF7A8A"></i> هر بخش بزنید تا مخفی شود</span>
             <button onclick="avaToggleEdit()">پایان</button>
         </div>
-    </div>
-
-    <!-- ===== مدال جزئیات خبر اقتصادی ایران ===== -->
-    <div class="ava-fs-modal" id="avaIrnModal">
-        <div class="ava-fs-top">
-            <span><i class="fas fa-landmark" style="color:#22C55E;"></i> خبر اقتصادی</span>
-            <button type="button" class="ava-fs-close" onclick="avaCloseFsModal('avaIrnModal')"><i class="fas fa-times"></i> خروج</button>
-        </div>
-        <div style="flex:1;overflow-y:auto;padding:16px;" id="avaIrnDetail"></div>
     </div>
 
     <!-- ===== (آپدیت ۲) مدال نمودار ارز دیجیتال ===== -->
@@ -8617,7 +8585,7 @@ function avaNewsOpen(id){
     const modal = document.getElementById('news-modal');
     if (modal){ modal.classList.add('open'); document.body.style.overflow='hidden'; }
 }
-document.addEventListener('DOMContentLoaded', function(){ avaNewsLoad('fa'); avaIrnLoad(); });
+document.addEventListener('DOMContentLoaded', function(){ avaNewsLoad('fa'); });
 
 /* --- کارت «نرخ‌های مورد علاقه» باید همیشه کارت فعال/اول در اسلایدر سبد دارایی/نرخ‌ها باشد ---
    توجه: عمداً از scrollIntoView استفاده نمی‌شود چون می‌تواند باعث اسکرول عمودیِ کل صفحه هم بشود
@@ -8684,146 +8652,6 @@ let avaCoinCur   = null;    // ارز فعال در مدال
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', startCrypto);
     else startCrypto();
 })();
-
-/* ==================== اخبار اقتصادی ایران ==================== */
-let avaIrnItems = [];
-let avaIrnLoaded = false;
-
-async function avaIrnLoad(force){
-    if (avaIrnLoaded && !force) return;
-    const strip = document.getElementById('avaIrnStrip');
-    if (force && strip) strip.innerHTML = '<div class="ava-empty" style="width:100%;"><i class="fas fa-circle-notch fa-spin"></i> در حال دریافت اخبار…</div>';
-    try {
-        const r = await fetch('api/iran_econ_news.php?action=list');
-        const d = await r.json();
-        avaIrnItems = (d && d.items) ? d.items : [];
-        avaIrnLoaded = true;
-        avaIrnRender();
-    } catch(e){
-        if (strip) strip.innerHTML = '<div class="ava-empty" style="width:100%;"><i class="fas fa-wifi"></i> خطا در دریافت اخبار</div>';
-    }
-}
-
-function avaIrnRow(n){
-    const thumb = n.image
-        ? '<div class="ava-irn-thumb"><img src="'+n.image+'" loading="lazy" onerror="this.parentNode.classList.add(\'ph\');this.remove()"></div>'
-        : '<div class="ava-irn-thumb ph"></div>';
-    return '<div class="ava-irn-row" onclick="avaIrnOpen(\''+n.id+'\')">'
-         + thumb
-         + '<div class="ava-irn-body">'
-         +   '<div class="ava-irn-title">'+avaEsc(n.title)+'</div>'
-         +   '<div class="ava-irn-meta"><span class="ava-irn-src">'+avaEsc(n.source)+'</span><span>'+avaEsc(n.date)+'</span></div>'
-         + '</div>'
-         + '<button type="button" class="ava-irn-like'+(n.liked?' on':'')+'" data-nid="'+n.id+'" onclick="event.stopPropagation();avaIrnLike(\''+n.id+'\', this)">'
-         + '<i class="'+(n.liked?'fas':'far')+' fa-heart"></i> <span>'+(n.likes||0)+'</span></button>'
-         + '</div>';
-}
-
-const AVA_IRN_PER_PAGE = 3;   // تعداد خبر در هر صفحه (با کشیدن انگشت صفحه بعد)
-
-function avaIrnRender(){
-    const pager = document.getElementById('avaIrnStrip');
-    const dots  = document.getElementById('avaIrnDots');
-    if (!pager) return;
-    if (!avaIrnItems.length){
-        pager.innerHTML = '<div class="ava-empty" style="width:100%;"><i class="fas fa-newspaper"></i> فعلاً خبری در دسترس نیست</div>';
-        if (dots) dots.innerHTML = '';
-        return;
-    }
-
-    // تقسیم اخبار به صفحه‌های ۳تایی
-    const pages = [];
-    for (let i = 0; i < avaIrnItems.length; i += AVA_IRN_PER_PAGE){
-        pages.push(avaIrnItems.slice(i, i + AVA_IRN_PER_PAGE));
-    }
-    pager.innerHTML = pages.map(p =>
-        '<div class="ava-irn-page">' + p.map(avaIrnRow).join('') + '</div>'
-    ).join('');
-
-    // نقطه‌های راهنمای صفحه
-    if (dots){
-        dots.innerHTML = pages.map((_, i) =>
-            '<span class="ava-irn-dot'+(i===0?' on':'')+'" data-pi="'+i+'"></span>'
-        ).join('');
-        if (!pager._dotsBound){
-            pager.addEventListener('scroll', () => {
-                const w  = pager.clientWidth || 1;
-                const at = Math.round(Math.abs(pager.scrollLeft) / w);
-                dots.querySelectorAll('.ava-irn-dot').forEach((d, i) => d.classList.toggle('on', i === at));
-            }, { passive:true });
-            pager._dotsBound = true;
-        }
-    }
-}
-
-async function avaIrnOpen(id){
-    const n = avaIrnItems.find(x => x.id === id);
-    if (!n) return;
-    const box = document.getElementById('avaIrnDetail');
-    if (box){
-        // نمایش فوری خلاصه + اسپینر ادامه‌ی خبر
-        box.innerHTML =
-            (n.image ? '<img src="'+n.image+'" style="width:100%;border-radius:16px;margin-bottom:14px;" onerror="this.style.display=\'none\'">' : '')
-          + '<div style="font-size:1rem;font-weight:900;color:#fff;line-height:1.9;margin-bottom:8px;">'+avaEsc(n.title)+'</div>'
-          + '<div style="font-size:.68rem;color:rgba(255,255,255,.5);margin-bottom:14px;"><span style="color:#22C55E;font-weight:800;">'+avaEsc(n.source)+'</span> · '+avaEsc(n.date)+'</div>'
-          + '<div id="avaIrnBody" style="font-size:.85rem;color:rgba(255,255,255,.88);line-height:2.1;margin-bottom:14px;white-space:pre-line;">'+avaEsc(n.summary || '')+'</div>'
-          + '<div id="avaIrnMoreSpin" class="ava-empty" style="padding:8px 0;"><i class="fas fa-circle-notch fa-spin"></i> در حال دریافت ادامه‌ی خبر…</div>'
-          + '<div style="display:flex;gap:10px;align-items:center;">'
-          + '<button type="button" class="ava-irn-like lg'+(n.liked?' on':'')+'" data-nid="'+n.id+'" onclick="avaIrnLike(\''+n.id+'\', this)">'
-          + '<i class="'+(n.liked?'fas':'far')+' fa-heart"></i> <span>'+(n.likes||0)+'</span></button>'
-          + '<a href="'+n.link+'" target="_blank" rel="noopener" style="flex:1;text-align:center;padding:12px;border-radius:14px;background:linear-gradient(135deg,#059669,#22C55E);color:#fff;font-weight:900;font-size:.8rem;text-decoration:none;"><i class="fas fa-arrow-up-right-from-square"></i> مطالعه در منبع</a>'
-          + '</div>';
-    }
-    avaOpenFsModal('avaIrnModal');
-
-    // واکشی ادامه‌ی خبر از سرور (متن کامل صفحه‌ی منبع)
-    try {
-        const r = await fetch('api/iran_econ_news.php?action=full&id=' + encodeURIComponent(id));
-        const d = await r.json();
-        const spin = document.getElementById('avaIrnMoreSpin');
-        if (spin) spin.remove();
-        if (d && d.success && d.body){
-            const bodyEl = document.getElementById('avaIrnBody');
-            if (bodyEl && d.body.length > (n.summary || '').length){
-                bodyEl.textContent = d.body;
-            }
-            // اگر فید تصویر نداشت ولی صفحه‌ی خبر داشت
-            if (d.image && !n.image){
-                n.image = d.image;
-                const boxEl = document.getElementById('avaIrnDetail');
-                if (boxEl && !boxEl.querySelector('img')){
-                    const im = document.createElement('img');
-                    im.src = d.image;
-                    im.style.cssText = 'width:100%;border-radius:16px;margin-bottom:14px;';
-                    boxEl.prepend(im);
-                }
-            }
-        }
-    } catch(e){
-        const spin = document.getElementById('avaIrnMoreSpin');
-        if (spin) spin.innerHTML = '<i class="fas fa-wifi"></i> ادامه‌ی خبر در دسترس نبود — از دکمه «مطالعه در منبع» استفاده کنید';
-    }
-}
-
-async function avaIrnLike(id, btn){
-    try {
-        const r = await fetch('api/iran_econ_news.php?action=like', {
-            method:'POST', headers:{'Content-Type':'application/json'},
-            body: JSON.stringify({ id: id })
-        });
-        const d = await r.json();
-        if (!d.success) return;
-        const n = avaIrnItems.find(x => x.id === id);
-        if (n){ n.liked = d.liked; n.likes = d.likes; }
-        // همگام‌سازی همه‌ی دکمه‌های همین خبر (کارت + مدال)
-        document.querySelectorAll('.ava-irn-like[data-nid="'+id+'"]').forEach(b=>{
-            b.classList.toggle('on', d.liked);
-            const ic = b.querySelector('i'); if (ic) ic.className = (d.liked?'fas':'far')+' fa-heart';
-            const sp = b.querySelector('span'); if (sp) sp.textContent = d.likes;
-        });
-    } catch(e){}
-}
-
 
 /* --- مدال نمودار ارز دیجیتال (استایل نمودار سبد دارایی) --- */
 function avaOpenCoin(id){
@@ -10578,19 +10406,6 @@ function avaOrdTrTab(which, el){
     // تعویض تب می‌تواند ارتفاع این کارت را عوض کند (سفارشات vs حواله‌ها تعداد
     // ردیف متفاوتی دارند) — نوار «فعالیت و دسترسی سریع» را دوباره هم‌ارتفاع کن
     if (typeof avaEqualizeQuadHeights === 'function') avaEqualizeQuadHeights();
-}
-
-/* --- (آپدیت جدید) سوییچ تب اخبار بازار جهانی / اخبار اقتصادی ایران --- */
-function avaNewsMegaTab(which, el){
-    const mk = document.getElementById('avaNewsPaneMarket');
-    const ir = document.getElementById('avaNewsPaneIran');
-    if (mk) mk.style.display = (which === 'market') ? 'block' : 'none';
-    if (ir) ir.style.display = (which === 'iran') ? 'block' : 'none';
-    document.querySelectorAll('#avaNewsMegaCard .ava-inv-tab[data-newstab]').forEach(t=>t.classList.remove('active'));
-    if (el) el.classList.add('active');
-    const allBtn = document.getElementById('avaNewsAllBtn');
-    if (allBtn) allBtn.style.display = (which === 'market' && window.__avaNewsAllItems && window.__avaNewsAllItems.length > 2) ? '' : 'none';
-    if (which === 'iran' && typeof avaIrnLoad === 'function') avaIrnLoad();
 }
 
 let __avaCoinListLoaded = false;

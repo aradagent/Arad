@@ -901,7 +901,7 @@
             padding: 8px 16px;
             border-radius: 30px;
             color: #ffffff;
-            z-index: 100000;
+            z-index: 999999;
             transition: transform 0.3s ease, opacity 0.3s ease;
             opacity: 0;
             font-size: 0.75rem;
