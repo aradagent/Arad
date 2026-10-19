@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<style>
+@font-face{font-family:V;src:url(v400.ttf);font-weight:400}
+@font-face{font-family:V;src:url(v700.ttf);font-weight:700}
+@font-face{font-family:V;src:url(v900.ttf);font-weight:900}
+html,body{margin:0;padding:0;width:1080px;height:1920px;overflow:hidden;background:#fff}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:V,sans-serif}
+#bg{position:absolute;inset:0}
+#art{position:absolute;inset:0}
+#card{position:absolute;top:270px;left:90px;right:90px;text-align:center;direction:rtl}
+#card span{display:inline-block;background:#fff;color:#1d1d2b;font-weight:900;font-size:62px;line-height:1.35;padding:22px 40px;border-radius:34px;box-shadow:0 10px 0 #c8102e;border:5px solid #1d1d2b}
+#sub{position:absolute;top:1290px;left:110px;right:110px;text-align:center;direction:rtl}
+#sub span{display:inline-block;background:rgba(20,20,35,.82);color:#fff;font-weight:700;font-size:44px;line-height:1.5;padding:14px 30px;border-radius:22px}
+#foot{position:absolute;top:1222px;left:0;right:0;text-align:center;direction:rtl;font-weight:700;font-size:34px;color:#1d1d2b}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="bg"></div>
+  <svg id="art" width="1080" height="1920" viewBox="0 0 1080 1920"></svg>
+  <div id="card"><span></span></div>
+  <div id="sub"><span></span></div>
+  <div id="foot"></div>
+</div>
+<script>
+const SUBS = new URLSearchParams(location.search).get('subs') === '1';
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const eo=t=>1-Math.pow(1-clamp(t),3);
+const eio=t=>{t=clamp(t);return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2};
+const back=t=>{t=clamp(t);const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2)};
+const pop=(lt,at,dur=.45)=>back((lt-at)/dur);
+const fa=n=>String(n).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d]);
+const money=n=>fa(Math.round(n).toLocaleString('en-US')).replace(/,/g,'٬');
+
+/* ---------- characters & props ---------- */
+const SKIN='#f4c9a4', SCARF='#e9d8bf', SCARF2='#d9c3a3', CARD='#e2a52c', INK='#2b2233', RED='#d0102f';
+
+function mina({x=540,y=1000,s=1,mood='smile',blink=false,wink=false,lookX=0,armUp=false,hold=''}={}){
+  const eyeY=-5;
+  const eye=(ex,closed)=>closed
+    ? `<path d="M${ex-11},${eyeY} Q${ex},${eyeY+7} ${ex+11},${eyeY}" stroke="${INK}" stroke-width="5" fill="none" stroke-linecap="round"/>`
+    : `<ellipse cx="${ex+lookX}" cy="${eyeY}" rx="9" ry="12" fill="${INK}"/><circle cx="${ex+lookX+3}" cy="${eyeY-4}" r="3" fill="#fff"/>`;
+  const mouths={
+    smile:`<path d="M-26,42 Q0,66 26,42" stroke="${RED}" stroke-width="7" fill="#fff" stroke-linecap="round"/>`,
+    content:`<path d="M-18,46 Q0,58 18,46" stroke="${RED}" stroke-width="7" fill="none" stroke-linecap="round"/>`,
+    sad:`<path d="M-20,56 Q0,40 20,56" stroke="${RED}" stroke-width="7" fill="none" stroke-linecap="round"/>`,
+    wow:`<ellipse cx="0" cy="50" rx="15" ry="19" fill="${RED}"/><ellipse cx="0" cy="55" rx="8" ry="8" fill="#7a0a1c"/>`,
+  };
+  const brows = mood==='sad'
+    ? `<path d="M-44,-34 L-18,-28" stroke="${INK}" stroke-width="6" stroke-linecap="round"/><path d="M44,-34 L18,-28" stroke="${INK}" stroke-width="6" stroke-linecap="round"/>`
+    : mood==='wow'
+    ? `<path d="M-44,-38 Q-30,-50 -16,-40" stroke="${INK}" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M44,-38 Q30,-50 16,-40" stroke="${INK}" stroke-width="6" fill="none" stroke-linecap="round"/>`
+    : `<path d="M-44,-32 Q-30,-40 -16,-32" stroke="${INK}" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M44,-32 Q30,-40 16,-32" stroke="${INK}" stroke-width="6" fill="none" stroke-linecap="round"/>`;
+  const armL = `<rect x="-150" y="150" width="56" height="200" rx="28" fill="${CARD}" transform="rotate(10 -122 160)"/><circle cx="-108" cy="352" r="26" fill="${SKIN}"/>`;
+  const armR = armUp
+    ? `<rect x="96" y="40" width="56" height="190" rx="28" fill="${CARD}" transform="rotate(-25 124 220)"/><circle cx="178" cy="40" r="28" fill="${SKIN}"/>`
+    : `<rect x="94" y="150" width="56" height="200" rx="28" fill="${CARD}" transform="rotate(-10 122 160)"/><circle cx="108" cy="352" r="26" fill="${SKIN}"/>`;
+  return `<g transform="translate(${x},${y}) scale(${s})">
+    <ellipse cx="0" cy="470" rx="170" ry="26" fill="rgba(0,0,0,.10)"/>
+    <path d="M-130,140 Q-140,110 -100,105 L100,105 Q140,110 130,140 L150,460 L-150,460 Z" fill="${CARD}"/>
+    <path d="M-40,105 L0,190 L40,105 Z" fill="#fff"/>
+    <path d="M0,190 L0,440" stroke="#b9831c" stroke-width="5"/>
+    <circle cx="0" cy="250" r="7" fill="#b9831c"/><circle cx="0" cy="320" r="7" fill="#b9831c"/><circle cx="0" cy="390" r="7" fill="#b9831c"/>
+    ${armL}${armR}
+    <path d="M-120,10 Q-130,-130 0,-140 Q130,-130 120,10 Q125,90 70,120 L-70,120 Q-125,90 -120,10 Z" fill="${SCARF}"/>
+    <circle cx="0" cy="5" r="88" fill="${SKIN}"/>
+    <path d="M-80,-30 Q-60,-88 0,-92 Q60,-88 80,-30 Q40,-62 0,-58 Q-40,-62 -80,-30 Z" fill="#4a2c1d"/>
+    <path d="M-96,-20 Q-100,-118 0,-122 Q100,-118 96,-20 Q92,-96 0,-100 Q-92,-96 -96,-20 Z" fill="${SCARF2}"/>
+    <path d="M-88,40 Q-95,110 -40,118 L-70,120 Q-125,90 -120,10 Z" fill="${SCARF2}"/>
+    ${brows}
+    ${eye(-30, blink)}${eye(30, blink||wink)}
+    <ellipse cx="-52" cy="28" rx="15" ry="9" fill="#f29a9a" opacity=".6"/><ellipse cx="52" cy="28" rx="15" ry="9" fill="#f29a9a" opacity=".6"/>
+    ${mouths[mood]||mouths.smile}
+    ${hold}
+  </g>`;
+}
+function lipstick(x,y,s=1,rot=0,open=1){
+  return `<g transform="translate(${x},${y}) rotate(${rot}) scale(${s})">
+    <rect x="-46" y="20" width="92" height="150" rx="10" fill="#1d1d2b"/>
+    <rect x="-46" y="20" width="92" height="22" fill="#c9a24a"/>
+    <rect x="-38" y="${-40*open}" width="76" height="80" fill="#c9a24a"/>
+    <path d="M-30,${-40*open} L-30,${-110*open} L30,${-140*open} L30,${-40*open} Z" fill="${RED}"/>
+    <path d="M-30,${-110*open} L30,${-140*open} L30,${-125*open} L-30,${-98*open} Z" fill="#ff5a75" opacity=".55"/>
+    <rect x="-34" y="60" width="10" height="90" rx="5" fill="#fff" opacity=".18"/>
+  </g>`;
+}
+const sparkle=(x,y,s,o)=>`<g transform="translate(${x},${y}) scale(${s})" opacity="${o}"><path d="M0,-30 L7,-7 L30,0 L7,7 L0,30 L-7,7 L-30,0 L-7,-7Z" fill="#ffd34d"/></g>`;
+function coffee(x,y,s=1){return `<g transform="translate(${x},${y}) scale(${s})"><path d="M-45,-60 L45,-60 L35,70 L-35,70Z" fill="#fff" stroke="${INK}" stroke-width="6"/><rect x="-50" y="-80" width="100" height="24" rx="8" fill="#8a5a3b"/><rect x="-42" y="-10" width="84" height="38" fill="#c98b5f"/></g>`}
+function burger(x,y,s=1){return `<g transform="translate(${x},${y}) scale(${s})"><path d="M-70,-10 Q-70,-75 0,-75 Q70,-75 70,-10Z" fill="#e5a548"/><rect x="-74" y="-12" width="148" height="20" rx="10" fill="#6db84a"/><rect x="-72" y="8" width="144" height="24" rx="10" fill="#7a3e22"/><path d="M-70,32 L70,32 Q70,62 0,62 Q-70,62 -70,32Z" fill="#e5a548"/><circle cx="-25" cy="-50" r="4" fill="#fff8"/><circle cx="15" cy="-58" r="4" fill="#fff8"/></g>`}
+function dress(x,y,s=1){return `<g transform="translate(${x},${y}) scale(${s})"><path d="M-30,-80 L30,-80 L40,-30 L80,80 L-80,80 L-40,-30Z" fill="#9b6bd6"/><path d="M-30,-80 L-45,-100 M30,-80 L45,-100" stroke="#9b6bd6" stroke-width="10" stroke-linecap="round"/><path d="M-40,-30 L40,-30" stroke="#fff" stroke-width="6"/></g>`}
+function phones(x,y,s=1){return `<g transform="translate(${x},${y}) scale(${s})"><path d="M-60,20 Q-60,-70 0,-70 Q60,-70 60,20" stroke="${INK}" stroke-width="14" fill="none"/><rect x="-82" y="0" width="40" height="70" rx="16" fill="#3fb7c7"/><rect x="42" y="0" width="40" height="70" rx="16" fill="#3fb7c7"/></g>`}
+function bag(x,y,s=1,c='#ff7aa2'){return `<g transform="translate(${x},${y}) scale(${s})"><path d="M-30,-40 Q-30,-80 0,-80 Q30,-80 30,-40" stroke="${INK}" stroke-width="7" fill="none"/><rect x="-60" y="-45" width="120" height="120" rx="12" fill="${c}"/></g>`}
+function padlock(x,y,s=1){return `<g transform="translate(${x},${y}) scale(${s})"><path d="M-30,-10 L-30,-45 Q-30,-75 0,-75 Q30,-75 30,-45 L30,-10" stroke="#555" stroke-width="12" fill="none"/><rect x="-45" y="-15" width="90" height="75" rx="12" fill="#e2b33c"/><circle cx="0" cy="15" r="10" fill="#555"/></g>`}
+function house(x,y,s=1){return `<g transform="translate(${x},${y}) scale(${s})"><path d="M-110,0 L0,-100 L110,0Z" fill="#c8553d"/><rect x="-90" y="0" width="180" height="140" fill="#f2e3c6"/><rect x="-25" y="60" width="50" height="80" fill="#7a4e2d"/><rect x="-75" y="25" width="40" height="40" fill="#9fd3f0"/><rect x="35" y="25" width="40" height="40" fill="#9fd3f0"/></g>`}
+function car(x,y,s=1){return `<g transform="translate(${x},${y}) scale(${s})"><path d="M-120,20 L-100,-30 Q-90,-50 -60,-55 L50,-55 Q80,-50 95,-20 L120,-10 L120,30 L-120,30Z" fill="#3f7fd6"/><path d="M-70,-45 L-50,-20 L40,-20 L60,-45Z" fill="#cfe9fb"/><circle cx="-70" cy="35" r="26" fill="${INK}"/><circle cx="70" cy="35" r="26" fill="${INK}"/><circle cx="-70" cy="35" r="10" fill="#bbb"/><circle cx="70" cy="35" r="10" fill="#bbb"/></g>`}
+function plane(x,y,s=1){return `<g transform="translate(${x},${y}) scale(${s})"><path d="M-100,0 L80,-10 Q110,0 80,10Z" fill="#e8eef5" stroke="#8aa" stroke-width="4"/><path d="M-10,-5 L-50,-60 L-25,-60 L30,-5Z M-10,5 L-50,60 L-25,60 L30,5Z M-90,-2 L-110,-35 L-95,-35 L-70,-2Z" fill="#cfd8e3"/></g>`}
+function bgGrad(a,b){return `linear-gradient(180deg,${a},${b})`}
+function floorLine(c='#00000010'){return `<rect x="0" y="1470" width="1080" height="450" fill="${c}"/>`}
+
+/* ---------- scenes ---------- */
+const scenes=[
+ {s:0,e:5,bg:['#ffe1e6','#ffc2cd'],card:'اثر رژ لب 💄 تو هم توش افتادی؟',
+  sub:['وقتی اقتصاد بد می‌شه، فروش یه چیز عجیب بالا می‌ره:','رژ لب.','بهش می‌گن «اثر رژ لب»، و احتمالاً تو هم توش افتادی.'],
+  draw:(lt)=>{
+    const p=eo(lt/2.2), len=1400;
+    const chart=`<polyline points="80,700 260,760 400,720 560,900 720,880 880,1080 1010,1150" fill="none" stroke="#c8102e" stroke-width="16" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="${len}" stroke-dashoffset="${len*(1-p)}" opacity=".35"/>`;
+    const z=lerp(.5,1.55,eo(lt/1.6))+Math.sin(lt*3)*.03;
+    const sp=[0,1,2,3,4].map(i=>{const a=i*1.26+lt*.8,o=.5+.5*Math.sin(lt*4+i*2);return sparkle(540+Math.cos(a)*300,1010+Math.sin(a)*300,.9+.4*Math.sin(lt*3+i),o)}).join('');
+    return chart+sp+lipstick(540,1060,z,Math.sin(lt*2.2)*6,eo((lt-.6)/1.2));
+  }},
+ {s:5,e:12,bg:['#fff4e0','#ffe2b8'],card:'رکود ۲۰۰۱ ← فروش رژ لب ↑',
+  sub:['این اسم رو رئیس شرکت آرایشی «استی لادر» بعد از رکود ۲۰۰۱ آمریکا مطرح کرد.','دید وقتی اوضاع بد شد، فروش رژ لب بالا رفت.'],
+  draw:(lt)=>{
+    let o=`<rect x="70" y="1180" width="940" height="60" rx="14" fill="#8a5a3b"/><rect x="110" y="1240" width="40" height="230" fill="#6f4730"/><rect x="930" y="1240" width="40" height="230" fill="#6f4730"/>`;
+    o+=`<g transform="rotate(-3 540 840)"><rect x="250" y="560" width="580" height="600" rx="18" fill="#fff" stroke="${INK}" stroke-width="6"/>
+      <text x="540" y="650" text-anchor="middle" font-family="V" font-weight="900" font-size="54" fill="${INK}">فروش رژ لب</text>
+      <text x="540" y="1120" text-anchor="middle" font-family="V" font-weight="700" font-size="42" fill="#777">${fa(2001)}</text>`;
+    const hs=[120,170,240,330];
+    hs.forEach((h,i)=>{const g=eo((lt-.4-i*.45)/.8);o+=`<rect x="${330+i*110}" y="${1060-h*g}" width="80" height="${h*g}" rx="8" fill="${RED}"/>`});
+    const ap=eo((lt-2.4)/1.2), L=520;
+    o+=`<path d="M320,1000 L720,700" stroke="#1f9d55" stroke-width="16" stroke-linecap="round" stroke-dasharray="${L}" stroke-dashoffset="${L*(1-ap)}" fill="none"/>`;
+    if(ap>.95)o+=`<path d="M720,700 L660,712 M720,700 L708,760" stroke="#1f9d55" stroke-width="16" stroke-linecap="round"/>`;
+    o+=`</g>`;
+    [0,1,2,3,4].forEach(i=>{const g=pop(lt,3.6+i*.25);if(g>0)o+=lipstick(200+i*170,1130,.42*g,0,1)});
+    return o;
+  }},
+ {s:12,e:19,bg:['#e6f0ff','#cfe0fb'],card:'خرج بزرگ ❌ لذت کوچیک ✅',
+  sub:['چرا؟','وقتی خرج‌های بزرگ، مثل خونه و ماشین و سفر، از دسترس خارج می‌شن،','ذهن ما سراغ لذت‌های کوچیک و ارزون می‌ره تا حالمون بهتر شه.'],
+  draw:(lt)=>{
+    const sw=eio((lt-3.4)/.9);
+    let o=floorLine();
+    // big window slides left out, small window slides in
+    const bx=lerp(0,-1100,sw), sx=lerp(1100,0,sw);
+    o+=`<g transform="translate(${bx},0) translate(540,430) scale(.82) translate(-540,-470)"><rect x="120" y="470" width="840" height="560" rx="24" fill="#fff" stroke="${INK}" stroke-width="8"/>${house(330,700,1)}${car(700,860,1.05)}${plane(700,600,.8)}
+      ${padlock(330,700,pop(lt,.8))}${padlock(700,850,pop(lt,1.3))}${padlock(720,600,pop(lt,1.8)*.8)}</g>`;
+    o+=`<g transform="translate(${sx},0) translate(540,430) scale(.82) translate(-540,-470)"><rect x="200" y="520" width="680" height="480" rx="24" fill="#fff6d6" stroke="${INK}" stroke-width="8"/>
+      <path d="M200,560 L880,560" stroke="#ff7aa2" stroke-width="40"/>
+      ${coffee(330,800,.9)}${burger(540,820,.85)}${lipstick(740,840,.5)}${sparkle(440,660,.8,.9)}${sparkle(660,690,.6,.8)}</g>`;
+    const mood= sw>.6?'smile':'sad';
+    return o+mina({x:540,y:989,s:.62,mood,blink:(lt%3.1)<.12,lookX:sw>.6?0:-6});
+  }},
+ {s:19,e:26,bg:['#fff0f6','#ffd6e7'],card:'☕ 🍔 👗 🎧  «حقمه»',
+  sub:['نسخه‌ی ایرانیش رو همه می‌شناسیم:','قهوه‌ی بیرون، سفارش غذا،','یه لباس که «حقمه»، یه گجت کوچیک.'],
+  draw:(lt)=>{
+    let o=floorLine();
+    const items=[[coffee,250,640,.5],[burger,830,640,1.6],[dress,200,1010,2.9],[phones,880,1000,4.1]];
+    items.forEach(([f,x,y,at])=>{const g=pop(lt,at);if(g>0){const b=Math.sin(lt*2.5+x)*8;o+=`<circle cx="${x}" cy="${y+b}" r="${135*g}" fill="#fff" opacity=".85"/>`+f(x,y+b,1.1*g)}});
+    if(lt>2.9){const g=pop(lt,3.1);o+=`<g transform="translate(540,600) scale(${g})"><rect x="-120" y="-50" width="240" height="90" rx="45" fill="${RED}"/><text x="0" y="15" text-anchor="middle" font-family="V" font-weight="900" font-size="50" fill="#fff">حقمه!</text></g>`}
+    return o+mina({x:540,y:998,s:.6,mood:'smile',blink:(lt%2.7)<.12,armUp:lt>1.6,hold:lt>1.6?bag(178,-10,.7):''});
+  }},
+ {s:26,e:32,bg:['#f2f2f7','#dcdcea'],card:'تکی ارزون، جمعاً گرون ⚠️',
+  sub:['تله کجاست؟','هر کدوم جدا ارزونه.','ولی کنار هم، ممکنه از همون چیز بزرگی که ازش دست کشیدیم بیشتر بشه.'],
+  draw:(lt)=>{
+    let o=floorLine();
+    const fs=[coffee,burger,bag,dress,phones,coffee,bag,burger];
+    const n=Math.min(fs.length,Math.floor(lt/0.5)+1);
+    const wob=lt>4.6?Math.sin(lt*9)*3*clamp((lt-4.6)/.5):0;
+    o+=`<g transform="rotate(${wob} 760 1300)">`;
+    for(let i=0;i<n;i++){const g=pop(lt,i*.5,.35);const yy=1240-i*88-lerp(-300,0,eo((lt-i*.5)/.35));o+=fs[i](760+(i%2?18:-18),yy,.85*Math.max(g,.01))}
+    o+=`</g>`;
+    if(lt>4.6) o+=`<text x="760" y="${1290-n*88-40}" text-anchor="middle" font-size="90">⚠️</text>`;
+    return o+mina({x:280,y:1021,s:.55,mood:lt>2.5?'wow':'smile',blink:(lt%2.3)<.1,lookX:6});
+  }},
+ {s:32,e:39,bg:['#e8fff1','#c6f2d8'],card:'۱۵۰ هزار ← ۴٫۵ میلیون ← ۵۵ میلیون',
+  sub:['مثلاً روزی صد و پنجاه هزار تومن خرج کوچیک.','ماهی می‌شه چهار و نیم میلیون.','سالی، نزدیک پنجاه و پنج میلیون.'],
+  draw:(lt)=>{
+    let v,label;
+    if(lt<2.2){v=150000;label='روزانه'}
+    else if(lt<4.6){v=lerp(150000,4500000,eo((lt-2.2)/1.4));label='ماهانه'}
+    else {v=lerp(4500000,54750000,eo((lt-4.6)/1.6));label='سالانه'}
+    let o='';
+    for(let i=0;i<10;i++){const yy=((lt*380+i*190)%1500)+380;o+=`<circle cx="${100+i*95}" cy="${yy}" r="26" fill="#f2c94c" stroke="#c99a1d" stroke-width="5" opacity=".45"/>`}
+    o+=`<g transform="translate(540,470) scale(.8) translate(-540,-520)"><rect x="190" y="520" width="700" height="880" rx="60" fill="#2f3542"/><rect x="240" y="580" width="600" height="200" rx="24" fill="#d8f5c8"/>
+      <text x="800" y="710" text-anchor="end" direction="ltr" font-family="V" font-weight="900" font-size="${v>9999999?92:100}" fill="${INK}">${money(v)}</text>
+      <text x="540" y="770" text-anchor="middle" font-family="V" font-weight="700" font-size="40" fill="#4b6b3a">تومان · ${label}</text>`;
+    for(let r=0;r<3;r++)for(let c=0;c<4;c++){const k=(r*4+c+Math.floor(lt*6))%7===0;o+=`<rect x="${255+c*145}" y="${830+r*170}" width="120" height="130" rx="22" fill="${k?'#ff7a7a':'#57606f'}"/>`}
+    o+=`</g>`;
+    return o;
+  }},
+ {s:39,e:46,bg:['#fff7e6','#ffe9c2'],card:'لذت کوچیک ✅ بی‌حساب‌وکتاب ❌',
+  sub:['ولی اثر رژ لب بد نیست.','لذت کوچیک برای حال روحی لازمه.','مشکل وقتیه که حسابش از دستمون در بره.'],
+  draw:(lt)=>{
+    let o=`<rect x="140" y="470" width="800" height="620" rx="20" fill="#bfe6ff" stroke="#fff" stroke-width="26"/><path d="M540,470 L540,1090 M140,780 L940,780" stroke="#fff" stroke-width="18"/>
+      <circle cx="${720+Math.sin(lt*.5)*10}" cy="620" r="80" fill="#ffd34d"/>${[0,1,2,3,4,5,6,7].map(i=>{const a=i*Math.PI/4+lt*.3;return `<path d="M${720+Math.cos(a)*100},${620+Math.sin(a)*100} L${720+Math.cos(a)*130},${620+Math.sin(a)*130}" stroke="#ffd34d" stroke-width="10" stroke-linecap="round"/>`}).join('')}
+      <path d="M100,450 Q160,800 120,1110 L60,1110 L60,450Z" fill="#e57a5a"/><path d="M980,450 Q920,800 960,1110 L1020,1110 L1020,450Z" fill="#e57a5a"/>`;
+    o+=floorLine('#00000008');
+    const cup=`<g transform="translate(160,240)"><path d="M-40,-30 L40,-30 L32,40 L-32,40Z" fill="#fff" stroke="${INK}" stroke-width="5"/><path d="M40,-15 Q65,-10 40,20" stroke="${INK}" stroke-width="5" fill="none"/>
+      ${[0,1,2].map(i=>`<path d="M${-18+i*18},${-45-((lt*40+i*20)%40)} q10,-15 0,-30" stroke="#999" stroke-width="5" fill="none" opacity="${.7-((lt*40+i*20)%40)/60}"/>`).join('')}</g>`;
+    const ok=pop(lt,3.6), no=pop(lt,5.0);
+    o+=`<g transform="translate(220,1130) scale(${ok})"><circle r="70" fill="#1f9d55"/><path d="M-30,0 L-8,24 L34,-24" stroke="#fff" stroke-width="16" fill="none" stroke-linecap="round"/></g>`;
+    o+=`<g transform="translate(860,1130) scale(${no})"><circle r="70" fill="${RED}"/><path d="M-26,-26 L26,26 M26,-26 L-26,26" stroke="#fff" stroke-width="16" stroke-linecap="round"/></g>`;
+    return o+mina({x:540,y:1007,s:.58,mood:'content',blink:(lt%3.4)<.14,armUp:true,hold:cup});
+  }},
+ {s:46,e:54,bg:['#eaf4ff','#cfe4ff'],card:'۱. سقف ماهانه   ۲. ثبت خرج‌ها 📊',
+  sub:['راه‌حل ساده‌ست:','یه سقف ماهانه برای «لذت‌های کوچیک» بذار،','و خرج‌هات رو یه جا ثبت کن تا ببینی واقعاً چقدر می‌شه.'],
+  draw:(lt)=>{
+    let o=`<g transform="translate(540,470) scale(.82) translate(-540,-500)"><rect x="300" y="500" width="480" height="900" rx="60" fill="${INK}"/><rect x="325" y="560" width="430" height="780" rx="30" fill="#fff"/><rect x="480" y="520" width="120" height="16" rx="8" fill="#555"/>
+      <text x="540" y="640" text-anchor="middle" font-family="V" font-weight="900" font-size="40" fill="${INK}">خرج‌های این ماه</text>`;
+    const lim=880;
+    const lp=eo((lt-1.2)/.8);
+    o+=`<path d="M350,${lim} L${350+380*lp},${lim}" stroke="${RED}" stroke-width="8" stroke-dasharray="22 14"/>`;
+    if(lp>.9)o+=`<text x="690" y="${lim-18}" text-anchor="middle" font-family="V" font-weight="900" font-size="34" fill="${RED}">سقف</text>`;
+    const hs=[260,330,210,300,240];
+    hs.forEach((h,i)=>{const g=eo((lt-2.4-i*.35)/.7);o+=`<rect x="${370+i*76}" y="${1290-h*g}" width="54" height="${h*g}" rx="10" fill="${['#ff7aa2','#f2a33c','#3fb7c7','#9b6bd6','#6db84a'][i]}"/>`});
+    o+=`</g>`;const c=pop(lt,5.4);
+    o+=`<g transform="translate(860,620) scale(${c})"><circle r="80" fill="#1f9d55"/><path d="M-34,0 L-10,26 L38,-26" stroke="#fff" stroke-width="18" fill="none" stroke-linecap="round"/></g>`;
+    return o+mina({x:170,y:1083,s:.42,mood:'smile',blink:(lt%2.9)<.12,lookX:6});
+  }},
+ {s:54,e:60,bg:['#ffe1e6','#ffc2cd'],card:'رژ لب تو چیه؟ 💄 کامنت کن 👇',foot:'ثبت خرج‌ها با حسابداری شخصی، تو اپ آراد',
+  sub:['رژ لب تو چیه؟','تو کامنت بنویس.','و این ریل رو ذخیره کن برای آخر ماه.'],
+  draw:(lt)=>{
+    let o='';
+    for(let i=0;i<7;i++){const yy=1300-((lt*160+i*170)%900);o+=`<text x="${150+i*130}" y="${yy}" font-size="60" opacity=".5">${i%2?'💄':'❤️'}</text>`}
+    const hold=lipstick(178,-40,.45,-15,1);
+    return o+mina({x:540,y:900,s:.66,mood:'smile',wink:lt>1.2&&lt<2.0||lt>4&&lt<4.6,blink:false,armUp:true,hold});
+  }},
+];
+
+function render(t){
+  const sc=scenes.find(s=>t>=s.s&&t<s.e)||scenes[scenes.length-1];
+  const lt=t-sc.s, d=sc.e-sc.s;
+  document.getElementById('bg').style.background=bgGrad(sc.bg[0],sc.bg[1]);
+  const fadeIn=sc.s===0?1:clamp(lt/.3), fadeOut=sc.e===60?clamp((d-lt)/.4):clamp((d-lt)/.3);
+  const art=document.getElementById('art');
+  art.innerHTML=sc.draw(lt);
+  art.style.opacity=Math.min(fadeIn,fadeOut);
+  const card=document.querySelector('#card span');
+  card.textContent=sc.card;
+  const cp=eo((lt-.15)/.45);
+  document.getElementById('card').style.transform=`translateY(${lerp(-60,0,cp)}px) scale(${lerp(.85,1,cp)})`;
+  document.getElementById('card').style.opacity=cp*fadeOut;
+  const sub=document.getElementById('sub');
+  if(SUBS){
+    const seg=d/sc.sub.length, i=Math.min(sc.sub.length-1,Math.floor(lt/seg));
+    sub.querySelector('span').textContent=sc.sub[i];
+    sub.style.opacity=fadeOut;
+  } else sub.style.opacity=0;
+  const foot=document.getElementById('foot');
+  foot.textContent=sc.foot||''; foot.style.opacity=sc.foot?eo((lt-1)/.6):0;
+}
+window.render=render;
+render(0);
+</script>
+</body>
+</html>
