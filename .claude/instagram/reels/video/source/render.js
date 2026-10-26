@@ -19,7 +19,7 @@ const path = require('path');
     return;
   }
 
-  const fps = 30, dur = 60;
+  const fps = 30, dur = Number(process.env.DUR || 60);
   const ff = spawn('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(fps), '-c:v', 'mjpeg', '-i', '-',
     '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-preset', 'medium', '-crf', '20', '-movflags', '+faststart', out], { stdio: ['pipe', 'inherit', 'inherit'] });
   for (let f = 0; f < fps * dur; f++) {

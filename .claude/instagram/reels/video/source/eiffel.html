@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<style>
+@font-face{font-family:V;src:url(v400.ttf);font-weight:400}
+@font-face{font-family:V;src:url(v700.ttf);font-weight:700}
+@font-face{font-family:V;src:url(v900.ttf);font-weight:900}
+html,body{margin:0;padding:0;width:1080px;height:1920px;overflow:hidden;background:#fff}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:V,sans-serif}
+#bg{position:absolute;inset:0}
+#art{position:absolute;inset:0}
+#card{position:absolute;top:270px;left:90px;right:90px;text-align:center;direction:rtl}
+#card span{display:inline-block;background:#fff;color:#1d1d2b;font-weight:900;font-size:62px;line-height:1.35;padding:22px 40px;border-radius:34px;box-shadow:0 10px 0 #c8102e;border:5px solid #1d1d2b}
+#sub{position:absolute;top:1290px;left:110px;right:110px;text-align:center;direction:rtl}
+#sub span{display:inline-block;background:rgba(20,20,35,.82);color:#fff;font-weight:700;font-size:44px;line-height:1.5;padding:14px 30px;border-radius:22px}
+#foot{position:absolute;top:1222px;left:0;right:0;text-align:center;direction:rtl;font-weight:700;font-size:34px;color:#1d1d2b}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="bg"></div>
+  <svg id="art" width="1080" height="1920" viewBox="0 0 1080 1920"></svg>
+  <div id="card"><span></span></div>
+  <div id="sub"><span></span></div>
+  <div id="foot"></div>
+</div>
+<script>
+const SUBS = new URLSearchParams(location.search).get('subs') === '1';
+const END=72;
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const eo=t=>1-Math.pow(1-clamp(t),3);
+const eio=t=>{t=clamp(t);return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2};
+const back=t=>{t=clamp(t);const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2)};
+const pop=(lt,at,dur=.45)=>back((lt-at)/dur);
+const INK='#1c1a1f', GOLD='#d9a441', SEP='#e9d8b4', SKIN='#efc7a0', TEAL='#2f5d62';
+document.querySelector('#card span').style.boxShadow='0 10px 0 '+GOLD;
+
+/* ---------- props ---------- */
+function eiffel(x,y,s=1,c='#3a3540'){return `<g transform="translate(${x},${y}) scale(${s})" fill="${c}">
+  <path d="M-8,-600 L8,-600 L14,-520 L-14,-520Z"/><rect x="-3" y="-660" width="6" height="60"/>
+  <path d="M-14,-520 L14,-520 L40,-300 L-40,-300Z"/><rect x="-60" y="-310" width="120" height="22"/>
+  <path d="M-40,-288 L40,-288 L95,-120 L-95,-120Z"/><rect x="-120" y="-130" width="240" height="26"/>
+  <path d="M-95,-104 L-200,0 L-140,0 Q0,-120 140,0 L200,0 L95,-104Z"/>
+  <path d="M-30,-480 L30,-340 M30,-480 L-30,-340 M-60,-270 L60,-150 M60,-270 L-60,-150" stroke="${SEP}" stroke-width="3" opacity=".25"/></g>`}
+function lustig({x=540,y=1000,s=1,mood='smile',armUp=false,hold='',blink=false}={}){
+  const mouth={smile:`<path d="M-22,40 Q0,58 22,40" stroke="${INK}" stroke-width="6" fill="none" stroke-linecap="round"/>`,
+    sly:`<path d="M-22,44 Q8,56 24,36" stroke="${INK}" stroke-width="6" fill="none" stroke-linecap="round"/>`,
+    shh:`<ellipse cx="0" cy="46" rx="9" ry="7" fill="${INK}"/>`}[mood]||'';
+  const eyes=blink?`<path d="M-38,-2 L-20,-2 M20,-2 L38,-2" stroke="${INK}" stroke-width="6" stroke-linecap="round"/>`
+    :`<path d="M-40,-4 Q-29,-14 -18,-4" stroke="${INK}" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M18,-4 Q29,-14 40,-4" stroke="${INK}" stroke-width="6" fill="none" stroke-linecap="round"/>`;
+  const armR=armUp?`<rect x="88" y="10" width="46" height="190" rx="23" fill="#15141a" transform="rotate(-28 110 190)"/><circle cx="170" cy="20" r="24" fill="${SKIN}"/>`
+    :`<rect x="86" y="130" width="46" height="210" rx="23" fill="#15141a" transform="rotate(-8 110 140)"/><circle cx="104" cy="345" r="23" fill="${SKIN}"/>`;
+  return `<g transform="translate(${x},${y}) scale(${s})">
+   <ellipse cx="0" cy="500" rx="150" ry="22" fill="rgba(0,0,0,.18)"/>
+   <rect x="-70" y="380" width="55" height="120" fill="#15141a"/><rect x="15" y="380" width="55" height="120" fill="#15141a"/>
+   <path d="M-110,120 Q-110,95 -80,92 L80,92 Q110,95 110,120 L100,400 L-100,400Z" fill="#1f1e25"/>
+   <path d="M-34,92 L0,190 L34,92Z" fill="#fff"/><path d="M-10,110 L0,200 L10,110Z" fill="#8b1e2b"/>
+   <path d="M-34,92 L-60,240 L-10,190Z M34,92 L60,240 L10,190Z" fill="#2c2b33"/>
+   <rect x="-132" y="130" width="46" height="210" rx="23" fill="#15141a" transform="rotate(8 -110 140)"/><circle cx="-104" cy="345" r="23" fill="${SKIN}"/>
+   ${armR}
+   <rect x="-22" y="62" width="44" height="34" fill="${SKIN}"/>
+   <ellipse cx="0" cy="5" rx="72" ry="82" fill="${SKIN}"/>
+   ${eyes}
+   <path d="M-34,26 Q-17,16 0,26 Q17,16 34,26 Q17,32 0,28 Q-17,32 -34,26Z" fill="${INK}"/>
+   ${mouth}
+   <ellipse cx="0" cy="-58" rx="98" ry="16" fill="#111"/><path d="M-62,-58 Q-64,-130 0,-132 Q64,-130 62,-58Z" fill="#111"/><rect x="-62" y="-76" width="124" height="12" fill="#5b1820"/>
+   ${hold}</g>`}
+function poisson({x=540,y=1000,s=1,mood='eager',blink=false,hold=''}={}){
+  const m={eager:`<path d="M-26,40 Q0,66 26,40Z" fill="${INK}"/>`,sad:`<path d="M-22,54 Q0,38 22,54" stroke="${INK}" stroke-width="6" fill="none" stroke-linecap="round"/>`,
+    wow:`<ellipse cx="0" cy="48" rx="14" ry="18" fill="${INK}"/>`}[mood];
+  const eyes=mood==='sad'||blink?`<path d="M-40,2 Q-29,8 -18,2 M18,2 Q29,8 40,2" stroke="${INK}" stroke-width="6" fill="none" stroke-linecap="round"/>`
+    :`<circle cx="-29" cy="-2" r="11" fill="${INK}"/><circle cx="29" cy="-2" r="11" fill="${INK}"/><circle cx="-25" cy="-6" r="4" fill="#fff"/><circle cx="33" cy="-6" r="4" fill="#fff"/>`;
+  return `<g transform="translate(${x},${y}) scale(${s})">
+   <ellipse cx="0" cy="500" rx="170" ry="24" fill="rgba(0,0,0,.18)"/>
+   <rect x="-80" y="380" width="65" height="120" fill="#4a3324"/><rect x="15" y="380" width="65" height="120" fill="#4a3324"/>
+   <path d="M-140,140 Q-140,100 -100,96 L100,96 Q140,100 140,140 L130,400 L-130,400Z" fill="#7a5236"/>
+   <path d="M-30,96 L0,170 L30,96Z" fill="#fff"/><rect x="-8" y="110" width="16" height="60" fill="${TEAL}"/>
+   <rect x="-168" y="140" width="52" height="200" rx="26" fill="#6a4630" transform="rotate(10 -140 150)"/><circle cx="-132" cy="345" r="26" fill="${SKIN}"/>
+   <rect x="116" y="140" width="52" height="200" rx="26" fill="#6a4630" transform="rotate(-10 140 150)"/><circle cx="132" cy="345" r="26" fill="${SKIN}"/>
+   <circle cx="0" cy="10" r="92" fill="${SKIN}"/>
+   <path d="M-90,-20 Q-88,-90 0,-92 Q88,-90 90,-20 Q60,-60 0,-60 Q-60,-60 -90,-20Z" fill="#6b4a2f"/>
+   <path d="M-48,-30 L-14,-24 M48,-30 L14,-24" stroke="${INK}" stroke-width="6" stroke-linecap="round"/>
+   ${eyes}<ellipse cx="0" cy="20" rx="12" ry="9" fill="#d99c7a"/>
+   <ellipse cx="-55" cy="30" rx="15" ry="9" fill="#e79090" opacity=".55"/><ellipse cx="55" cy="30" rx="15" ry="9" fill="#e79090" opacity=".55"/>
+   ${m}${hold}</g>`}
+const paper=(x,y,s=1,r=0,stamp=true)=>`<g transform="translate(${x},${y}) rotate(${r}) scale(${s})"><rect x="-120" y="-160" width="240" height="320" fill="#f6ecd6" stroke="#b9a37a" stroke-width="4"/>
+  ${[0,1,2,3,4,5].map(i=>`<rect x="-90" y="${-100+i*36}" width="${i%3==2?120:180}" height="10" rx="5" fill="#c9b48a"/>`).join('')}
+  ${stamp?`<circle cx="60" cy="110" r="34" fill="none" stroke="#8b1e2b" stroke-width="7"/><circle cx="60" cy="110" r="20" fill="#8b1e2b" opacity=".6"/>`:''}</g>`;
+const envelope=(x,y,s=1,r=0)=>`<g transform="translate(${x},${y}) rotate(${r}) scale(${s})"><rect x="-130" y="-80" width="260" height="160" rx="8" fill="#efe1c2" stroke="#b9a37a" stroke-width="4"/><path d="M-130,-80 L0,20 L130,-80" fill="none" stroke="#b9a37a" stroke-width="4"/><circle cx="0" cy="20" r="26" fill="#8b1e2b"/></g>`;
+const coin=(x,y,s=1)=>`<g transform="translate(${x},${y}) scale(${s})"><circle r="30" fill="${GOLD}" stroke="#a87a22" stroke-width="5"/><text y="12" text-anchor="middle" font-size="32" font-weight="900" fill="#a87a22" font-family="V">F</text></g>`;
+function bubble(x,y,w,txt,c='#fff',tc=INK){return `<g transform="translate(${x},${y})"><rect x="${-w/2}" y="-40" width="${w}" height="80" rx="30" fill="${c}"/><text y="14" text-anchor="middle" font-family="V" font-weight="700" font-size="36" fill="${tc}">${txt}</text></g>`}
+function vignette(){return `<defs><radialGradient id="vg" cx="50%" cy="45%" r="75%"><stop offset="55%" stop-color="#000" stop-opacity="0"/><stop offset="100%" stop-color="#000" stop-opacity=".55"/></radialGradient></defs><rect width="1080" height="1920" fill="url(#vg)"/>`}
+function grain(t){let o='';let sd=Math.floor(t*12)*9301;for(let i=0;i<90;i++){sd=(sd*9301+49297)%233280;const x=sd/233280*1080;sd=(sd*9301+49297)%233280;const y=sd/233280*1920;o+=`<rect x="${x}" y="${y}" width="3" height="3" fill="#fff" opacity=".12"/>`}return o}
+const floor=(c='rgba(0,0,0,.12)')=>`<rect x="0" y="1460" width="1080" height="460" fill="${c}"/>`;
+
+/* ---------- scenes ---------- */
+const OLD=true;
+const scenes=[
+ {s:0,e:5,bg:['#c9b48a','#8a7656'],card:'مردی که برج ایفل رو فروخت 🗼',
+  sub:['سال ۱۹۲۵، یه مرد، برج ایفل رو فروخت.','مشکل اینجا بود که برج ایفل مال اون نبود.'],
+  draw:lt=>{let o=`<circle cx="760" cy="620" r="150" fill="#f2e2bb" opacity=".6"/>`+eiffel(700,1300,1.25+lt*.02,'#4a4250');
+    o+=`<rect x="0" y="1150" width="1080" height="160" fill="#e9dcc0" opacity="${.35+.1*Math.sin(lt)}"/>`;
+    const p=pop(lt,1.4);o+=lustig({x:300,y:900,s:.62,mood:'sly',armUp:true,hold:p>0?paper(180,-60,.42*p,-10):''});
+    return o}},
+ {s:5,e:12,bg:['#d8c49c','#9c8662'],card:'یه خبر کوچیک در روزنامه 📰',
+  sub:['اسمش ویکتور لاستیگ بود.','یه روز تو روزنامه خوند که نگهداری برج ایفل برای شهر خیلی گرون تموم می‌شه.','و یه فکر به سرش زد.'],
+  draw:lt=>{let o=floor();o+=`<rect x="140" y="1180" width="800" height="40" rx="12" fill="#5a3e2b"/><rect x="520" y="1220" width="40" height="240" fill="#4a3324"/>`;
+    o+=`<g transform="translate(860,1150)"><path d="M-40,-60 L40,-60 L32,10 L-32,10Z" fill="#f6ecd6" stroke="${INK}" stroke-width="5"/>${[0,1].map(i=>`<path d="M${-12+i*22},${-80-((lt*40+i*20)%40)} q10,-15 0,-30" stroke="#fff" stroke-width="5" fill="none" opacity=".6"/>`).join('')}</g>`;
+    o+=lustig({x:420,y:760,s:.7,mood:lt>4.6?'sly':'smile',blink:(lt%2.6)<.12});
+    const np=`<g transform="translate(520,1000) rotate(-4)"><rect x="-210" y="-140" width="420" height="280" fill="#f3ead2" stroke="#8a7656" stroke-width="4"/><rect x="-180" y="-110" width="360" height="40" fill="${INK}"/><text x="0" y="-80" text-anchor="middle" font-family="V" font-weight="900" font-size="30" fill="#f3ead2">نگهداری برج: گران!</text>${eiffel(-110,110,.28,'#555')}${[0,1,2,3].map(i=>`<rect x="-30" y="${-40+i*36}" width="190" height="10" rx="5" fill="#b9a37a"/>`).join('')}</g>`;
+    o+=np;
+    if(lt>4.6){const g=pop(lt,4.6);o+=`<g transform="translate(640,560) scale(${g})"><circle r="70" fill="#ffd34d"/><path d="M-20,30 L20,30 M-14,48 L14,48" stroke="${INK}" stroke-width="8"/><text y="18" text-anchor="middle" font-size="70">💡</text></g>`}
+    return o}},
+ {s:12,e:20,bg:['#cdb88f','#8f7a58'],card:'سربرگ جعلی + جلسه‌ی «محرمانه»',
+  sub:['نامه‌هایی با سربرگ جعلی دولت درست کرد','و چند تا از بزرگ‌ترین تاجرهای آهن قراضه‌ی پاریس رو','به یه جلسه‌ی «محرمانه» تو یه هتل لوکس دعوت کرد.'],
+  draw:lt=>{let o=`<rect x="80" y="560" width="920" height="760" rx="20" fill="#6b4a33"/><rect x="80" y="560" width="920" height="760" rx="20" fill="none" stroke="#3e2a1d" stroke-width="10"/>`;
+    o+=`<circle cx="540" cy="620" r="${180+10*Math.sin(lt*2)}" fill="#ffe7a8" opacity=".18"/>`;
+    o+=paper(330,900,.95,-6,lt>2.2);
+    [0,1,2].forEach(i=>{const g=pop(lt,3.2+i*.7);if(g>0)o+=envelope(740,760+i*150,.75*g,(i-1)*6)});
+    if(lt>1.4){const sp=eio((lt-1.4)/.8);o+=`<g transform="translate(${lerp(560,390,sp)},${lerp(700,1010,sp)}) rotate(-20)"><rect x="-20" y="-110" width="40" height="110" rx="8" fill="#5a3e2b"/><ellipse cx="0" cy="0" rx="46" ry="18" fill="#8b1e2b"/></g>`}
+    return o}},
+ {s:20,e:28,bg:['#2f4a4e','#1b2b2e'],card:'«این خبر نباید درز کنه» 🤫',
+  sub:['تو جلسه گفت:','«دولت تصمیم گرفته برج رو برچیده و آهنش رو بفروشه.','ولی این خبر نباید جایی درز کنه، وگرنه مردم شلوغ می‌کنن.»'],
+  draw:lt=>{let o=`<path d="M300,470 L780,470 L700,560 L380,560Z" fill="#ffe7a8" opacity=".12"/><circle cx="540" cy="480" r="30" fill="#ffe7a8"/>`;
+    o+=`<rect x="80" y="1160" width="920" height="60" rx="18" fill="#5a3e2b"/>`;
+    [[180,'#6a4630'],[900,'#3e4a5a']].forEach(([x,c])=>{o+=`<g transform="translate(${x},1000)"><circle cx="0" cy="0" r="62" fill="${SKIN}"/><path d="M-90,70 Q0,40 90,70 L100,170 L-100,170Z" fill="${c}"/><circle cx="-20" cy="-5" r="7" fill="${INK}"/><circle cx="20" cy="-5" r="7" fill="${INK}"/></g>`});
+    o+=poisson({x:300,y:1010,s:.42,mood:'eager',blink:(lt%2.2)<.1});
+    o+=lustig({x:620,y:760,s:.66,mood:lt>3.5?'shh':'smile',armUp:lt>3.5,blink:(lt%3)<.1});
+    o+=`<rect x="80" y="1160" width="920" height="60" rx="18" fill="#5a3e2b"/>`;
+    if(lt>1.2&&lt<3.6){const g=pop(lt,1.2);o+=`<g transform="scale(${g})" transform-origin="820 640">${bubble(820,640,300,'برج برچیده می‌شه!','#f3ead2')}</g>`}
+    if(lt>3.6){const g=pop(lt,3.6);o+=`<g transform="translate(830,620) scale(${g})"><text text-anchor="middle" font-size="110">🤫</text></g>`}
+    return o}},
+ {s:28,e:35,bg:['#d9b45f','#9c7432'],card:'طعمه: فرصت بزرگ 🎣',
+  sub:['یکی از تاجرها، آندره پواسون، بیشتر از همه هیجان‌زده بود.','این قرارداد می‌تونست اسمش رو بین بزرگ‌ترها ثبت کنه.'],
+  draw:lt=>{let o=eiffel(810,1250,.85,'#6a5530');
+    for(let i=0;i<9;i++){const a=i*.7+lt*.9;o+=coin(810+Math.cos(a)*(160+i*12),760+Math.sin(a)*120-i*20,.8+.2*Math.sin(lt*3+i))}
+    o+=`<g transform="translate(250,${520+Math.sin(lt*2)*25})"><path d="M0,0 L0,240" stroke="#555" stroke-width="4"/><path d="M0,240 q0,40 -30,40 q-20,0 -20,-20" stroke="#555" stroke-width="7" fill="none"/>${coin(-28,280,.8)}</g>`;
+    o+=poisson({x:380,y:900,s:.65,mood:'eager',blink:(lt%2.4)<.1});
+    return o}},
+ {s:35,e:43,bg:['#a99a80','#5f5546'],card:'پول + رشوه ← فرار 💼',
+  sub:['پواسون پول رو داد.','لاستیگ حتی یه رشوه‌ی جدا هم ازش گرفت تا «کار سریع‌تر پیش بره».','و همون روز، با یه چمدون پر از پول، از پاریس رفت.'],
+  draw:lt=>{let o='';
+    if(lt<4.4){o+=floor();
+      o+=poisson({x:280,y:960,s:.55,mood:'eager'});o+=lustig({x:790,y:900,s:.6,mood:'sly'});
+      const n=Math.min(6,Math.floor(lt/.5));for(let i=0;i<n;i++){const k=clamp((lt-i*.5)/.5);o+=`<g transform="translate(${lerp(360,700,eo(k))},${lerp(1100,1080,k)-Math.sin(k*Math.PI)*160})"><rect x="-50" y="-26" width="100" height="52" rx="6" fill="#7fae7a" stroke="#4d7a49" stroke-width="4"/></g>`}
+      if(lt>2.8){const g=pop(lt,2.8);o+=`<g transform="translate(540,620) scale(${g})">${bubble(0,0,280,'+ رشوه 🤝','#f3ead2')}</g>`}
+    } else {const k=lt-4.4;
+      o+=`<rect x="0" y="560" width="1080" height="640" fill="#4c4a45"/>`;
+      o+=`<g transform="translate(${-((k*500)%1600)+1200},0)">${eiffel(0,1150,.6,'#2e2c33')}</g>`;
+      o+=`<rect x="0" y="560" width="1080" height="640" fill="none" stroke="#2a2420" stroke-width="40"/><rect x="520" y="560" width="40" height="640" fill="#2a2420"/>`;
+      for(let i=0;i<5;i++){o+=`<circle cx="${(i*260-k*600)%1300+1300}" cy="${520-i*10}" r="${50+i*8}" fill="#fff" opacity=".25"/>`}
+      o+=lustig({x:300,y:820,s:.55,mood:'sly',hold:`<g transform="translate(150,330)"><rect x="-70" y="-50" width="140" height="100" rx="12" fill="#6b4a2f"/><rect x="-25" y="-70" width="50" height="22" rx="8" fill="none" stroke="#3e2a1d" stroke-width="8"/></g>`});
+    }
+    return o}},
+ {s:43,e:49,bg:['#5b5650','#2e2b28'],card:'قربانی از خجالت ساکت موند 😶',
+  sub:['عجیب‌ترین بخش؟','پواسون اون‌قدر خجالت کشید که هیچ‌وقت شکایت نکرد.'],
+  draw:lt=>{let o=`<circle cx="540" cy="640" r="40" fill="#ffe7a8" opacity=".9"/><path d="M540,680 L340,1200 L740,1200Z" fill="#ffe7a8" opacity=".10"/>`;
+    o+=`<rect x="160" y="1180" width="760" height="40" rx="12" fill="#3e2a1d"/>`;
+    o+=poisson({x:540,y:860,s:.6,mood:'sad',hold:`<g transform="translate(0,330)"><path d="M-60,-30 L40,-46 L66,20 L-30,44 L-70,0Z" fill="#f3ead2" stroke="#b9a37a" stroke-width="4"/></g>`});
+    const g=pop(lt,2.4);o+=`<g transform="translate(820,620) scale(${g})"><text text-anchor="middle" font-size="110">😶</text></g>`;
+    return o}},
+ {s:49,e:60,bg:['#2a2a33','#15151b'],card:'۴ ترفند کلاهبردار 🃏',
+  sub:['ترفندهای لاستیگ رو ببین:','یک، خودش رو مقام رسمی جا زد.','دو، گفت «محرمانه‌ست، به کسی نگو».','سه، یه فرصت استثنایی جلوی چشم گذاشت.','چهار، عجله ایجاد کرد.'],
+  draw:lt=>{let o=`<rect x="70" y="470" width="940" height="790" rx="40" fill="#1f5141"/><rect x="70" y="470" width="940" height="790" rx="40" fill="none" stroke="#3e2a1d" stroke-width="24"/>`;
+    const cards=[['مقام جعلی','🎖️'],['محرمانه','🔒'],['فرصت طلایی','💰'],['عجله','⏳']];
+    cards.forEach(([t,e],i)=>{const at=2.2+i*2.2,g=eo((lt-at)/.5);if(g<=0)return;const x=[310,770,310,770][i],y=[680,680,1040,1040][i];
+      o+=`<g transform="translate(${x},${lerp(y-300,y,g)}) rotate(${(i%2?4:-4)*g}) scale(.92)" opacity="${g}"><rect x="-190" y="-160" width="380" height="320" rx="24" fill="#f6ecd6" stroke="${GOLD}" stroke-width="8"/>
+        <text x="-150" y="-110" font-family="V" font-weight="900" font-size="48" fill="#8b1e2b">${'۱۲۳۴'[i]}</text><text y="10" text-anchor="middle" font-size="110">${e}</text>
+        <text y="120" text-anchor="middle" font-family="V" font-weight="900" font-size="50" fill="${INK}">${t}</text></g>`});
+    return o}},
+ {s:60,e:67,bg:['#cfe1e6','#9fbfc6'],card:'۱۹۲۵ ← امروز: همون ترفندها 📱',
+  sub:['صد سال گذشته، ولی ترفندها همونه:','«از پشتیبانی پیام می‌دیم»، «به کسی نگو»، «نرخ ویژه»، «فقط تا ده دقیقه‌ی دیگه».','فقط برج ایفل جاش رو داده به پیام تلگرامی.'],
+  draw:lt=>{let o=`<rect x="0" y="470" width="1080" height="420" fill="#b8a37c"/>`+lustig({x:250,y:560,s:.42,mood:'sly',armUp:true,hold:paper(170,-60,.35,-8)})+eiffel(820,880,.55,'#6b5d48');
+    o+=`<rect x="0" y="880" width="1080" height="10" fill="${INK}"/>`;
+    o+=`<g transform="translate(540,1080)"><rect x="-210" y="-190" width="420" height="380" rx="40" fill="${INK}"/><rect x="-190" y="-168" width="380" height="336" rx="24" fill="#eef4f6"/></g>`;
+    const msgs=['پشتیبانی هستیم','به کسی نگو 🤫','نرخ ویژه 💰','فقط ۱۰ دقیقه! ⏰'];
+    msgs.forEach((m,i)=>{const g=pop(lt,1+i*1.1);if(g>0)o+=`<g transform="translate(${560-(i%2)*30},${955+i*82}) scale(${g})">${bubble(0,0,320,m,'#ffffff','#8b1e2b')}</g>`});
+    return o}},
+ {s:67,e:72,bg:['#f2b16b','#b8563f'],card:'برای کسی بفرست که فکر می‌کنه گول نمی‌خوره 📩',
+  sub:['این داستان رو برای کسی بفرست که فکر می‌کنه «من گول نمی‌خورم».','پواسون هم همین فکر رو می‌کرد.'],
+  draw:lt=>{let o=`<circle cx="540" cy="1000" r="300" fill="#ffd89a" opacity=".7"/>`+eiffel(540,1380,1.1,'#5a2e2a');
+    const k=lt/5;o+=`<g transform="translate(${lerp(300,900,k)},${lerp(1150,700,k)+Math.sin(lt*3)*40}) rotate(${lt*60})">${paper(0,0,.35,0,true)}</g>`;
+    return o}},
+];
+
+function render(t){
+  const sc=scenes.find(s=>t>=s.s&&t<s.e)||scenes[scenes.length-1];
+  const lt=t-sc.s,d=sc.e-sc.s;
+  document.getElementById('bg').style.background=`linear-gradient(180deg,${sc.bg[0]},${sc.bg[1]})`;
+  const fadeIn=sc.s===0?1:clamp(lt/.3),fadeOut=sc.e===END?clamp((d-lt)/.5):clamp((d-lt)/.3);
+  const art=document.getElementById('art');
+  art.innerHTML=sc.draw(lt)+(sc.s<60?grain(t):'')+vignette();
+  art.style.opacity=Math.min(fadeIn,fadeOut);
+  document.querySelector('#card span').textContent=sc.card;
+  const cp=eo((lt-.15)/.45),card=document.getElementById('card');
+  card.style.transform=`translateY(${lerp(-60,0,cp)}px) scale(${lerp(.85,1,cp)})`;card.style.opacity=cp*fadeOut;
+  const sub=document.getElementById('sub');
+  if(SUBS){const seg=d/sc.sub.length,i=Math.min(sc.sub.length-1,Math.floor(lt/seg));sub.querySelector('span').textContent=sc.sub[i];sub.style.opacity=fadeOut}else sub.style.opacity=0;
+  document.getElementById('foot').style.opacity=0;
+}
+window.render=render;render(0);
+</script>
+</body>
+</html>
